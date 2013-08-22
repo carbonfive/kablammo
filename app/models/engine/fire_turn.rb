@@ -1,5 +1,5 @@
 class FireTurn < Turn
-  attr_accessor :skew
+  attr_reader :skew
 
   def initialize(skew)
     @skew = skew

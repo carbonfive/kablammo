@@ -9,34 +9,12 @@ class Engine
         if square.tank?
           tank = square.tank
           turn = Turn.parse tank.strategy.next_turn(nil, tank, self)
-          move square, turn if turn.move?
+          turn.board = @board
+          turn.execute square
         end
       end
     end
     @board.save!
-  end
-
-  private
-
-  def move(square, turn)
-    x = square.x
-    y = square.y
-    move_to(square, x, y - 1) if turn.north?
-    move_to(square, x, y + 1) if turn.south?
-    move_to(square, x + 1, y) if turn.east?
-    move_to(square, x - 1, y) if turn.west?
-  end
-
-  def move_to(source, x, y)
-    return if x < 0 || x >= @board.width
-    return if y < 0 || y >= @board.height
-
-    dest = @board.square_at(x, y)
-    if dest.empty?
-      tank = source.tank
-      source.clear
-      dest.place_tank tank
-    end
   end
 
 end
