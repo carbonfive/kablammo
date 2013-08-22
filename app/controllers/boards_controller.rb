@@ -13,13 +13,8 @@ class BoardsController
       width: 10
     })
 
-    board.add_wall
-    board.add_wall
-    board.add_wall
-
-    board.add_tank Tank.new
-    board.add_tank Tank.new
-
+    6.times { board.add_wall }
+    2.times { board.add_tank Tank.new }
     board.save!
 
     @app.redirect "/boards/#{name}"
