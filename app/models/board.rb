@@ -43,6 +43,10 @@ class Board
     square.place_tank tank
   end
 
+  def tanks
+    self.squares.map(&:tank).compact.sort_by(&:username)
+  end
+
   private
 
   def length

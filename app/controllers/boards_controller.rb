@@ -14,7 +14,7 @@ class BoardsController
     })
 
     6.times { board.add_wall }
-    2.times { board.add_tank Tank.new }
+    2.times { |i| board.add_tank new_tank("tank-#{i}") }
     board.save!
 
     @app.redirect "/boards/#{name}"
@@ -33,6 +33,12 @@ class BoardsController
   end
 
   private
+
+  def new_tank(name)
+    tank = Tank.new
+    tank.username = name
+    tank
+  end
 
   def erb(*args)
     @app.erb(*args)

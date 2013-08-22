@@ -5,12 +5,8 @@ class Square
   key :y,     Integer, required: true
   key :state, String,  required: true, in: %w(empty wall tank), default: 'empty'
 
+  embedded_in :board
   one :tank
-
-  def clear
-    @state = 'empty'
-    self.tank = nil
-  end
 
   def place_wall
     @state = 'wall'
@@ -24,7 +20,7 @@ class Square
 
   def clear
     @state = 'empty'
-    @tank = nil
+    self.tank = nil
   end
 
   def empty?

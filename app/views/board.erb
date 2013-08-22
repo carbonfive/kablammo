@@ -8,5 +8,11 @@
   <% end %>
 </div>
 
-<a href="/boards/<%= board.name %>/turn">Turn</a><br/><br/>
-<a href="/boards/<%= board.name %>/reset">Reset board</a>
+<br/>
+<% board.tanks.each do |tank| %>
+  <div><%= tank.stats %></div>
+<% end %>
+
+<br/>
+<a href="/boards/<%= board.name %>/turn">Turn</a> |
+<a href="/boards/<%= board.name %>/reset">Reset</a>

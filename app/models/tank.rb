@@ -6,7 +6,14 @@ class Tank
   key :ammo,     Integer, required: true, default: 10
   key :armor,    Integer, required: true, default: 5
 
+  embedded_in :square
+
   def strategy
     Strategy.new
+  end
+
+  def stats
+    s = self.square
+    "#{@username} - [#{s.x}, #{s.y}] dir #{@rotation}, ammo #{@ammo}, armor #{@armor}"
   end
 end
