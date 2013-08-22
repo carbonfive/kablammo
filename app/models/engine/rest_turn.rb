@@ -1,0 +1,3 @@
+class RestTurn < Turn
+
+end

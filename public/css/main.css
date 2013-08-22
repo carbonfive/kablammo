@@ -1,0 +1,23 @@
+.board {
+}
+
+.row {
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  border: 1px solid gray;
+  display: inline-block;
+}
+
+.empty {
+}
+
+.wall {
+  background-color: black;
+}
+
+.tank {
+  background-color: red;
+}

@@ -1,0 +1,12 @@
+<div class="board">
+  <% board.each_row do |row| %>
+    <div class="row">
+      <% row.each do |square| %>
+        <div class="square <%= square.state %>"></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<a href="/boards/<%= board.name %>/turn">Turn</a><br/><br/>
+<a href="/boards/<%= board.name %>/reset">Reset board</a>
