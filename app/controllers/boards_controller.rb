@@ -9,12 +9,12 @@ class BoardsController
 
     board = Board.create({
       name: name,
-      height: 10,
-      width: 10
+      height: 9,
+      width: 16
     })
 
     6.times { board.add_wall }
-    2.times { |i| board.add_tank new_tank("tank-#{i}") }
+    2.times { |i| board.add_tank new_tank("#{i}") }
     board.save!
 
     @app.redirect "/boards/#{name}"

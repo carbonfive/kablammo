@@ -15,6 +15,10 @@ class Board
     @engine ||= Engine.new(self)
   end
 
+  def geometry
+    @geometry ||= Geometry.new(@height, @width)
+  end
+
   def turn
     engine.turn
   end
@@ -23,13 +27,13 @@ class Board
     self.where(name: name).first
   end
 
-  def each_row
-    (0..height).each do |y|
-      yield squares[(@width * y)...(@width * (y+1))]
-    end
+  def rows
+    squares.each_slice(@width).to_a
   end
 
   def square_at(x, y)
+    return nil if x < 0 || x >= @width
+    return nil if y < 0 || y >= @height
     squares[@width * y + x]
   end
 
@@ -47,6 +51,23 @@ class Board
     self.squares.map(&:tank).compact.sort_by(&:username)
   end
 
+  def alive_tanks
+    tanks.select(&:alive?)
+  end
+
+  def game_on?
+    alive_tanks.length >= 2
+  end
+
+  def line_of_sight(source, degrees)
+    los = geometry.line_of_sight source, degrees
+    los.map { |p| square_at(p.x, p.y) }
+  end
+
+  def direction_to(source, dest)
+    geometry.direction_to(source, dest)
+  end
+
   private
 
   def length
@@ -59,7 +80,7 @@ class Board
   end
 
   def fill_in_empty_board
-    self.squares = Array.new(length).fill(Square.new)
+    self.squares = Array.new(length).fill { Square.new }
     self.squares.each_with_index do |square, i|
       square.x = i % @width
       square.y = i / @width

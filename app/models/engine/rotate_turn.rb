@@ -5,7 +5,8 @@ class RotateTurn < Turn
     @rotation = rotation
   end
 
-  def rotate?
-    true
+  def execute
+    tank.rotate_to @rotation
   end
+
 end

@@ -4,16 +4,17 @@ class Engine
   end
 
   def turn
-    @board.each_row do |row|
-      row.each do |square|
-        if square.tank?
-          tank = square.tank
-          turn = Turn.parse tank.strategy.next_turn(nil, tank, self)
-          turn.board = @board
-          turn.execute square
-        end
-      end
+    turns = @board.alive_tanks.map do |tank|
+      Turn.next_turn tank
     end
+
+    turns.sort_by(&:priority)
+    #p turns.map(&:tank).map(&:username)
+
+    turns.each do |turn|
+      turn.execute
+    end
+
     @board.save!
   end
 

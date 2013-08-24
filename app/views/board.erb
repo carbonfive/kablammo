@@ -1,8 +1,8 @@
 <div class="board">
-  <% board.each_row do |row| %>
+  <% board.rows.reverse.each do |row| %>
     <div class="row">
       <% row.each do |square| %>
-        <div class="square <%= square.state %>"></div>
+        <div class="square <%= square.html_classes %>">&nbsp;</div>
       <% end %>
     </div>
   <% end %>
