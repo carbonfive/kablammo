@@ -11,7 +11,8 @@ class FireTurn < Turn
     return if ! tank.can_fire?
 
     tank.fire
-    enemy = tank.pointed_at @skew
+    lof = tank.line_of_fire @skew
+    enemy = lof.last
     if enemy && enemy.tank?
       enemy.tank.hit
     end

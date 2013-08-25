@@ -59,10 +59,10 @@ class Tank
     pixels.map { |p| square.board.square_at(p.x, p.y) }
   end
 
-  def pointed_at(skew = 0)
+  def line_of_fire(skew = 0)
     los = line_of_sight skew
-    return nil if los.empty?
-    los.find { |s| ! s.empty? }
+    hit = los.index { |s| ! s.empty? }
+    hit ? los[0..hit] : los
   end
 
   def stats

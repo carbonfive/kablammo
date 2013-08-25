@@ -29,12 +29,10 @@ class Strategy
 
   def can_fire_at?(enemy)
     (@tank.rotation - @tank.direction_to(enemy)).abs <= 5
-    #@tank.pointed_at == enemy.square
   end
 
   def can_fire_at_me?(enemy)
     (enemy.rotation - enemy.direction_to(@tank)).abs <= 5
-    #enemy.pointed_at == @tank.square
   end
 
   def fire_at(enemy, skew = false)
@@ -94,8 +92,8 @@ class AggressiveStrategy < Strategy
   def next_turn
     enemy = find_enemies.first
     return rest if @tank.ammo == 0
-    return fire_at enemy if can_fire_at? enemy
     return approach enemy if obscured? enemy
+    return fire_at enemy if can_fire_at? enemy
     return point_at enemy unless pointed_at? enemy
     approach enemy
   end

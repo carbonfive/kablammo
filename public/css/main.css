@@ -50,3 +50,7 @@ body {
 .tank.armor-5 {
   background-color: #289E00;
 }
+
+.fire {
+  border: 2px solid red;
+}

@@ -20,11 +20,22 @@ class Board
   end
 
   def turn
-    engine.turn
+    engine.turn if game_on?
   end
 
   def find_by_name(name)
     self.where(name: name).first
+  end
+
+  def get_last_fires
+    fires = []
+    tanks.each do |tank|
+      turn = Turn.parse tank.last_turn
+      if turn && turn.is_a?(FireTurn)
+        fires << tank.line_of_fire.map { |s| [s.x, s.y] }
+      end
+    end
+    fires
   end
 
   def rows

@@ -22,8 +22,9 @@ class BoardsController
 
   def show(name)
     board = Board.find_by_name name
+    fires = board.get_last_fires
     return [404, "Unknown board: #{name}"] unless board
-    erb :board, locals: { board: board }
+    erb :board, locals: { board: board, fires: fires }
   end
 
   def turn(name)

@@ -2,7 +2,7 @@
   <% board.rows.reverse.each do |row| %>
     <div class="row">
       <% row.each do |square| %>
-        <div class="square <%= square.html_classes %>">&nbsp;</div>
+        <div id="square-<%= square.x %>-<%= square.y %>" class="square <%= square.html_classes %>">&nbsp;</div>
       <% end %>
     </div>
   <% end %>
@@ -16,3 +16,10 @@
 <br/>
 <a href="/boards/<%= board.name %>/turn">Turn</a> |
 <a href="/boards/<%= board.name %>/reset">Reset</a>
+
+<script type="text/javascript">
+var fires = <%= JSON.dump fires %>;
+$(function() {
+  animateFires(fires);
+})
+</script>
