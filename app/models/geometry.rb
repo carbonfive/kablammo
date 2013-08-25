@@ -6,7 +6,7 @@ class Geometry
 
   def line_of_sight(source, degrees)
     degrees *= 1.0 # cast to float
-    degrees %= 360
+    degrees %= 360 # normalize to 0...360 degrees
     radians = degrees * Math::PI / 180.0
 
     # steeper slopes require mapping the coordinate space
@@ -38,16 +38,13 @@ class Geometry
     end
     los.delete Pixel.new(source.x, source.y)
 
-    puts "line of sight: [#{source.x}, #{source.y}] @ #{degrees} -> " + los.join(' ')
-
+    #puts "line of sight: [#{source.x}, #{source.y}] @ #{degrees} -> " + los.join(' ')
     los
   end
 
   def direction_to(source, dest)
     x = dest.x - source.x
     y = dest.y - source.y
-    puts x
-    puts y
     radians = Math.atan( (y*1.0) / (x*1.0) )
     degrees = radians * 180 / Math::PI
     degrees += 180 if x < 0

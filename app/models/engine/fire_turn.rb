@@ -3,12 +3,13 @@ class FireTurn < Turn
 
   def initialize(skew)
     @skew = skew || 0
+    @skew = -5 if @skew < -5
+    @skew = 5 if @skew > 5
   end
 
   def execute
     return if ! tank.can_fire?
 
-    puts "fire!"
     tank.fire
     enemy = tank.pointed_at @skew
     if enemy && enemy.tank?

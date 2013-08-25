@@ -47,23 +47,28 @@ class Tank
     @ammo > 0
   end
 
-  def line_of_sight(skew = 0)
-    degrees = @rotation + skew
-    pixels = square.board.line_of_sight(square, degrees)
-    los = pixels.map { |p| square.board.square_at(p.x, p.y) }
-    hit = los.find_index { |s| ! s.empty? }
-    hit ? los[0..hit] : los
-  end
-
-  def pointed_at(skew = 0)
-    los = line_of_sight skew
-    puts "hit? #{los.last && !los.last.empty? ? los.last.position : ''}"
-    return false if los.empty?
-    los.last.empty? ? nil : los.last
+  def full_armor?
+    @armor == MAX_ARMOR
   end
 
   def direction_to(enemy)
     square.board.direction_to(square, enemy.square)
+  end
+
+  def line_of_sight_to(enemy)
+    pixels = square.board.line_of_sight(square, direction_to(enemy))
+    pixels.map { |p| square.board.square_at(p.x, p.y) }
+  end
+
+  def line_of_sight(skew = 0)
+    pixels = square.board.line_of_sight(square, @rotation + skew)
+    pixels.map { |p| square.board.square_at(p.x, p.y) }
+  end
+
+  def pointed_at(skew = 0)
+    los = line_of_sight skew
+    return false if los.empty?
+    los.find_index { |s| ! s.empty? }
   end
 
   def stats

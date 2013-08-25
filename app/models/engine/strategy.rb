@@ -11,12 +11,24 @@ class Strategy
     @board.tanks.reject {|t| t == @tank}
   end
 
+  def pointed_at?(enemy)
+    @tank.line_of_sight.include?(enemy)
+  end
+
+  def obscured?(enemy)
+    los = @tank.line_of_sight_to enemy
+    hit = los.find { |s| ! s.empty? }
+    los.include?(enemy.square) && hit != enemy.square
+  end
+
   def can_fire_at?(enemy)
-    @tank.pointed_at == enemy.square
+    (@tank.rotation - @tank.direction_to(enemy)).abs <= 5
+    #@tank.pointed_at == enemy.square
   end
 
   def can_fire_at_me?(enemy)
-    enemy.pointed_at == @tank.square
+    (enemy.rotation - enemy.direction_to(@tank)).abs <= 5
+    #enemy.pointed_at == @tank.square
   end
 
   def fire_at(enemy, skew = false)
@@ -28,11 +40,11 @@ class Strategy
     "r#{degrees}"
   end
 
-  def move_toward(enemy)
+  def approach(enemy)
     aggressive_moves(enemy).find { |m| can_move? m }
   end
 
-  def move_away_from(enemy)
+  def retreat_from(enemy)
     aggressive_moves(enemy).reverse.find { |m| can_move? m }
   end
 
@@ -49,18 +61,22 @@ class Strategy
     throw "unknown direction: #{degrees}"
   end
 
-  def can_move?(move)
+  def square_for(move)
     x, y = @tank.square.x, @tank.square.y
     y += 1 if move == 'n'
     y -= 1 if move == 's'
     x += 1 if move == 'e'
     x -= 1 if move == 'w'
-    next_square = @board.square_at x, y
+    @board.square_at x, y
+  end
+
+  def can_move?(move)
+    next_square = square_for move
     next_square && next_square.empty?
   end
 
   def rest
-    nil
+    '.'
   end
 
   def next_turn
@@ -71,21 +87,19 @@ end
 class AggressiveStrategy < Strategy
   def next_turn
     enemy = find_enemies.first
-    if can_fire_at? enemy
-      fire_at enemy, false
-    else
-      point_at enemy
-    end
+    return rest if @tank.ammo == 0
+    return fire_at enemy if can_fire_at? enemy
+    return approach enemy if obscured? enemy
+    return point_at enemy unless pointed_at? enemy
+    approach enemy
   end
 end
 
 class DefensiveStrategy < Strategy
   def next_turn
     enemy = find_enemies.first
-    if can_fire_at_me? enemy
-      move_away_from enemy
-    else
-      rest
-    end
+    return retreat_from enemy if can_fire_at_me? enemy
+    return rest if ! @tank.full_armor?
+    retreat_from enemy
   end
 end
