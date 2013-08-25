@@ -67,8 +67,8 @@ class Tank
 
   def pointed_at(skew = 0)
     los = line_of_sight skew
-    return false if los.empty?
-    los.find_index { |s| ! s.empty? }
+    return nil if los.empty?
+    los.find { |s| ! s.empty? }
   end
 
   def stats
