@@ -7,6 +7,12 @@ class Strategy
     next_turn
   end
 
+  def for_use_by(strategy)
+    @tank = strategy.tank
+    @board = @tank.square.board
+    self
+  end
+
   def find_enemies
     @board.tanks.reject {|t| t == @tank}
   end
@@ -99,7 +105,20 @@ class DefensiveStrategy < Strategy
   def next_turn
     enemy = find_enemies.first
     return retreat_from enemy if can_fire_at_me? enemy
-    return rest if ! @tank.full_armor?
+    return rest if @tank.ammo < Tank::MAX_AMMO
     retreat_from enemy
+  end
+end
+
+class CombinationStrategy < Strategy
+  def initialize(agg_factor)
+    @agg_factor = agg_factor
+  end
+
+  def next_turn
+    aggressive = AggressiveStrategy.new.for_use_by self
+    defensive = DefensiveStrategy.new.for_use_by self
+    return aggressive.next_turn if rand <= @agg_factor
+    defensive.next_turn
   end
 end

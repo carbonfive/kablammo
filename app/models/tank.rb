@@ -13,14 +13,12 @@ class Tank
   embedded_in :square
 
   def strategy
-    return AggressiveStrategy.new if @username == '0'
-    return DefensiveStrategy.new if @username == '1'
-    Strategy.new
+    return CombinationStrategy.new(rand)
   end
 
   def rest
     @ammo  = [MAX_AMMO,  @ammo  + 1].min
-    @armor = [MAX_ARMOR, @armor + 1].min
+    #@armor = [MAX_ARMOR, @armor + 1].min
   end
 
   def hit
@@ -45,10 +43,6 @@ class Tank
 
   def can_fire?
     @ammo > 0
-  end
-
-  def full_armor?
-    @armor == MAX_ARMOR
   end
 
   def direction_to(enemy)
