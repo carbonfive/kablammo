@@ -8,10 +8,10 @@ class Engine
       Turn.next_turn tank
     end
 
-    turns.sort_by(&:priority)
-    #p turns.map(&:tank).map(&:username)
+    turns = turns.sort_by(&:priority)
 
     turns.each do |turn|
+      #puts "#{turn.tank.username} - #{turn.tank.last_turn} - #{turn.priority}"
       turn.execute
     end
 

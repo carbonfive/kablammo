@@ -14,30 +14,38 @@ class BoardsController
     })
 
     6.times { board.add_wall }
-    2.times { |i| board.add_tank new_tank("#{i}") }
+    board.add_tank( new_tank 'agg', (rand / 2 + 0.5) )
+    board.add_tank( new_tank 'def', (rand / 2) )
     board.save!
 
     @app.redirect "/boards/#{name}"
   end
 
-  def show(name)
+  def show(name, play = false)
     board = Board.find_by_name name
     fires = board.get_last_fires
     return [404, "Unknown board: #{name}"] unless board
-    erb :board, locals: { board: board, fires: fires }
+    erb :board, locals: { board: board, fires: fires, play: play }
   end
 
   def turn(name)
     board = Board.find_by_name name
     board.turn if board
-    show name
+    show name, false
+  end
+
+  def play(name)
+    board = Board.find_by_name name
+    board.turn if board
+    show name, true
   end
 
   private
 
-  def new_tank(name)
+  def new_tank(name, agg)
     tank = Tank.new
-    tank.username = name
+    tank.username = "#{name}-#{agg.round(2)}"
+    tank.agg = agg
     tank
   end
 

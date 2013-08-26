@@ -10,10 +10,13 @@ class Tank
   key :armor,     Integer, required: true, default: MAX_ARMOR
   key :last_turn, String
 
+  # this will go away
+  key :agg, Float
+
   embedded_in :square
 
   def strategy
-    return CombinationStrategy.new(rand)
+    CombinationStrategy.new @agg
   end
 
   def rest

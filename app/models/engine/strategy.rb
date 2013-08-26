@@ -35,8 +35,10 @@ class Strategy
     (enemy.rotation - enemy.direction_to(@tank)).abs <= 5
   end
 
-  def fire_at(enemy, skew = false)
-    "f#{skew ? 5 : ''}"
+  def fire_at(enemy, compensate = false)
+    direction = @tank.direction_to(enemy).round
+    skew = direction - @tank.rotation
+    "f#{skew}"
   end
 
   def point_at(enemy)

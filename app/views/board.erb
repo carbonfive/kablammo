@@ -14,12 +14,22 @@
 <% end %>
 
 <br/>
-<a href="/boards/<%= board.name %>/turn">Turn</a> |
+<% if play %>
+  <a href="/boards/<%= board.name %>">Stop</a> |
+<% else %>
+  <a href="/boards/<%= board.name %>/turn">Turn</a> |
+  <a href="/boards/<%= board.name %>/play">Play</a> |
+<% end %>
 <a href="/boards/<%= board.name %>/reset">Reset</a>
 
 <script type="text/javascript">
 var fires = <%= JSON.dump fires %>;
 $(function() {
-  animateFires(fires);
+  <% if play %>
+      function play() { setTimeout( function() { window.location.reload() }, 500 ) }
+  <% else %>
+      function play() { }
+  <% end %>
+  animateFires(fires, play);
 })
 </script>

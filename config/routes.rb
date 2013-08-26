@@ -8,6 +8,10 @@ get '/boards/:name/turn' do |name|
   BoardsController.new(self).turn name
 end
 
+get '/boards/:name/play' do |name|
+  BoardsController.new(self).play name
+end
+
 get '/boards/:name/reset' do |name|
   BoardsController.new(self).reset name
 end
