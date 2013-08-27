@@ -23,13 +23,10 @@
 <a href="/boards/<%= board.name %>/reset">Reset</a>
 
 <script type="text/javascript">
-var fires = <%= JSON.dump fires %>;
+var board = <%= MultiJson.dump board %>;
+var fires = <%= MultiJson.dump fires %>;
+var play  = <%= play %>;
 $(function() {
-  <% if play %>
-      function play() { setTimeout( function() { window.location.reload() }, 500 ) }
-  <% else %>
-      function play() { }
-  <% end %>
-  animateFires(fires, play);
+  new kablammo.Board(board, fires, play).render();
 })
 </script>
