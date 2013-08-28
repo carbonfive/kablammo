@@ -1,10 +1,12 @@
 class FireTurn < Turn
+  MAX_SKEW = 10
+
   attr_reader :skew
 
   def initialize(skew)
     @skew = skew || 0
-    @skew = -5 if @skew < -5
-    @skew = 5 if @skew > 5
+    @skew = MAX_SKEW * -1 if @skew < MAX_SKEW * -1
+    @skew = MAX_SKEW      if @skew > MAX_SKEW
   end
 
   def line_of_fire

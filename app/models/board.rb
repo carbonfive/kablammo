@@ -80,6 +80,10 @@ class Board
     geometry.direction_to(source, dest)
   end
 
+  def distance_to(source, dest)
+    geometry.distance_to(source, dest)
+  end
+
   private
 
   def length

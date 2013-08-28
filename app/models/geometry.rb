@@ -51,6 +51,12 @@ class Geometry
     degrees % 360
   end
 
+  def distance_to(source, dest)
+    x = (dest.x - source.x).abs
+    y = (dest.y - source.y).abs
+    Math.sqrt(x*x + y*y)
+  end
+
   private
 
   def in_bounds?(x, y)

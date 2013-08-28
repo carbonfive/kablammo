@@ -52,6 +52,10 @@ class Tank
     square.board.direction_to(square, enemy.square)
   end
 
+  def distance_to(enemy)
+    square.board.distance_to(square, enemy.square)
+  end
+
   def line_of_sight_to(enemy)
     pixels = square.board.line_of_sight(square, direction_to(enemy))
     pixels.map { |p| square.board.square_at(p.x, p.y) }

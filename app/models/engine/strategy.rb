@@ -28,16 +28,22 @@ class Strategy
   end
 
   def can_fire_at?(enemy)
-    (@tank.rotation - @tank.direction_to(enemy)).abs <= 5
+    (@tank.rotation - @tank.direction_to(enemy)).abs <= FireTurn::MAX_SKEW
   end
 
   def can_fire_at_me?(enemy)
-    (enemy.rotation - enemy.direction_to(@tank)).abs <= 5
+    (enemy.rotation - enemy.direction_to(@tank)).abs <= FireTurn::MAX_SKEW
   end
 
-  def fire_at(enemy, compensate = false)
+  def fire_at(enemy, compensate = 0)
     direction = @tank.direction_to(enemy).round
     skew = direction - @tank.rotation
+    distance = @tank.distance_to(enemy)
+    max_distance = Math.sqrt(@board.height * @board.height + @board.width * @board.width)
+    compensation = ( 10 - ( (10 - 3) * (distance / max_distance) ) ).round
+    #puts "10 - (10 - 3) * (#{distance} / #{max_distance}) = #{compensation}"
+    compensation *= -1 if rand(0..1) == 0
+    skew += compensation if compensate > rand
     "f#{skew}"
   end
 
@@ -101,7 +107,7 @@ class AggressiveStrategy < Strategy
     enemy = find_enemies.first
     return rest if @tank.ammo == 0
     return approach enemy if obscured? enemy
-    return fire_at enemy if can_fire_at? enemy
+    return fire_at enemy, 0.75 if can_fire_at? enemy
     return point_at enemy unless pointed_at? enemy
     approach enemy
   end
