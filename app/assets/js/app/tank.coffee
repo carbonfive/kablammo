@@ -1,10 +1,11 @@
 class kablammo.Tank
   constructor: (@parent, @args) ->
-    @el = '.tank'
+    @el = 'img'
 
   $el: ->
     @parent.$el().find @el
 
   render: ->
-    img = "<img src='https://identicons.github.com/#{@args.username}.png'/>"
-    @$el().append img
+    url = "https://identicons.github.com/#{@args.username}.png"
+    console.log @$el
+    @$el().attr 'src', url

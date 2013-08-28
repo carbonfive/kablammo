@@ -9,14 +9,11 @@ class kablammo.Square
 
   render: ->
     @$el().addClass @args.state
-    @renderTank()
+    @$el().find('img').attr 'src', '/images/blank.png'
+    @renderTank() if @args.state == 'tank'
 
   renderTank: ->
-    if @args.state == 'tank'
-      @$el().append '<div class="tank"/>'
-      @tank.render()
-    else
-      @$el().empty()
+    @tank.render()
 
   fire: ->
     @$el().addClass 'fire'

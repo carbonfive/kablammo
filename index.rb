@@ -15,8 +15,9 @@ set :root, File.dirname(__FILE__)
 register Sinatra::AssetPack
 
 assets {
-  serve '/js',  from: 'app/assets/js'
-  serve '/css', from: 'app/assets/css'
+  serve '/js',     from: 'app/assets/js'
+  serve '/css',    from: 'app/assets/css'
+  serve '/images', from: 'app/assets/images'
 
   js :application, '/js/application.js', [
     '/js/vendor/**/*.js',
