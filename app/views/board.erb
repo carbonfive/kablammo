@@ -2,7 +2,7 @@
   <% board.rows.reverse.each do |row| %>
     <div class="row">
       <% row.each do |square| %>
-        <div id="square-<%= square.x %>-<%= square.y %>" class="square <%= square.html_classes %>">&nbsp;</div>
+        <div class="square square-<%= square.x %>-<%= square.y %>">&nbsp;</div>
       <% end %>
     </div>
   <% end %>

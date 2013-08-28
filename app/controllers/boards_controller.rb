@@ -14,8 +14,8 @@ class BoardsController
     })
 
     6.times { board.add_wall }
-    board.add_tank( new_tank 'agg', (rand / 2 + 0.5) )
-    board.add_tank( new_tank 'def', (rand / 2) )
+    board.add_tank( new_tank 'mwynholds', (rand / 2 + 0.5) )
+    board.add_tank( new_tank 'dhendee', (rand / 2) )
     board.save!
 
     @app.redirect "/boards/#{name}"
@@ -44,7 +44,7 @@ class BoardsController
 
   def new_tank(name, agg)
     tank = Tank.new
-    tank.username = "#{name}-#{agg.round(2)}"
+    tank.username = name
     tank.agg = agg
     tank
   end

@@ -9,11 +9,16 @@ body {
 }
 
 .square {
+  background-color: #eee;
   width: 50px;
   height: 50px;
-  border: 1px solid gray;
   display: inline-block;
-  margin: 3px;
+}
+
+.square img {
+  margin-top: -16px;
+  width: 50px;
+  height: 50px;
 }
 
 .empty {
@@ -24,33 +29,8 @@ body {
 }
 
 .tank.dead {
-  background-color: #B80000;
-}
-
-.tank.armor-0 {
-  background-color: #3B7728;
-}
-
-.tank.armor-1 {
-  background-color: #377E20;
-}
-
-.tank.armor-2 {
-  background-color: #338618;
-}
-
-.tank.armor-3 {
-  background-color: #2F910E;
-}
-
-.tank.armor-4 {
-  background-color: #2B9608;
-}
-
-.tank.armor-5 {
-  background-color: #289E00;
 }
 
 .fire {
-  border: 2px solid red;
+  background-color: #B80000;
 }
