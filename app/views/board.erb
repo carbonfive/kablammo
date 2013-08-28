@@ -7,20 +7,30 @@
     </div>
   <% end %>
 </div>
+<div class="stats">
+  <% board.tanks.each do |tank| %>
+    <div class="stat">
+      <img src="https://identicons.github.com/<%= tank.username %>.png"/>
+      <div class="username"><%= tank.username %></div>
+      <table>
+        <tr class="rotation"><th>Rotation</th><td><%= tank.rotation %></td></tr>
+        <tr class="armor"><th>Armor</th><td><%= tank.armor %></td></tr>
+        <tr class="ammo"><th>Ammo</th><td><%= tank.ammo %></td></tr>
+        <tr class="last-turn"><th>Last Turn</th><td><%= tank.last_turn %></td></tr>
+      </table>
+    </div>
+  <% end %>
+</div>
 
-<br/>
-<% board.tanks.each do |tank| %>
-  <div><%= tank.stats %></div>
-<% end %>
-
-<br/>
-<% if play %>
-  <a href="/boards/<%= board.name %>">Stop</a> |
-<% else %>
-  <a href="/boards/<%= board.name %>/turn">Turn</a> |
-  <a href="/boards/<%= board.name %>/play">Play</a> |
-<% end %>
-<a href="/boards/<%= board.name %>/reset">Reset</a>
+<div class="buttons">
+  <% if play %>
+    <a href="/boards/<%= board.name %>">Stop</a> |
+  <% else %>
+    <a href="/boards/<%= board.name %>/turn">Turn</a> |
+    <a href="/boards/<%= board.name %>/play">Play</a> |
+  <% end %>
+  <a href="/boards/<%= board.name %>/reset">Reset</a>
+</div>
 
 <script type="text/javascript">
 var board = <%= MultiJson.dump board %>;

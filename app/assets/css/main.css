@@ -3,6 +3,7 @@ body {
 }
 
 .board {
+  display: inline-block;
 }
 
 .row {
@@ -36,4 +37,47 @@ body {
 
 .fire {
   background-color: #B80000;
+}
+
+/* Stats */
+
+.stats {
+  display: inline-block;
+  margin-left: 20px;
+  vertical-align: top;
+}
+
+.stat {
+  margin-bottom: 30px;
+}
+
+.stat img {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.stat .username {
+  display: inline-block;
+}
+
+.stat table {
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.stat table th {
+  text-align: right;
+  font-weight: bold;
+  padding: 3px 0;
+}
+
+.stat table td {
+  padding: 3px 0 3px 20px;
+}
+
+/* Buttons */
+
+.buttons {
+  margin-top: 20px;
 }
