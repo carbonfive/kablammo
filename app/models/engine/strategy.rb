@@ -54,6 +54,12 @@ class Strategy
     aggressive_moves(enemy).reverse.find { |m| can_move? m }
   end
 
+  def dodge(enemy)
+    am = aggressive_moves enemy
+    moves = [ am[1], am[2], am[3], am[4] ]
+    moves.find { |m| can_move? m }
+  end
+
   def aggressive_moves(enemy)
     degrees = @tank.direction_to(enemy)
     return %w(e n s w) if degrees >= 0   && degrees <= 45
@@ -104,7 +110,7 @@ end
 class DefensiveStrategy < Strategy
   def next_turn
     enemy = find_enemies.first
-    return retreat_from enemy if can_fire_at_me? enemy
+    return dodge enemy if can_fire_at_me? enemy
     return rest if @tank.ammo < Tank::MAX_AMMO
     retreat_from enemy
   end
