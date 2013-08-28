@@ -31,7 +31,11 @@ class @kablammo.Board
       @fire lof, next
     , 100
 
-  turn: ->
+  turn: =>
+    dead_tank = _(@squares).find (s) ->
+      s.args.state == 'tank' && s.tank.args.armor < 0
+    return if dead_tank?
+
     setTimeout ->
       window.location.reload()
     , 250

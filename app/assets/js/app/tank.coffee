@@ -7,5 +7,4 @@ class kablammo.Tank
 
   render: ->
     url = "https://identicons.github.com/#{@args.username}.png"
-    console.log @$el
     @$el().attr 'src', url

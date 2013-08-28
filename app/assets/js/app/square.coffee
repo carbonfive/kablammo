@@ -13,6 +13,7 @@ class kablammo.Square
     @renderTank() if @args.state == 'tank'
 
   renderTank: ->
+    @$el().addClass 'dead' if @tank.args.armor < 0
     @tank.render()
 
   fire: ->
