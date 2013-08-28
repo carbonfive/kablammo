@@ -31,8 +31,9 @@ class Board
     fires = []
     tanks.each do |tank|
       turn = Turn.parse tank.last_turn
+      turn.tank = tank
       if turn && turn.is_a?(FireTurn)
-        fires << tank.line_of_fire.map { |s| [s.x, s.y] }
+        fires << turn.line_of_fire.map { |s| [s.x, s.y] }
       end
     end
     fires

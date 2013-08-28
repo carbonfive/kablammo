@@ -7,11 +7,15 @@ class FireTurn < Turn
     @skew = 5 if @skew > 5
   end
 
+  def line_of_fire
+    tank.line_of_fire @skew
+  end
+
   def execute
     return if ! tank.can_fire?
 
     tank.fire
-    lof = tank.line_of_fire @skew
+    lof = line_of_fire
     enemy = lof.last
     if enemy && enemy.tank?
       enemy.tank.hit
