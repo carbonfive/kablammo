@@ -16,3 +16,9 @@ class kablammo.Tank
     stat.find('.armor td').html @args.armor
     stat.find('.ammo td').html @args.ammo
     stat.find('.last-turn td').html @last_turn?.args.value
+
+    if @last_turn? && @last_turn.args.line_of_fire?
+      @parent.parent.fire @last_turn.args.line_of_fire, =>
+        $(@parent).trigger 'rendered'
+    else
+      $(@parent).trigger 'rendered'

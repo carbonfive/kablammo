@@ -24,11 +24,5 @@ module Engine
         enemy.tank.hit
       end
     end
-
-    def turn
-      turn = super
-      turn.line_of_fire = line_of_fire.map {|s| [s.x, s.y]}
-      turn
-    end
   end
 end

@@ -1,8 +1,6 @@
 class kablammo.Square
   constructor: (@parent, @args) ->
     @el = ".square-#{@args.x}-#{@args.y}"
-    if @args.state == 'tank'
-      @tank = new kablammo.Tank(@, @args.tank)
 
   $el: ->
     @parent.$el().find @el
@@ -10,9 +8,16 @@ class kablammo.Square
   render: ->
     @$el().addClass @args.state
     @$el().find('img').attr 'src', '/images/blank.png'
-    @renderTank() if @args.state == 'tank'
+    if @args.state == 'tank'
+      @tank = new kablammo.Tank(@, @args.tank)
+      @renderTank()
+    else
+      $(@parent).trigger 'rendered', @
 
   renderTank: ->
+    $(@).on 'rendered', (child) =>
+      $(@parent).trigger 'rendered', @
+
     @$el().addClass 'dead' if @tank.args.armor < 0
     @tank.render()
 

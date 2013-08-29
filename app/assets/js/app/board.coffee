@@ -10,20 +10,16 @@ class @kablammo.Board
 
   render: =>
     @squares = ( new kablammo.Square(@, square) for square in @args.squares )
+
+    rendered = 0
+    $(@).on 'rendered', (child) ->
+      rendered += 1
+      if rendered == @squares.length
+        @turn() if @playing
+
     square.render() for square in @squares
 
-    fires = _.chain(@squares).map((square) -> square.tank?.last_turn?.args.line_of_fire).compact().value()
-    count = 0
-    next = =>
-      return if ! @playing
-      count += 1
-      @turn() if count == fires.length
-
-    @turn() if @playing && fires.length == 0
-    @fire(lof, next) for lof in fires
-
   fire: (lof, next) =>
-    console.log lof
     if lof.length == 0
       next() if next
       return
