@@ -4,12 +4,8 @@ get '/boards/:name' do |name|
   BoardsController.new(self).show name
 end
 
-get '/boards/:name/turn' do |name|
+post '/boards/:name/turn.json' do |name|
   BoardsController.new(self).turn name
-end
-
-get '/boards/:name/play' do |name|
-  BoardsController.new(self).play name
 end
 
 get '/boards/:name/reset' do |name|

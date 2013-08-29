@@ -9,6 +9,7 @@ gem 'coffee-script'
 gem 'multi_json'
 gem 'oj'
 gem 'execjs', '1.4.0'
+gem 'tilt-jbuilder', require: 'sinatra/jbuilder'
 
 
 group :development do

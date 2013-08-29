@@ -82,3 +82,9 @@ body {
 .buttons {
   margin-top: 20px;
 }
+
+.buttons .link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}

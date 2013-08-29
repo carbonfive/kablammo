@@ -27,18 +27,6 @@ class Board
     self.where(name: name).first
   end
 
-  def get_last_fires
-    fires = []
-    tanks.each do |tank|
-      turn = Turn.parse tank.last_turn
-      turn.tank = tank
-      if turn && turn.is_a?(FireTurn)
-        fires << turn.line_of_fire.map { |s| [s.x, s.y] }
-      end
-    end
-    fires
-  end
-
   def rows
     squares.each_slice(@width).to_a
   end

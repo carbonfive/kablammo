@@ -9,7 +9,7 @@
 </div>
 <div class="stats">
   <% board.tanks.each do |tank| %>
-    <div class="stat">
+    <div class="stat tank-<%= tank.username %>">
       <img src="https://identicons.github.com/<%= tank.username %>.png"/>
       <div class="username"><%= tank.username %></div>
       <table>
@@ -23,20 +23,14 @@
 </div>
 
 <div class="buttons">
-  <% if play %>
-    <a href="/boards/<%= board.name %>">Stop</a> |
-  <% else %>
-    <a href="/boards/<%= board.name %>/turn">Turn</a> |
-    <a href="/boards/<%= board.name %>/play">Play</a> |
-  <% end %>
+  <span class="link turn">Turn</span> |
+  <span class="link play">Play</span> |
   <a href="/boards/<%= board.name %>/reset">Reset</a>
 </div>
 
 <script type="text/javascript">
-var board = <%= MultiJson.dump board %>;
-var fires = <%= MultiJson.dump fires %>;
-var play  = <%= play %>;
 $(function() {
-  new kablammo.Board(board, fires, play).render();
+  var json = <%= json %>;
+  new kablammo.Board(json).render();
 })
 </script>

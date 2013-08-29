@@ -21,23 +21,17 @@ class BoardsController
     @app.redirect "/boards/#{name}"
   end
 
-  def show(name, play = false)
+  def show(name)
     board = Board.find_by_name name
-    fires = board.get_last_fires
     return [404, "Unknown board: #{name}"] unless board
-    erb :board, locals: { board: board, fires: fires, play: play }
+    json = jbuilder :board, locals: { board: board }
+    erb :board, locals: { board: board, json: json }
   end
 
   def turn(name)
     board = Board.find_by_name name
     board.turn if board
-    show name, false
-  end
-
-  def play(name)
-    board = Board.find_by_name name
-    board.turn if board
-    show name, true
+    jbuilder :board, locals: { board: board }
   end
 
   private
@@ -53,7 +47,7 @@ class BoardsController
     @app.erb(*args)
   end
 
-  def html(str)
-    "<html><body>#{str}</body></html>"
+  def jbuilder(*args)
+    @app.jbuilder(*args)
   end
 end

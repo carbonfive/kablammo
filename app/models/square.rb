@@ -34,14 +34,4 @@ class Square
   def position
     "[#{@x}, #{@y}]"
   end
-
-  # lame
-  def html_classes
-    classes = [@state]
-    if tank?
-      classes << 'dead' if tank.dead?
-      classes << "armor-#{tank.armor}" if tank.alive?
-    end
-    classes.join ' '
-  end
 end

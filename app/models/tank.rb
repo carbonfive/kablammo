@@ -72,8 +72,10 @@ class Tank
     hit ? los[0..hit] : los
   end
 
-  def stats
-    s = self.square
-    "#{@username} - [#{s.x}, #{s.y}] - dir #{@rotation}, ammo #{@ammo}, armor #{@armor} - #{@last_turn}"
+  def last_fire
+    turn = Turn.parse last_turn
+    turn.tank = self
+    return unless turn && turn.is_a?(FireTurn)
+    turn.line_of_fire.map {|s| [s.x, s.y]}
   end
 end
