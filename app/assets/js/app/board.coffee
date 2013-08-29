@@ -12,7 +12,7 @@ class @kablammo.Board
     @squares = ( new kablammo.Square(@, square) for square in @args.squares )
     square.render() for square in @squares
 
-    fires = _.chain(@squares).map((square) -> square.tank?.args?.last_fire).compact().value()
+    fires = _.chain(@squares).map((square) -> square.tank?.last_turn?.args.line_of_fire).compact().value()
     count = 0
     next = =>
       return if ! @playing
@@ -23,6 +23,7 @@ class @kablammo.Board
     @fire(lof, next) for lof in fires
 
   fire: (lof, next) =>
+    console.log lof
     if lof.length == 0
       next() if next
       return

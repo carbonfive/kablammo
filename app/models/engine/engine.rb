@@ -1,21 +1,24 @@
-class Engine::Engine
-  def initialize(board)
-    @board = board
-  end
-
-  def turn
-    turns = @board.alive_tanks.map do |tank|
-      Engine::Turn.next_turn tank
+module Engine
+  class Engine
+    def initialize(board)
+      @board = board
     end
 
-    turns = turns.sort_by(&:priority)
+    def turn
+      handlers = @board.alive_tanks.map do |tank|
+        handler = TurnHandler.next_turn tank
+        tank.turns << handler.turn
+        handler
+      end
 
-    turns.each do |turn|
-      #puts "#{turn.tank.username} - #{turn.tank.last_turn} - #{turn.priority}"
-      turn.execute
+      handlers = handlers.sort_by(&:priority)
+
+      handlers.each do |handler|
+        handler.execute
+      end
+
+      @board.save!
     end
 
-    @board.save!
   end
-
 end

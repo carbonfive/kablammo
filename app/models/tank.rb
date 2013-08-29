@@ -8,11 +8,11 @@ class Tank
   key :rotation,  Integer, required: true, default: 0
   key :ammo,      Integer, required: true, default: MAX_AMMO
   key :armor,     Integer, required: true, default: MAX_ARMOR
-  key :last_turn, String
 
   # this will go away
   key :agg, Float
 
+  many :turns
   embedded_in :square
 
   def strategy
@@ -71,10 +71,4 @@ class Tank
     hit ? los[0..hit] : los
   end
 
-  def last_fire
-    turn = Engine::Turn.parse last_turn
-    turn.tank = self
-    return unless turn && turn.is_a?(Engine::FireTurn)
-    turn.line_of_fire.map {|s| [s.x, s.y]}
-  end
 end
