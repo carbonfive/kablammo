@@ -3,16 +3,12 @@ module Strategy
     attr_reader :tank, :board
 
     def self.lookup(username)
-      if username == 'mwynholds'
-        Combination.new do
-          rand() <= 0.8 ? Aggressive.new : Defensive.new
-        end
-      elsif username == 'dhendee'
-        Combination.new do
-          rand() <= 0.2 ? Aggressive.new : Defensive.new
-        end
-      else
-        raise "Unknown username: #{username}"
+      peeps = { mwynholds: 0.8, dhendee: 0.2, carbonfive: 0.5 }
+      num = peeps[username.to_sym]
+      raise "Unknown username: #{username}" unless num
+
+      Combination.new do
+        rand() <= num ? Aggressive.new : Defensive.new
       end
     end
 
@@ -29,7 +25,7 @@ module Strategy
     end
 
     def find_enemies
-      @board.tanks.reject {|t| t == @tank}
+      @board.tanks.reject {|t| t == @tank}.reject {|t| t.dead?}
     end
 
     def pointed_at?(enemy)

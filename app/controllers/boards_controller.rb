@@ -16,6 +16,7 @@ class BoardsController
     6.times { board.add_wall }
     board.add_tank( new_tank 'mwynholds' )
     board.add_tank( new_tank 'dhendee' )
+    board.add_tank( new_tank 'carbonfive' )
     board.save!
 
     @app.redirect "/boards/#{name}"
