@@ -1,4 +1,4 @@
-class Turn
+class Engine::Turn
 
   MOVES = Hash[%w(north south east west).map {|d| [d[0], d]}]
 
@@ -14,16 +14,16 @@ class Turn
   end
 
   def self.parse(str)
-    return RestTurn.new unless str
+    return Engine::RestTurn.new unless str
 
     str = str.downcase
     type = str[0]
     value = Integer(str[1..-1]) if str.length > 1
 
-    return MoveTurn.new(MOVES[type]) if MOVES[type]
-    return FireTurn.new(value) if type == 'f'
-    return RotateTurn.new(value) if type == 'r'
-    RestTurn.new
+    return Engine::MoveTurn.new(MOVES[type]) if MOVES[type]
+    return Engine::FireTurn.new(value) if type == 'f'
+    return Engine::RotateTurn.new(value) if type == 'r'
+    Engine::RestTurn.new
   end
 
   def square
@@ -36,7 +36,10 @@ class Turn
 
   # turns are prioritized by type, and secondarily by who has more rest (ie: armor)
   def priority
-    order = [MoveTurn, RotateTurn, FireTurn, RestTurn]
+    order = [ Engine::MoveTurn,
+              Engine::RotateTurn,
+              Engine::FireTurn,
+              Engine::RestTurn ]
     order.index(self.class) * 100 + (50 - @tank.armor)
   end
 

@@ -1,4 +1,4 @@
-class Strategy
+class Strategy::Base
   attr_reader :tank, :board
 
   def execute_turn(tank)
@@ -28,11 +28,11 @@ class Strategy
   end
 
   def can_fire_at?(enemy)
-    (@tank.rotation - @tank.direction_to(enemy)).abs <= FireTurn::MAX_SKEW
+    (@tank.rotation - @tank.direction_to(enemy)).abs <= Engine::FireTurn::MAX_SKEW
   end
 
   def can_fire_at_me?(enemy)
-    (enemy.rotation - enemy.direction_to(@tank)).abs <= FireTurn::MAX_SKEW
+    (enemy.rotation - enemy.direction_to(@tank)).abs <= Engine::FireTurn::MAX_SKEW
   end
 
   def fire_at(enemy, compensate = 0)
@@ -102,7 +102,7 @@ class Strategy
   end
 end
 
-class AggressiveStrategy < Strategy
+class Strategy::Aggressive < Strategy::Base
   def next_turn
     enemy = find_enemies.first
     return rest if @tank.ammo == 0
@@ -113,7 +113,7 @@ class AggressiveStrategy < Strategy
   end
 end
 
-class DefensiveStrategy < Strategy
+class Strategy::Defensive < Strategy::Base
   def next_turn
     enemy = find_enemies.first
     return dodge enemy if can_fire_at_me? enemy
@@ -122,14 +122,14 @@ class DefensiveStrategy < Strategy
   end
 end
 
-class CombinationStrategy < Strategy
+class Strategy::Combination < Strategy::Base
   def initialize(agg_factor)
     @agg_factor = agg_factor
   end
 
   def next_turn
-    aggressive = AggressiveStrategy.new.for_use_by self
-    defensive = DefensiveStrategy.new.for_use_by self
+    aggressive = Strategy::Aggressive.new.for_use_by self
+    defensive = Strategy::Defensive.new.for_use_by self
     return aggressive.next_turn if rand <= @agg_factor
     defensive.next_turn
   end

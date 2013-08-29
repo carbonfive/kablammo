@@ -12,7 +12,7 @@ class Board
   before_create :fill_in_empty_board
 
   def engine
-    @engine ||= Engine.new(self)
+    @engine ||= Engine::Engine.new(self)
   end
 
   def geometry

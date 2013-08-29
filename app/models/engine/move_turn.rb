@@ -1,4 +1,4 @@
-class MoveTurn < Turn
+class Engine::MoveTurn < Engine::Turn
   attr_reader :direction
 
   def initialize(direction)

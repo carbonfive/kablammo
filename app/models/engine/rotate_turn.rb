@@ -1,4 +1,4 @@
-class RotateTurn < Turn
+class Engine::RotateTurn < Engine::Turn
   attr_reader :rotation
 
   def initialize(rotation)

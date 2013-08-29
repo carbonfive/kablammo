@@ -16,12 +16,11 @@ class Tank
   embedded_in :square
 
   def strategy
-    CombinationStrategy.new @agg
+    Strategy::Combination.new @agg
   end
 
   def rest
     @ammo  = [MAX_AMMO,  @ammo  + 1].min
-    #@armor = [MAX_ARMOR, @armor + 1].min
   end
 
   def hit
@@ -73,9 +72,9 @@ class Tank
   end
 
   def last_fire
-    turn = Turn.parse last_turn
+    turn = Engine::Turn.parse last_turn
     turn.tank = self
-    return unless turn && turn.is_a?(FireTurn)
+    return unless turn && turn.is_a?(Engine::FireTurn)
     turn.line_of_fire.map {|s| [s.x, s.y]}
   end
 end

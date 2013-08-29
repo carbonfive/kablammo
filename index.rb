@@ -6,6 +6,9 @@ require 'sinatra'
 require 'json'
 
 require './config/mongo'
+
+module Engine end
+module Strategy end
 require './app/models/engine/turn'
 Dir['./app/models/**/*.rb'].each   { |file| require file }
 Dir['./app/controllers/*.rb'].each { |file| require file }

@@ -1,11 +1,11 @@
-class Engine
+class Engine::Engine
   def initialize(board)
     @board = board
   end
 
   def turn
     turns = @board.alive_tanks.map do |tank|
-      Turn.next_turn tank
+      Engine::Turn.next_turn tank
     end
 
     turns = turns.sort_by(&:priority)

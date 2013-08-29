@@ -1,4 +1,4 @@
-class FireTurn < Turn
+class Engine::FireTurn < Engine::Turn
   MAX_SKEW = 10
 
   attr_reader :skew
