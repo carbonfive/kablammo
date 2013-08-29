@@ -16,7 +16,7 @@ class Board
   end
 
   def geometry
-    @geometry ||= Geometry.new(@height, @width)
+    @geometry ||= Geometry.new(@width, @height)
   end
 
   def turn

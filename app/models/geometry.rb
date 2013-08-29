@@ -1,7 +1,12 @@
 class Geometry
-  def initialize(height, width)
-    @height = height
+
+  SLOP = 0.10
+  POS = SLOP
+  NEG = POS * -1
+
+  def initialize(width, height)
     @width = width
+    @height = height
   end
 
   def line_of_sight(source, degrees)
@@ -13,11 +18,11 @@ class Geometry
     steep = true if degrees.in?(45, 135, false) || degrees.in?(225, 315, false)
 
     # figure out if we're pointing forward or backward
-    delta = 0.01  if degrees.in?(0, 45) || degrees.in?(315, 360)
-    delta = -0.01 if degrees.in?(135, 225)
+    delta = POS if degrees.in?(0, 45) || degrees.in?(315, 360)
+    delta = NEG if degrees.in?(135, 225)
 
-    delta = 0.01  if degrees.in?(45, 135, false)
-    delta = -0.01 if degrees.in?(225, 315, false)
+    delta = POS if degrees.in?(45, 135, false)
+    delta = NEG if degrees.in?(225, 315, false)
 
     # each grid square is 1.0 x 1.0.  we measure from the middle
     offset_x = source.x + 0.5
@@ -75,7 +80,7 @@ class Geometry
 
   def in_slop?(f)
     fractional = f - f.floor
-    fractional < 0.05
+    fractional < SLOP
   end
 end
 
