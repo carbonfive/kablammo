@@ -9,14 +9,11 @@ class Tank
   key :ammo,      Integer, required: true, default: MAX_AMMO
   key :armor,     Integer, required: true, default: MAX_ARMOR
 
-  # this will go away
-  key :agg, Float
-
   many :turns
   embedded_in :square
 
   def strategy
-    Strategy::Combination.new @agg
+    Strategy::Base.lookup @username
   end
 
   def rest

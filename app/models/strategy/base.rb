@@ -2,6 +2,20 @@ module Strategy
   class Base
     attr_reader :tank, :board
 
+    def self.lookup(username)
+      if username == 'mwynholds'
+        Combination.new do
+          rand() <= 0.8 ? Aggressive.new : Defensive.new
+        end
+      elsif username == 'dhendee'
+        Combination.new do
+          rand() <= 0.2 ? Aggressive.new : Defensive.new
+        end
+      else
+        raise "Unknown username: #{username}"
+      end
+    end
+
     def execute_turn(tank)
       @tank = tank
       @board = tank.square.board
@@ -100,39 +114,6 @@ module Strategy
 
     def next_turn
       throw 'not implemented'
-    end
-  end
-
-  class Aggressive < Base
-    def next_turn
-      enemy = find_enemies.first
-      return rest if @tank.ammo == 0
-      return approach enemy if obscured? enemy
-      return fire_at enemy, 0.75 if can_fire_at? enemy
-      return point_at enemy unless pointed_at? enemy
-      approach enemy
-    end
-  end
-
-  class Defensive < Base
-    def next_turn
-      enemy = find_enemies.first
-      return dodge enemy if can_fire_at_me? enemy
-      return rest if @tank.ammo < ::Tank::MAX_AMMO
-      retreat_from enemy
-    end
-  end
-
-  class Combination < Base
-    def initialize(agg_factor)
-      @agg_factor = agg_factor
-    end
-
-    def next_turn
-      aggressive = Aggressive.new.for_use_by self
-      defensive = Defensive.new.for_use_by self
-      return aggressive.next_turn if rand <= @agg_factor
-      defensive.next_turn
     end
   end
 end
