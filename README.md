@@ -9,6 +9,5 @@ Setup
 
 - Clone the repo
 - Install dependancies: run `bundle install`
-- Start the server: run `ruby index.rb`
-- Run tests: >_<
-- Visit `localhost:4567/??????`
+- Start the server: run `rerun.sh`
+- View a board `localhost:4567/boards/1/reset`
