@@ -11,17 +11,17 @@ module Engine
     end
 
     def line_of_fire
-      tank.line_of_fire @skew
+      robot.line_of_fire @skew
     end
 
     def execute
-      return if ! tank.can_fire?
+      return if ! robot.can_fire?
 
-      tank.fire
+      robot.fire
       lof = line_of_fire
       enemy = lof.last
-      if enemy && enemy.tank?
-        enemy.tank.hit
+      if enemy && enemy.robot?
+        enemy.robot.hit
       end
     end
   end

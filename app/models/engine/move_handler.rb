@@ -23,9 +23,9 @@ module Engine
 
       dest = board.square_at(x, y)
       if dest.empty?
-        tank = source.tank
+        robot = source.robot
         source.clear
-        dest.place_tank tank
+        dest.place_robot robot
       end
     end
 

@@ -33,9 +33,9 @@ class @kablammo.Board
     , 100
 
   turn: (event) =>
-    alive_tanks = _(@squares).filter (s) ->
-      s.args.state == 'tank' && s.tank.args.armor >= 0
-    game_on = alive_tanks.length >= 2
+    alive_robots = _(@squares).filter (s) ->
+      s.args.state == 'robot' && s.robot.args.armor >= 0
+    game_on = alive_robots.length >= 2
     return unless game_on
 
     done = (data, status, xhr) =>

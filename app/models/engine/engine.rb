@@ -5,9 +5,9 @@ module Engine
     end
 
     def turn
-      handlers = @board.alive_tanks.map do |tank|
-        handler = TurnHandler.next_turn tank
-        tank.turns << handler.turn
+      handlers = @board.alive_robots.map do |robot|
+        handler = TurnHandler.next_turn robot
+        robot.turns << handler.turn
         handler
       end
 
