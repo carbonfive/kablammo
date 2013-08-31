@@ -1,22 +1,19 @@
-class @kablammo.Board
-  constructor: (@args) ->
+class kablammo.Board
+  constructor: (@parent, @args) ->
     @el = '.board'
-    @playing = false
-    $('.buttons .turn').click @turn
-    $('.buttons .play').click @play
+    $(@).on 'rendered', @onRendered
 
   $el: ->
-    $(@el)
+    @parent.$el().find @el
+
+  onRendered: =>
+    @rendered += 1
+    if @rendered == @args.squares.length
+      $(@parent).trigger 'rendered'
 
   render: =>
+    @rendered = 0
     @squares = ( new kablammo.Square(@, square) for square in @args.squares )
-
-    rendered = 0
-    $(@).on 'rendered', (child) ->
-      rendered += 1
-      if rendered == @squares.length
-        @turn() if @playing
-
     square.render() for square in @squares
 
   fire: (lof, next) =>
@@ -32,34 +29,11 @@ class @kablammo.Board
       @fire lof, next
     , 100
 
-  turn: (event) =>
-    alive_robots = _(@squares).filter (s) ->
-      s.args.state == 'robot' && s.robot.args.armor >= 0
-    game_on = alive_robots.length >= 2
-    return unless game_on
-
-    done = (data, status, xhr) =>
-      @args = $.parseJSON data
-      @render()
-
-    fail = (xhr, status, error) ->
-      console.log status
-
-    $.post("/boards/#{@args.name}/turn.json")
-      .done(done)
-      .fail()
-
-  play: =>
-    if @playing
-      $('.buttons .play').text 'Play'
-      @playing = false
-    else
-      $('.buttons .play').text 'Stop'
-      @playing = true
-      @turn()
-
-  stop: =>
-    @playing = false
+  alive_robots: ->
+    isRobot = (square) -> ( square.args.state == 'robot' )
+    toRobot = (square) -> square.robot
+    isAlive = (robot) -> robot.alive()
+    _.chain(@squares).filter(isRobot).map(toRobot).filter(isAlive).value()
 
   squareFor: (x, y) ->
     _(@squares).find (s) ->

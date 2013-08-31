@@ -1,30 +1,16 @@
 class Board
-  include MongoMapper::Document
+  include MongoMapper::EmbeddedDocument
 
-  key :name,   String,  required: true, unique: true
   key :height, Integer, required: true
   key :width,  Integer, required: true
 
   many :squares
+  embedded_in :battle
 
   attr_protected :squares
 
-  before_create :fill_in_empty_board
-
-  def engine
-    @engine ||= Engine::Engine.new(self)
-  end
-
   def geometry
     @geometry ||= Geometry.new(@width, @height)
-  end
-
-  def turn
-    engine.turn if game_on?
-  end
-
-  def find_by_name(name)
-    self.where(name: name).first
   end
 
   def rows
@@ -45,18 +31,6 @@ class Board
   def add_robot(robot, x = nil, y = nil)
     square = y == nil ? random_square : square_at(x, y)
     square.place_robot robot
-  end
-
-  def robots
-    self.squares.map(&:robot).compact.sort_by(&:username)
-  end
-
-  def alive_robots
-    robots.select(&:alive?)
-  end
-
-  def game_on?
-    alive_robots.length >= 2
   end
 
   def line_of_sight(source, degrees)
@@ -83,7 +57,7 @@ class Board
     square
   end
 
-  def fill_in_empty_board
+  def fill_in_empty_squares
     self.squares = Array.new(length).fill { Square.new }
     self.squares.each_with_index do |square, i|
       square.x = i % @width
