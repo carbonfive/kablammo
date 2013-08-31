@@ -1,24 +1,25 @@
 class kablammo.Square
   constructor: (@parent, @args) ->
     @el = ".square-#{@args.x}-#{@args.y}"
+    $(@).on 'rendered', @onRendered
 
   $el: ->
     @parent.$el().find @el
+
+  onRendered: =>
+    $(@parent).trigger 'rendered'
 
   render: ->
     @$el().addClass @args.state
     @$el().find('img').attr 'src', '/images/blank.png'
     if @args.state == 'robot'
       @robot = new kablammo.Robot(@, @args.robot)
-      @renderrobot()
+      @renderRobot()
     else
-      $(@parent).trigger 'rendered', @
+      @onRendered()
 
-  renderrobot: ->
-    $(@).on 'rendered', (child) =>
-      $(@parent).trigger 'rendered', @
-
-    @$el().addClass 'dead' if @robot.args.armor < 0
+  renderRobot: ->
+    @$el().addClass 'dead' if ! @robot.alive()
     @robot.render()
 
   fire: ->

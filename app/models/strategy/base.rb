@@ -14,18 +14,28 @@ module Strategy
 
     def execute_turn(robot)
       @robot = robot
-      @board = robot.square.board
       next_turn
     end
 
     def for_use_by(strategy)
       @robot = strategy.robot
-      @board = @robot.square.board
       self
     end
 
+    def square
+      @robot.square
+    end
+
+    def board
+      square.board
+    end
+
+    def battle
+      board.battle
+    end
+
     def find_enemies
-      @board.robots.reject {|t| t == @robot}.reject {|t| t.dead?}
+      battle.robots.reject {|t| t == @robot}.reject {|t| t.dead?}
     end
 
     def pointed_at?(enemy)
@@ -50,7 +60,7 @@ module Strategy
       direction = @robot.direction_to(enemy).round
       skew = direction - @robot.rotation
       distance = @robot.distance_to(enemy)
-      max_distance = Math.sqrt(@board.height * @board.height + @board.width * @board.width)
+      max_distance = Math.sqrt(board.height * board.height + board.width * board.width)
       compensation = ( 10 - ( (10 - 3) * (distance / max_distance) ) ).round
       #puts "10 - (10 - 3) * (#{distance} / #{max_distance}) = #{compensation}"
       compensation *= -1 if rand(0..1) == 0
@@ -96,7 +106,7 @@ module Strategy
       y -= 1 if move == 's'
       x += 1 if move == 'e'
       x -= 1 if move == 'w'
-      @board.square_at x, y
+      board.square_at x, y
     end
 
     def can_move?(move)

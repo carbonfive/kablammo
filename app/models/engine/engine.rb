@@ -1,11 +1,11 @@
 module Engine
   class Engine
-    def initialize(board)
-      @board = board
+    def initialize(battle)
+      @battle = battle
     end
 
     def turn
-      handlers = @board.alive_robots.map do |robot|
+      handlers = @battle.alive_robots.map do |robot|
         handler = TurnHandler.next_turn robot
         robot.turns << handler.turn
         handler
@@ -17,7 +17,7 @@ module Engine
         handler.execute
       end
 
-      @board.save!
+      @battle.save!
     end
 
   end
