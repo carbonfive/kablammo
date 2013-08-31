@@ -14,9 +14,9 @@ class BoardsController
     })
 
     6.times { board.add_wall }
-    board.add_tank( new_tank 'mwynholds' )
-    board.add_tank( new_tank 'dhendee' )
-    board.add_tank( new_tank 'carbonfive' )
+    board.add_robot( new_robot 'mwynholds' )
+    board.add_robot( new_robot 'dhendee' )
+    board.add_robot( new_robot 'carbonfive' )
     board.save!
 
     @app.redirect "/boards/#{name}"
@@ -37,10 +37,10 @@ class BoardsController
 
   private
 
-  def new_tank(name)
-    tank = Tank.new
-    tank.username = name
-    tank
+  def new_robot(name)
+    robot = Robot.new
+    robot.username = name
+    robot
   end
 
   def erb(*args)

@@ -1,4 +1,4 @@
-class Tank
+class Robot
   include MongoMapper::EmbeddedDocument
 
   MAX_AMMO  = 10

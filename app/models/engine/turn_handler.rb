@@ -4,15 +4,15 @@ module Engine
     MOVES = Hash[%w(north south east west).map {|d| [d[0], d]}]
 
     attr_accessor :value
-    attr_accessor :tank
+    attr_accessor :robot
 
-    def self.next_turn(tank)
-      strategy = tank.strategy
-      str = strategy.execute_turn tank
+    def self.next_turn(robot)
+      strategy = robot.strategy
+      str = strategy.execute_turn robot
 
       handler = parse str
       handler.value = str
-      handler.tank = tank
+      handler.robot = robot
       handler
     end
 
@@ -36,7 +36,7 @@ module Engine
     end
 
     def square
-      tank.square
+      robot.square
     end
 
     def board
@@ -46,7 +46,7 @@ module Engine
     # turns are prioritized by type, and secondarily by who has more rest (ie: armor)
     def priority
       order = [ MoveHandler, RotateHandler, FireHandler, RestHandler ]
-      order.index(self.class) * 100 + (50 - @tank.armor)
+      order.index(self.class) * 100 + (50 - @robot.armor)
     end
 
   end

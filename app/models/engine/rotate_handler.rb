@@ -7,7 +7,7 @@ module Engine
     end
 
     def execute
-      tank.rotate_to @rotation
+      robot.rotate_to @rotation
     end
 
   end

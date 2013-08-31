@@ -1,4 +1,4 @@
-class kablammo.Tank
+class kablammo.Robot
   constructor: (@parent, @args) ->
     @el = 'img'
 
@@ -11,7 +11,7 @@ class kablammo.Tank
 
     url = "https://identicons.github.com/#{@args.username}.png"
     @$el().attr 'src', url
-    stat = $(".stats .tank-#{@args.username}")
+    stat = $(".stats .robot-#{@args.username}")
     stat.find('.rotation td').html @args.rotation
     stat.find('.armor td').html @args.armor
     stat.find('.ammo td').html @args.ammo

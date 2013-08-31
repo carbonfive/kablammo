@@ -42,21 +42,21 @@ class Board
     square.place_wall
   end
 
-  def add_tank(tank, x = nil, y = nil)
+  def add_robot(robot, x = nil, y = nil)
     square = y == nil ? random_square : square_at(x, y)
-    square.place_tank tank
+    square.place_robot robot
   end
 
-  def tanks
-    self.squares.map(&:tank).compact.sort_by(&:username)
+  def robots
+    self.squares.map(&:robot).compact.sort_by(&:username)
   end
 
-  def alive_tanks
-    tanks.select(&:alive?)
+  def alive_robots
+    robots.select(&:alive?)
   end
 
   def game_on?
-    alive_tanks.length >= 2
+    alive_robots.length >= 2
   end
 
   def line_of_sight(source, degrees)
