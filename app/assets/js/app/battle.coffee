@@ -19,7 +19,6 @@ class @kablammo.Battle
     @board.render()
 
   turn: (event) =>
-    console.log @board.alive_robots()
     return unless @board.alive_robots().length >= 2
 
     done = (data, status, xhr) =>

@@ -7,8 +7,6 @@ require 'json'
 
 require './config/mongo'
 
-module Engine end
-module Strategy end
 require './app/models/engine/turn_handler'
 require './app/models/strategy/base'
 Dir['./app/models/**/*.rb'].each   { |file| require file }

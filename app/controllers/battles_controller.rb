@@ -9,13 +9,14 @@ class BattlesController
 
   def create()
     name = request['name'] || 'Battle Royale'
+    #robots = %w(mwynholds dhendee carbonfive)
+    robots = %w(mwynholds dhendee)
+    walls = 6
     battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
 
     board = battle.board
-    6.times { board.add_wall }
-    board.add_robot( new_robot 'mwynholds' )
-    board.add_robot( new_robot 'dhendee' )
-    board.add_robot( new_robot 'carbonfive' )
+    walls.times { board.add_wall }
+    robots.each { |robot| board.add_robot(new_robot robot) }
     battle.save!
 
     @app.redirect "/battles/#{battle.id}"
