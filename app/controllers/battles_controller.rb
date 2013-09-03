@@ -10,8 +10,8 @@ class BattlesController
   def create()
     name = request['name'] || 'Battle Royale'
     robots = { mwynholds: [0,4], dhendee: [15,4] }
-    walls = [ [2,3],  [2,4],  [2,5],
-              [13,3], [13,4], [13,5],
+    walls = [ [2,3],  [2,5],  [4, 4],
+              [13,3], [13,5], [11,4],
               [6,1],  [7,1],  [8,1],  [9,1],
               [6,7],  [7,7],  [8,7],  [9,7] ]
     battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
