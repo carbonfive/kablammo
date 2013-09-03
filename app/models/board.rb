@@ -38,14 +38,6 @@ class Board
     los.map { |p| square_at(p.x, p.y) }
   end
 
-  def direction_to(source, dest)
-    geometry.direction_to(source, dest)
-  end
-
-  def distance_to(source, dest)
-    geometry.distance_to(source, dest)
-  end
-
   private
 
   def length

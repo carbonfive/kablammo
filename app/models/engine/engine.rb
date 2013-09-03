@@ -19,10 +19,10 @@ module Engine
         end
         msg_handlers[robot.username] = msg_handler
         receive_channel(robot).register(&msg_handler)
-        send_channel(robot).send 'next_turn'
+        send_channel(robot).send @battle
       end
 
-      sleep 0.1 while turn_handlers.length < alive_robots.length
+      sleep 0.01 while turn_handlers.length < alive_robots.length
 
       alive_robots.each do |robot|
         msg_handler = msg_handlers[robot.username]
