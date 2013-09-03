@@ -23,14 +23,12 @@ class Board
     squares[@width * y + x]
   end
 
-  def add_wall(x = nil, y = nil)
-    square = y == nil ? random_square : square_at(x, y)
-    square.place_wall
+  def add_wall(x, y)
+    square_at(x, y).place_wall
   end
 
-  def add_robot(robot, x = nil, y = nil)
-    square = y == nil ? random_square : square_at(x, y)
-    square.place_robot robot
+  def add_robot(robot, x, y)
+    square_at(x, y).place_robot robot
   end
 
   def line_of_sight(source, degrees)
@@ -42,11 +40,6 @@ class Board
 
   def length
     height * width
-  end
-
-  def random_square
-    square = squares[rand(0..length)] until square && square.empty?
-    square
   end
 
   def fill_in_empty_squares
