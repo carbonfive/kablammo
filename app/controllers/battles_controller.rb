@@ -29,9 +29,9 @@ class BattlesController
     erb :battle, locals: { battle: battle, json: json }
   end
 
-  def turn(id)
+  def turn(id, count=1)
     battle = Battle.find_by_id id
-    battle.turn if battle
+    1.upto(count) { battle.turn } if battle
     jbuilder :battle, locals: { battle: battle }
   end
 
