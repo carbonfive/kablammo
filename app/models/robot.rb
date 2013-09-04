@@ -8,9 +8,15 @@ class Robot
   key :rotation,  Integer, required: true, default: 0
   key :ammo,      Integer, required: true, default: MAX_AMMO
   key :armor,     Integer, required: true, default: MAX_ARMOR
+  key :abilities, Array,   required: true, default: []
 
   many :turns
   embedded_in :square
+
+  def assign_abilities(abilities)
+    new_abilities = self.abilities + abilities
+    self.abilities = new_abilities.uniq
+  end
 
   def strategy
     Strategy::Base.lookup @username
