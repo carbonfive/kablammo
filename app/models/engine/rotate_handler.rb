@@ -2,7 +2,8 @@ module Engine
   class RotateHandler < TurnHandler
     attr_reader :rotation
 
-    def initialize(rotation)
+    def initialize(robot, str, rotation)
+      super robot, str
       @rotation = rotation
     end
 

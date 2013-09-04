@@ -2,7 +2,8 @@ module Engine
   class MoveHandler < TurnHandler
     attr_reader :direction
 
-    def initialize(direction)
+    def initialize(robot, str, direction)
+      super robot, str
       @direction = direction
     end
 
