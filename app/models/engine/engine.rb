@@ -19,7 +19,7 @@ module Engine
         end
         msg_handlers[robot.username] = msg_handler
         receive_channel(robot).register(&msg_handler)
-        send_channel(robot).send @battle
+        send_channel(robot).send battle_for(robot)
       end
 
       sleep 0.01 while turn_handlers.length < alive_robots.length
@@ -41,6 +41,24 @@ module Engine
     end
 
     private
+
+    def battle_for(robot)
+      battle = @battle.serializable_hash
+      battle['board'].delete 'id'
+      battle['board']['squares'].each do |square|
+        square.delete 'id'
+        square.delete 'state' if square['state'] == 'empty'
+        if square['robot']
+          square['robot'].delete 'id'
+          square['robot']['turns'].each do |turn|
+            turn.delete 'id'
+          end
+        else
+          square.delete 'robot'
+        end
+      end
+      battle
+    end
 
     def send_channel(robot)
       @channels[robot.username][:send]
