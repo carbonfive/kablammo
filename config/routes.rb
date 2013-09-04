@@ -16,8 +16,11 @@ post '/battles/:id/turn/:count.json' do |id, count|
   BattlesController.new(self).turn id, count.to_i
 end
 
-#get '/strategies' #index
 #post '/strategies/:id' #  update
+
+get '/strategies' do
+  StrategiesController.new(self).index
+end
 
 # create
 post '/strategies' do

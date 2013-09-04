@@ -4,6 +4,11 @@ class StrategiesController
     @app = app
   end
 
+  def index
+    strategies = Strategy.all
+    erb :'strategy/index', locals: { strategies: strategies }
+  end
+
   def create
     url = @app.request['github_url']
     # given a github repo, clone it locally

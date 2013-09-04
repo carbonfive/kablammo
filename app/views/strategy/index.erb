@@ -1,0 +1,16 @@
+<h2>All Strategies</h2>
+
+<table class="strategies">
+  <tr>
+    <th>User</th>
+    <th>Path</th>
+    <th>Repo</th>
+  </tr>
+  <% strategies.each_with_index do |strategy, idx| %>
+  <tr class="<%= (idx % 2) > 0 ? 'odd' : 'even' %>">
+    <td><a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a></td>
+    <td><%= strategy.path %></td>
+    <td><%= strategy.github_url %></td>
+  </tr>
+  <% end %>
+</table>
