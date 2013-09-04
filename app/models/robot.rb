@@ -44,6 +44,20 @@ class Robot
     @ammo > 0
   end
 
+  def can_see?(other_square)
+    return true if square == other_square
+
+    direction = square.board.geometry.direction_to square, other_square
+    los = square.board.line_of_sight square, direction
+    return true if los.empty?
+
+    hit = los.index { |s| ! s.empty? }
+    return true unless hit
+
+    other_index = los.index other_square
+    other_index <= hit
+  end
+
   def line_of_sight(skew = 0)
     pixels = square.board.line_of_sight(square, @rotation + skew)
     pixels.map { |p| square.board.square_at(p.x, p.y) }

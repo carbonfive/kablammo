@@ -36,6 +36,12 @@ class Board
     los.map { |p| square_at(p.x, p.y) }
   end
 
+  def as_seen_by(robot)
+    board = self.dup
+    board.squares = self.squares.map { |s| s.as_seen_by robot }
+    board
+  end
+
   private
 
   def length

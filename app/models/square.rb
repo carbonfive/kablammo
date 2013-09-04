@@ -31,6 +31,15 @@ class Square
     @state == 'robot'
   end
 
+  def as_seen_by(robot)
+    square = self.dup
+    unless robot.can_see?(self)
+      square.state = 'obscured'
+      square.robot = nil
+    end
+    square
+  end
+
   def position
     "[#{@x}, #{@y}]"
   end

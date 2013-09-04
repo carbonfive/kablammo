@@ -38,4 +38,10 @@ class Battle
   def game_on?
     alive_robots.length >= 2
   end
+
+  def as_seen_by(robot)
+    battle = self.dup
+    battle.board = self.board.as_seen_by robot
+    battle
+  end
 end
