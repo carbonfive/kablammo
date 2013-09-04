@@ -72,7 +72,6 @@ class Robot
   def as_seen_by(robot)
     return self if robot == self
     clone = self.dup
-    clone.username = nil
     clone.turns = self.turns.empty? ? [] : [ self.turns.last ]
     clone
   end
