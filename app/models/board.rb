@@ -3,6 +3,8 @@ class Board
 
   key :height, Integer, required: true
   key :width,  Integer, required: true
+  key :height, Integer, required: true, default: 9
+  key :width,  Integer, required: true, default: 16
 
   many :squares
   embedded_in :battle
