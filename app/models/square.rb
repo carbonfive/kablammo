@@ -42,6 +42,7 @@ class Square
       square.state = 'obscured'
       square.robot = nil
     end
+    square.robot = self.robot.as_seen_by(robot) if square.robot
     square
   end
 
