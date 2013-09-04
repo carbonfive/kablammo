@@ -31,8 +31,13 @@ class Square
     @state == 'robot'
   end
 
+  def wall?
+    @state == 'wall'
+  end
+
   def as_seen_by(robot)
     square = self.dup
+    return square if square.wall?
     unless robot.can_see?(self)
       square.state = 'obscured'
       square.robot = nil
