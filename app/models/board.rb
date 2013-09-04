@@ -1,10 +1,8 @@
 class Board
   include MongoMapper::EmbeddedDocument
 
-  key :height, Integer, required: true
-  key :width,  Integer, required: true
-  key :height, Integer, required: true, default: 9
-  key :width,  Integer, required: true, default: 16
+  key :height, Integer, default: 9
+  key :width,  Integer, default: 16
 
   many :squares
   embedded_in :battle
