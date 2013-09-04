@@ -19,7 +19,7 @@ module Engine
         end
         msg_handlers[robot.username] = msg_handler
         receive_channel(robot).register(&msg_handler)
-        send_channel(robot).send battle_for(robot)
+        send_channel(robot).send @battle.as_seen_by(robot)
       end
 
       sleep 0.01 while turn_handlers.length < alive_robots.length
