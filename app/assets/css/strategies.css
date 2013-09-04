@@ -1,9 +1,9 @@
-h2 { 
+h2 {
   font-size: 120%;
   font-style: bold;
 }
 
-table.strategies { 
+table.strategies {
   border: 1px solid #eee;
   margin: 20px;
 }
@@ -11,7 +11,7 @@ table.strategies th {
   font-style: bold;
 }
 
-table.strategies td { 
+table.strategies td {
   line-height: 20px;
   padding: 10px;
 }

@@ -7,8 +7,15 @@ class BattlesController
     @app.request
   end
 
+  def new()
+    strategies = Strategy.all
+    erb :battle_new, locals{ strategies: strategies }
+  end
+
   def create()
+    # get_players_from_request
     name = request['name'] || 'Battle Royale'
+
     robots = { mwynholds: [0,4], dhendee: [15,4] }
     walls = [ [2,3],  [2,5],  [4, 4],
               [13,3], [13,5], [11,4],

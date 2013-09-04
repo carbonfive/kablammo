@@ -1,6 +1,10 @@
 set :views, Proc.new { File.join(root, 'app/views') }
 
 get '/battles/new' do
+  BattlesController.new(self).new
+end
+
+post '/battles/' do
   BattlesController.new(self).create
 end
 
