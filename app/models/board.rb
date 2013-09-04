@@ -3,11 +3,22 @@ class Board
 
   key :height, Integer, default: 9
   key :width,  Integer, default: 16
+  key :starts, Array, required: true
 
   many :squares
   embedded_in :battle
 
   attr_protected :squares
+  def initialize(attrs)
+    walls = attrs.delete(:walls)
+    super(attrs)
+
+    self.squares = Array.new(@height * @width).fill do |i|
+      Square.new({ x: i % @width, y: i / @width })
+    end 
+
+    walls.each { |pos| add_wall pos[0], pos[1] }
+  end
 
   def geometry
     @geometry ||= Geometry.new(@width, @height)
@@ -25,8 +36,9 @@ class Board
     square_at(x, y).place_wall
   end
 
-  def add_robot(robot, x, y)
-    square_at(x, y).place_robot robot
+  def add_robot(robot, start)
+    start = starts[start]
+    square_at( start[0], start[1] ).place_robot robot
   end
 
   def line_of_sight(source, degrees)
@@ -40,17 +52,4 @@ class Board
     board
   end
 
-  private
-
-  def length
-    height * width
-  end
-
-  def fill_in_empty_squares
-    self.squares = Array.new(length).fill { Square.new }
-    self.squares.each_with_index do |square, i|
-      square.x = i % @width
-      square.y = i / @width
-    end
-  end
 end

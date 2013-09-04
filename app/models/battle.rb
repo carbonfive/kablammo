@@ -6,11 +6,7 @@ class Battle
   one :board
 
   def self.wage(args = {})
-    board_args = args.delete :board
-
     battle = Battle.new(args)
-    battle.board = Board.new(board_args)
-    battle.board.fill_in_empty_squares
     battle.save!
     battle
   end
