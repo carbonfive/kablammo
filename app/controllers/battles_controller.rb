@@ -18,10 +18,32 @@ class BattlesController
     })
   end
 
+  def random_darts(width, height, count, exclusions = [])
+    darts = []
+    while darts.length < count do 
+      proposed = [Random.rand(width), Random.rand(height)]
+      excluded = exclusions.include?(proposed) || darts.include?(proposed)
+      darts.push proposed unless excluded
+    end 
+    darts 
+  end
+
+  def darts_board(width = 16, height = 9, seed = nil)
+    Random.srand(seed) if seed
+
+    walls = random_darts(width, height, 14)
+    starts = random_darts(width, height, 2, walls)
+
+    Board.new({ width: width,
+      height: height,
+      walls: walls,
+      starts: starts})
+  end
+
   def create()
     name = request['name'] || 'Battle Royale'
 
-    battle = Battle.wage({ name: name, board: default_board })
+    battle = Battle.wage({ name: name, board: darts_board })
 
     board = battle.board
     robots = { mwynholds: 0, dhendee: 1 }
