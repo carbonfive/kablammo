@@ -18,8 +18,6 @@ class Board
   end
 
   def square_at(x, y)
-    return nil if x < 0 || x >= @width
-    return nil if y < 0 || y >= @height
     squares[@width * y + x]
   end
 
