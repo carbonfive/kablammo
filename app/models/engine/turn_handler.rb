@@ -6,27 +6,28 @@ module Engine
     attr_accessor :value
     attr_accessor :robot
 
+    def initialize(robot, value)
+      @robot = robot
+      @value = value
+    end
+
     def self.next_turn(robot)
       strategy = robot.strategy
       str = strategy.execute_turn robot
-
-      handler = parse str
-      handler.value = str
-      handler.robot = robot
-      handler
+      parse robot, str
     end
 
-    def self.parse(str)
-      return RestHandler.new unless str
+    def self.parse(robot, str)
+      return RestHandler.new robot unless str
 
       str = str.downcase
       type = str[0]
       value = Integer(str[1..-1]) if str.length > 1
 
-      return MoveHandler.new(MOVES[type]) if MOVES[type]
-      return FireHandler.new(value) if type == 'f'
-      return RotateHandler.new(value) if type == 'r'
-      RestHandler.new
+      return MoveHandler.new(robot, str, MOVES[type]) if MOVES[type]
+      return FireHandler.new(robot, str, value) if type == 'f'
+      return RotateHandler.new(robot, str, value) if type == 'r'
+      RestHandler.new robot
     end
 
     def turn
