@@ -54,6 +54,6 @@ class Board
       square.x = i % @width
       square.y = i / @width
     end
-    self.squares.first.power_up = PowerUp.instance :golden_bullet
+    self.squares[129].power_up = PowerUp.instance :golden_bullet
   end
 end

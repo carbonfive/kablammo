@@ -28,6 +28,7 @@ module Engine
         robot = source.robot
         power_up = dest.power_up
         power_up.grant robot
+        dest.power_up = nil
       end
 
       if dest.empty?
