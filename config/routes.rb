@@ -16,6 +16,20 @@ post '/battles/:id/turn/:count.json' do |id, count|
   BattlesController.new(self).turn id, count.to_i
 end
 
-get '/strategies/:github_repo_url' do |url|
-  StrategiesController.new(self).create url
+#get '/strategies' #index
+#post '/strategies/:id' #  update
+
+# create
+post '/strategies' do
+  StrategiesController.new(self).create
 end
+
+get '/strategies/new' do
+  StrategiesController.new(self).new
+end
+
+get '/strategies/:id' do |id|
+  StrategiesController.new(self).show id
+end
+
+

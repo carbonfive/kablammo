@@ -21,6 +21,7 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     ffi (1.9.0)
+    git (1.2.6)
     i18n (0.6.5)
     jbuilder (1.5.1)
       activesupport (>= 3.0.0)
@@ -65,7 +66,6 @@ GEM
       rack (>= 1.0)
       rack-test (>= 0.5)
       ripl (>= 0.3.5)
-    ruby-git (0.2.2)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -96,11 +96,11 @@ DEPENDENCIES
   bson_ext
   coffee-script
   execjs (= 1.4.0)
+  git
   mongo_mapper
   oj
   redis_message_capsule
   rerun
-  ruby-git
   sinatra
   sinatra-assetpack
   thin

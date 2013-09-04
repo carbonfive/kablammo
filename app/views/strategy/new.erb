@@ -1,0 +1,20 @@
+<h2>New Strategy</h2>
+
+<% if strategy.errors.any? %>
+<div class="errors">
+  <div>We were unable to save the strategy because 
+    <%= strategy.errors.full_messages %>
+    .</div>
+</div>
+<% end %>
+
+<form method="post" action="/strategies">
+  <div class="control-group">
+  <label>Github Repo Url:</label>
+  <input type="text" name="github_url" size="200"></input>
+  </div>
+  <div class="control-group">
+  <input type="submit" name="go"></input>
+  </div>
+</form>
+

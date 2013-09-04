@@ -18,3 +18,11 @@ Strategy Clients
 ----------------
 
 - See http://github.com/carbonfive/kablammo-strategy
+
+
+TODO:
+-----
+
+* make rerun ignore game_strategies directory (this is where we are going to pull repos) 
+OR
+* don't use rerun on the production server

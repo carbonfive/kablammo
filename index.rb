@@ -5,13 +5,15 @@ Bundler.require :default
 require 'sinatra'
 require 'json'
 
+set :root, File.dirname(__FILE__)
+
 require './config/mongo'
 
 require './app/models/engine/turn_handler'
 Dir['./app/models/**/*.rb'].each   { |file| require file }
 Dir['./app/controllers/*.rb'].each { |file| require file }
 
-set :root, File.dirname(__FILE__)
+require './config/strategy'
 
 register Sinatra::AssetPack
 
