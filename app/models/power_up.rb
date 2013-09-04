@@ -4,6 +4,7 @@ class PowerUp
   key :name, String, required: true
   key :duration, Integer
   key :abilities, Array
+  key :type, String, required: true
 
   def grant(robot)
     robot.assign_abilities @abilities
@@ -13,7 +14,8 @@ class PowerUp
     case type
     when :golden_bullet
       PowerUp.new name: 'Golden Bullet',
-                  abilities: [Ability::SHOOT_THROUGH_WALLS]
+                  abilities: [Ability::SHOOT_THROUGH_WALLS],
+                  type: :golden_bullet
     end
   end
 end
