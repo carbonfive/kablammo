@@ -14,7 +14,7 @@ class PowerUp
     case type
     when :golden_bullet
       PowerUp.new name: 'Golden Bullet',
-                  abilities: [Ability::SHOOT_THROUGH_WALLS],
+                  abilities: [Ability::FIRE_THROUGH_WALLS],
                   type: :golden_bullet
     end
   end

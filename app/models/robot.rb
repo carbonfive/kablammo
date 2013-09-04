@@ -64,6 +64,10 @@ class Robot
     other_index <= hit
   end
 
+  def can_fire_through_walls?
+    self.abilities.include? Ability::FIRE_THROUGH_WALLS
+  end
+
   def line_of_sight(skew = 0)
     pixels = square.board.line_of_sight(square, @rotation + skew)
     pixels.map { |p| square.board.square_at(p.x, p.y) }
@@ -71,7 +75,13 @@ class Robot
 
   def line_of_fire(skew = 0)
     los = line_of_sight skew
-    hit = los.index { |s| ! s.empty? }
+
+    if can_fire_through_walls?
+      hit = los.index { |s| s.robot? }
+    else
+      hit = los.index { |s| ! s.empty? }
+    end
+
     hit ? los[0..hit] : los
   end
 
