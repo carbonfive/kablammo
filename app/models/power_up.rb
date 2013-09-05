@@ -14,7 +14,15 @@ class PowerUp
   end
 
   def degrade
-    p "DEgrading"
+    if @duration > 0
+      @duration -= 1
+    end
+
+    robot.revoke_abilities abilities if exhausted?
+  end
+
+  def exhausted?
+    duration <= 0
   end
 
   def self.instance(type)

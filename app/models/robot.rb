@@ -19,6 +19,11 @@ class Robot
     self.abilities = new_abilities.uniq
   end
 
+  def revoke_abilities(abilities)
+    updated_abilities = self.abilities - abilities
+    self.abilities = updated_abilities
+  end
+
   def strategy
     Strategy::Base.lookup @username
   end

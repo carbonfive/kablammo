@@ -47,9 +47,11 @@ module Engine
     private
 
     def degrade_power_ups(robots)
-      power_ups = robots.map(&:power_ups).flatten
-      power_ups.each do |power_up|
-        power_up.degrade
+      robots.each do |robot|
+        robot.power_ups.each do |power_up|
+          power_up.degrade
+          robot.power_ups.delete(power_up) if power_up.exhausted?
+        end
       end
     end
 
