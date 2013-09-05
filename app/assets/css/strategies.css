@@ -1,0 +1,21 @@
+h2 {
+  font-size: 120%;
+  font-style: bold;
+}
+
+table.strategies {
+  border: 1px solid #eee;
+  margin: 20px;
+}
+table.strategies th {
+  font-style: bold;
+}
+
+table.strategies td {
+  line-height: 20px;
+  padding: 10px;
+}
+
+table.strategies tr.odd {
+  background-color: #fefefe;
+}
