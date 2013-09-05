@@ -27,7 +27,7 @@ class kablammo.Board
     setTimeout =>
       square.unfire()
       @fire lof, next
-    , 100
+    , 50
 
   alive_robots: ->
     isRobot = (square) -> ( square.args.state == 'robot' )

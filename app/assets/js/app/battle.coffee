@@ -12,7 +12,7 @@ class @kablammo.Battle
   onRendered: =>
     setTimeout =>
       @turn() if @playing
-    , 250
+    , 50
 
   render: =>
     @board = new kablammo.Board(@, @args.board)
