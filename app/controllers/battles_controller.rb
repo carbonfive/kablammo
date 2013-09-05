@@ -7,13 +7,29 @@ class BattlesController
     @app.request
   end
 
+  def new()
+    strategies = Strategy.all
+    erb :"battle/new", locals: { strategies: strategies }
+  end
+
   def create()
+    player_ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
+    if player_ids.length < 2
+      redirect '/battles/new' and return # flash an error? 
+    end
+
+    # get_players_from_request
     name = request['name'] || 'Battle Royale'
-    robots = { mwynholds: [0,4], dhendee: [15,4] }
+
+    player_names = player_ids.map{|player| activate_player(player)}
+
+    robots = Hash[player_names.zip([[0,4], [15,4]])]
+
     walls = [ [2,3],  [2,5],  [4, 4],
-              [13,3], [13,5], [11,4],
-              [6,1],  [7,1],  [8,1],  [9,1],
-              [6,7],  [7,7],  [8,7],  [9,7] ]
+             [13,3], [13,5], [11,4],
+             [6,1],  [7,1],  [8,1],  [9,1],
+             [6,7],  [7,7],  [8,7],  [9,7] ]
+
     battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
 
     board = battle.board
@@ -51,5 +67,16 @@ class BattlesController
 
   def jbuilder(*args)
     @app.jbuilder(*args)
+  end
+
+  def activate_player(id)
+    s = Strategy.find(id)
+    if s
+      s.launch
+      s.username
+    else
+      # this is to handle dhendee/mwynholds manual launch
+      id
+    end
   end
 end

@@ -1,0 +1,31 @@
+<h2>Got no strategies?</h2>
+<a href="/strategies/new">Add your github repo strategy and BATTLE!</a>
+
+<hr>
+<h2>Start a new battle</h2>
+
+<form method="post" action="/battles/">
+
+  <div class="player_chooser">
+    <label>Player 1</label>
+    <select name="player1">
+      <option value="dhendee" selected="selected">Hendee</option>
+      <% strategies.each do |s| %>
+      <option value="<%= s.id %>"><%= s.username %></option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="player_chooser">
+    <label>Player 2</label>
+    <select name="player2">
+      <option value="mwynholds" selected="selected">Mikey</option>
+      <% strategies.each do |s| %>
+      <option value="<%= s.id %>"><%= s.username %></option>
+      <% end %>
+    </select>
+  </div>
+  <div class="clear start_battle">
+    <input type="submit" value="fight!" />
+  </div>
+</form>
