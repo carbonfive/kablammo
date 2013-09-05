@@ -6,8 +6,15 @@ class PowerUp
   key :abilities, Array
   key :type, String, required: true
 
-  def grant(robot)
-    robot.assign_abilities @abilities
+  embedded_in :square
+  embedded_in :robot
+
+  def grant
+    robot.assign_abilities abilities
+  end
+
+  def degrade
+    p "DEgrading"
   end
 
   def self.instance(type)
@@ -15,7 +22,8 @@ class PowerUp
     when :golden_bullet
       PowerUp.new name: 'Golden Bullet',
                   abilities: [Ability::FIRE_THROUGH_WALLS],
-                  type: :golden_bullet
+                  type: :golden_bullet,
+                  duration: 10
     end
   end
 end

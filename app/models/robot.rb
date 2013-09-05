@@ -11,6 +11,7 @@ class Robot
   key :abilities, Array,   required: true, default: []
 
   many :turns
+  many :power_ups
   embedded_in :square
 
   def assign_abilities(abilities)
@@ -65,7 +66,7 @@ class Robot
   end
 
   def can_fire_through_walls?
-    self.abilities.include? Ability::FIRE_THROUGH_WALLS
+    abilities.include? Ability::FIRE_THROUGH_WALLS
   end
 
   def line_of_sight(skew = 0)
@@ -91,5 +92,4 @@ class Robot
     clone.turns = self.turns.empty? ? [] : [ self.turns.last ]
     clone
   end
-
 end

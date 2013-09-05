@@ -27,7 +27,8 @@ module Engine
       if dest.power_up?
         robot = source.robot
         power_up = dest.power_up
-        power_up.grant robot
+        robot.power_ups << power_up
+        power_up.grant
         dest.power_up = nil
       end
 
