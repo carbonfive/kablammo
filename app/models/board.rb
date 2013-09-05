@@ -55,6 +55,7 @@ class Board
       square.y = i / @width
     end
     new_power_up = PowerUp.instance :golden_bullet
-    self.squares[112].power_up = new_power_up
+    random_place = self.squares[rand(140)]
+    random_place.power_up = new_power_up
   end
 end
