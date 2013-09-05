@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/arbind/redis_message_capsule-gem.git
+  revision: 1383554bdc81e201674d812035144349102f3098
+  specs:
+    redis_message_capsule (0.8.2)
+      json
+      redis
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -53,9 +61,6 @@ GEM
     rb-kqueue (0.2.0)
       ffi (>= 0.5.0)
     redis (3.0.4)
-    redis_message_capsule (0.8.2)
-      json
-      redis
     rerun (0.8.1)
       listen (>= 1.0.3)
     ripl (0.7.0)
@@ -99,7 +104,7 @@ DEPENDENCIES
   git
   mongo_mapper
   oj
-  redis_message_capsule
+  redis_message_capsule!
   rerun
   sinatra
   sinatra-assetpack

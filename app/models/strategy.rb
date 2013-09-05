@@ -21,6 +21,13 @@ class Strategy
     self
   end
 
+  def launch
+    puts "Lauching #{username}"
+    cmd = "cd #{path} && bundle && ruby ./index.rb #{username}"
+    Process.spawn(cmd)
+    puts "Lauched #{username}"
+  end
+
   def url= url
     username = get_github_username(url)
     if username
