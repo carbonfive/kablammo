@@ -10,6 +10,7 @@ module Engine
       msg_handlers = {}
       turn_handlers = []
       alive_robots = @battle.alive_robots
+      degrade_power_ups alive_robots
       alive_robots.each do |robot|
         msg_handler = Proc.new do |str|
           turn_handlers << TurnHandler.parse(robot, str)
@@ -44,6 +45,15 @@ module Engine
     end
 
     private
+
+    def degrade_power_ups(robots)
+      robots.each do |robot|
+        robot.power_ups.each do |power_up|
+          power_up.degrade
+          robot.power_ups.delete(power_up) if power_up.exhausted?
+        end
+      end
+    end
 
     def send_channel(robot)
       @channels[robot.username][:send]

@@ -7,6 +7,7 @@ class Square
 
   embedded_in :board
   one :robot
+  one :power_up
 
   def place_wall
     @state = 'wall'

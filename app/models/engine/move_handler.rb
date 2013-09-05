@@ -23,6 +23,15 @@ module Engine
       return if y < 0 || y >= board.height
 
       dest = board.square_at(x, y)
+
+      if dest.power_up?
+        robot = source.robot
+        power_up = dest.power_up
+        robot.power_ups << power_up
+        power_up.grant
+        dest.power_up = nil
+      end
+
       if dest.empty?
         robot = source.robot
         source.clear
