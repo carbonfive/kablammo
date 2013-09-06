@@ -70,6 +70,8 @@ module Engine
         #       are supposed to look right for the code on the other side
         send = capsule.channel "#{robot.username}-receive"
         receive = capsule.channel "#{robot.username}-send"
+        send.clear
+        receive.clear
         channels[robot.username] = { send: send, receive: receive }
       end
       channels
