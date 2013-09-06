@@ -10,7 +10,10 @@ class kablammo.Robot
 
   render: ->
     @turns = ( new kablammo.Turn(@, turn) for turn in @args.turns )
-    @last_turn = _(@turns).last()
+    @lastTurn = _(@turns).last()
+    @powerUps = ( new kablammo.PowerUp(@, power_up) for power_up in @args.power_ups ) if @args.power_ups?
+    @ups = _(@powerUps).map (pu) -> "#{pu.args.name} (#{pu.args.duration})"
+    console.log @powerUps
 
     url = "https://identicons.github.com/#{@args.username}.png"
     @$el().attr 'src', url
@@ -18,10 +21,11 @@ class kablammo.Robot
     stat.find('.rotation td').html @args.rotation
     stat.find('.armor td').html @args.armor
     stat.find('.ammo td').html @args.ammo
-    stat.find('.last-turn td').html @last_turn?.args.value
+    stat.find('.power-ups td').html @ups
+    stat.find('.last-turn td').html @lastTurn?.args.value
 
-    if @alive() && @last_turn? && @last_turn.args.line_of_fire?
-      @board().fire @last_turn.args.line_of_fire, @onRendered
+    if @alive() && @lastTurn? && @lastTurn.args.line_of_fire?
+      @board().fire @lastTurn.args.line_of_fire, @onRendered
     else
       @onRendered()
 

@@ -1,10 +1,10 @@
 class PowerUp
   include MongoMapper::EmbeddedDocument
 
-  key :name, String, required: true
-  key :duration, Integer
+  key :name,      String, required: true
+  key :duration,  Integer
   key :abilities, Array
-  key :type, String, required: true
+  key :type,      String, required: true
 
   embedded_in :square
   embedded_in :robot

@@ -29,7 +29,7 @@ module Engine
         power_up = dest.power_up
         robot.power_ups << power_up
         power_up.grant
-        dest.power_up = nil
+        dest.clear
       end
 
       if dest.empty?

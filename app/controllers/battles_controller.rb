@@ -32,9 +32,14 @@ class BattlesController
 
     battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
 
+    #robots = Hash[player_names.zip([[0,2], [4,2]])]
+    #walls = []
+    #battle = Battle.wage({ name: name, board: { height: 5, width: 5 } })
+
     board = battle.board
     walls.each { |pos| board.add_wall pos[0], pos[1] }
     robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
+    board.add_power_up new_power_up, 0, 0
     battle.save!
 
     @app.redirect "/battles/#{battle.id}"
@@ -59,6 +64,10 @@ class BattlesController
     robot = Robot.new
     robot.username = name
     robot
+  end
+
+  def new_power_up
+    PowerUp.instance :golden_bullet
   end
 
   def erb(*args)

@@ -8,9 +8,12 @@ class kablammo.Square
     @parent.$el().find @el
 
   onRendered: =>
-    $(@parent).trigger 'rendered'
+    @rendered += 1
+    if @rendered == 2
+      $(@parent).trigger 'rendered'
 
   render: ->
+    @rendered = 0
     @$el().addClass @args.state
     @image.attr 'src', '/images/blank.png'
 
@@ -20,11 +23,14 @@ class kablammo.Square
     else
       @onRendered()
 
-    @renderPowerUp() if @args.power_up
+    if @args.state == 'power_up'
+      @powerUp = new kablammo.PowerUp(@, @args.power_up)
+      @renderPowerUp()
+    else
+      @onRendered()
 
   renderPowerUp: ->
-    powerUpIcon = "/images/#{@args.power_up.type}.png"
-    @image.attr 'src', powerUpIcon
+    @powerUp.render()
 
   renderRobot: ->
     @$el().addClass 'dead' if ! @robot.alive()

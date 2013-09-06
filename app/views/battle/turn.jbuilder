@@ -3,8 +3,7 @@ json.board do
   json.(battle.board, :height, :width)
   json.squares battle.board.squares do |square|
     json.power_up do
-      json.name square.power_up.name
-      json.type square.power_up.type
+      json.(square.power_up, :name, :type, :duration)
     end if square.power_up?
     json.(square, :x, :y, :state)
     json.robot do
@@ -12,6 +11,9 @@ json.board do
       json.turns square.robot.turns do |turn|
         json.(turn, :value, :line_of_fire)
       end
+      json.power_ups square.robot.power_ups do |power_up|
+        json.(power_up, :name, :type, :duration)
+      end if ! square.robot.power_ups.empty?
     end if square.robot
   end
 end

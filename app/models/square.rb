@@ -3,7 +3,7 @@ class Square
 
   key :x,     Integer, required: true
   key :y,     Integer, required: true
-  key :state, String,  required: true, in: %w(empty wall robot), default: 'empty'
+  key :state, String,  required: true, in: %w(empty wall robot power_up), default: 'empty'
 
   embedded_in :board
   one :robot
@@ -19,9 +19,15 @@ class Square
     self.robot = robot
   end
 
+  def place_power_up(power_up)
+    @state = 'power_up'
+    self.power_up = power_up
+  end
+
   def clear
     @state = 'empty'
     self.robot = nil
+    self.power_up = nil
   end
 
   def empty?
@@ -34,6 +40,10 @@ class Square
 
   def wall?
     @state == 'wall'
+  end
+
+  def power_up?
+    @state == 'power_up'
   end
 
   def as_seen_by(robot)

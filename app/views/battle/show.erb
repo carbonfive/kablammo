@@ -17,6 +17,7 @@
           <tr class="rotation"><th>Rotation</th><td><%= robot.rotation %></td></tr>
           <tr class="armor"><th>Armor</th><td><%= robot.armor %></td></tr>
           <tr class="ammo"><th>Ammo</th><td><%= robot.ammo %></td></tr>
+          <tr class="power-ups"><th>Power Ups</th><td><%= robot.power_ups.map(&:name).join(', ') %></td></tr>
           <tr class="last-turn"><th>Last Turn</th><td><%= robot.turns.last %></td></tr>
         </table>
       </div>

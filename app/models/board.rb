@@ -31,6 +31,10 @@ class Board
     square_at(x, y).place_robot robot
   end
 
+  def add_power_up(power_up, x, y)
+    square_at(x, y).place_power_up power_up
+  end
+
   def line_of_sight(source, degrees)
     los = geometry.line_of_sight source, degrees
     los.map { |p| square_at(p.x, p.y) }
@@ -54,8 +58,5 @@ class Board
       square.x = i % @width
       square.y = i / @width
     end
-    new_power_up = PowerUp.instance :golden_bullet
-    random_place = self.squares[rand(140)]
-    random_place.power_up = new_power_up
   end
 end
