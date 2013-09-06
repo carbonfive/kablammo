@@ -15,7 +15,7 @@ class BattlesController
   def create()
     player_ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
     if player_ids.length < 2
-      redirect '/battles/new' and return # flash an error? 
+      @app.redirect '/battles/new' and return # flash an error?
     end
 
     # get_players_from_request
