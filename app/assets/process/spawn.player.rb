@@ -30,10 +30,25 @@ send_channel.clear
 receive_channel.clear
 Thread.abort_on_exception = true
 
+process = Thread.current
+
 receive_channel.register do |msg|
+  if 'shutdown'.eql? msg
+    process[:shutdown] = true
+    Thread.exit
+  end
   turn = next_turn strategy, msg
   send_channel.send turn
 end
 
 puts "Welcome to Kablammo, #{username}!"
-sleep
+
+begin
+  while !process[:shutdown] do
+    sleep 1
+  end
+rescue SignalException => e
+  puts
+  puts 'Quit'
+end
+puts "Game Over for #{username}"
