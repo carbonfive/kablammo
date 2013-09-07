@@ -42,6 +42,12 @@ module Engine
       end
 
       @battle.save!
+
+      if @battle.game_over?
+        @battle.robots.each do |robot|
+          send_channel(robot).send :shutdown
+        end
+      end
     end
 
     private
