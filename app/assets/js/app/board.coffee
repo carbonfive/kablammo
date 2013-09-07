@@ -69,7 +69,7 @@ class kablammo.Board
     _.chain(last).clone().extend({ fire: true }).value()
 
   rotateTurn: (last, value) ->
-    _.chain(last).clone().extend({ fire: false, turretAngle: (value * Math.PI / 180.0) }).value()
+    _.chain(last).clone().extend({ fire: false, turretAngle: @convertAngle(value) }).value()
 
   moveNorthTurn: (last) ->
     _.chain(last).clone().extend({ fire: false, y: last.y + 1, direction: 0 }).value()
@@ -85,3 +85,6 @@ class kablammo.Board
 
   restTurn: (last) ->
     _.chain(last).clone().extend({ fire: false }).value()
+
+  convertAngle: (degrees) ->
+    ((degrees + 90) * Math.PI) / 180.0
