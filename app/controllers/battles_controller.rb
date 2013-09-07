@@ -23,23 +23,21 @@ class BattlesController
 
     player_names = player_ids.map{|player| activate_player(player)}
 
-    robots = Hash[player_names.zip([[0,4], [15,4]])]
+    #robots = Hash[player_names.zip([[0,4], [15,4]])]
+    #walls = [ [2,3],  [2,5],  [4, 4],
+             #[13,3], [13,5], [11,4],
+             #[6,1],  [7,1],  [8,1],  [9,1],
+             #[6,7],  [7,7],  [8,7],  [9,7] ]
+    #battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
 
-    walls = [ [2,3],  [2,5],  [4, 4],
-             [13,3], [13,5], [11,4],
-             [6,1],  [7,1],  [8,1],  [9,1],
-             [6,7],  [7,7],  [8,7],  [9,7] ]
-
-    battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
-
-    #robots = Hash[player_names.zip([[0,2], [4,2]])]
-    #walls = []
-    #battle = Battle.wage({ name: name, board: { height: 5, width: 5 } })
+    robots = Hash[player_names.zip([[0,2], [4,2]])]
+    walls = [[2, 2]]
+    battle = Battle.wage({ name: name, board: { height: 5, width: 5 } })
 
     board = battle.board
     walls.each { |pos| board.add_wall pos[0], pos[1] }
     robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
-    board.add_power_up new_power_up, 0, 0
+    #board.add_power_up new_power_up, 0, 0
     30.times { battle.turn }
     battle.save!
 
