@@ -40,6 +40,7 @@ class BattlesController
     walls.each { |pos| board.add_wall pos[0], pos[1] }
     robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
     board.add_power_up new_power_up, 0, 0
+    2.times { battle.turn }
     battle.save!
 
     @app.redirect "/battles/#{battle.id}"
@@ -63,6 +64,8 @@ class BattlesController
   def new_robot(name)
     robot = Robot.new
     robot.username = name
+    robot.turns = []
+    robot.power_ups = []
     robot
   end
 

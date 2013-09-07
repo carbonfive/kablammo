@@ -1,10 +1,13 @@
 class Robot
   include MongoMapper::EmbeddedDocument
+  include Target
 
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
   key :username,  String,  required: true
+  key :x,         Integer, required: true
+  key :y,         Integer, required: true
   key :rotation,  Integer, required: true, default: 0
   key :ammo,      Integer, required: true, default: MAX_AMMO
   key :armor,     Integer, required: true, default: MAX_ARMOR
@@ -12,7 +15,15 @@ class Robot
 
   many :turns
   many :power_ups
-  embedded_in :square
+  embedded_in :board
+
+  def initialize(*args)
+    super
+    @rotation = 0
+    @ammo = MAX_AMMO
+    @armor = MAX_ARMOR
+    @abilities = []
+  end
 
   def assign_abilities(abilities)
     new_abilities = self.abilities + abilities
@@ -56,18 +67,20 @@ class Robot
     @ammo > 0
   end
 
-  def can_see?(other_square)
-    return true if square == other_square
+  def can_see?(target)
+    return true if located_at? target
 
-    direction = square.board.geometry.direction_to square, other_square
-    los = square.board.line_of_sight square, direction
+    direction = direction_to target
+    los = line_of_sight_to direction
     return true if los.empty?
+    p los
+    p target
 
-    hit = los.index { |s| ! s.empty? }
-    return true unless hit
+    first_hit = los.index { |p| board.hit? p }
+    return true unless first_hit
 
-    other_index = los.index other_square
-    other_index <= hit
+    target_hit = los.index { |p| p.located_at? target }
+    target_hit <= first_hit
   end
 
   def can_fire_through_walls?

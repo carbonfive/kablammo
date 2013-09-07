@@ -1,12 +1,14 @@
 class PowerUp
   include MongoMapper::EmbeddedDocument
+  include Target
 
+  key :x,         Integer
+  key :y,         Integer
   key :name,      String, required: true
   key :duration,  Integer
   key :abilities, Array
   key :type,      String, required: true
 
-  embedded_in :square
   embedded_in :robot
 
   def grant

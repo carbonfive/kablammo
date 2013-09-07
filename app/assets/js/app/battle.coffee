@@ -2,17 +2,11 @@ class @kablammo.Battle
   constructor: (@args) ->
     @el = '.battle'
     @playing = false
-    $(@).on 'rendered', @onRendered
     $('.buttons .turn').click @turn
     $('.buttons .play').click @play
 
   $el: ->
     $(@el)
-
-  onRendered: =>
-    setTimeout =>
-      @turn() if @playing
-    , 50
 
   render: =>
     @board = new kablammo.Board(@, @args.board)

@@ -10,6 +10,8 @@ set :root, File.dirname(__FILE__)
 require './config/mongo'
 
 require './app/models/engine/turn_handler'
+require './app/models/target'
+require './app/models/board' # need this before Battle
 Dir['./app/models/**/*.rb'].each   { |file| require file }
 Dir['./app/controllers/*.rb'].each { |file| require file }
 
@@ -25,7 +27,11 @@ assets {
   js :application, '/js/application.js', [
     '/js/vendor/**/*.js',
     '/js/app/kablammo.js',
-    '/js/app/**/*.js'
+    '/js/app/battle.js',
+    '/js/app/board.js',
+    '/js/app/visualization.js'
+    #'/js/app/kablammo.js',
+    #'/js/app/**/*.js'
   ]
 
   css :application, '/js/application.css', [

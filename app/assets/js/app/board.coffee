@@ -1,40 +1,83 @@
 class kablammo.Board
   constructor: (@parent, @args) ->
     @el = '.board'
-    $(@).on 'rendered', @onRendered
+    @viz = @createVisualization()
 
   $el: ->
     @parent.$el().find @el
 
-  onRendered: =>
-    @rendered += 1
-    if @rendered == @args.squares.length
-      $(@parent).trigger 'rendered'
+  render: ->
+    @viz.draw()
 
-  render: =>
-    @rendered = 0
-    @squares = ( new kablammo.Square(@, square) for square in @args.squares )
-    square.render() for square in @squares
+  play: ->
+    @viz.play()
 
-  fire: (lof, next) =>
-    if lof.length == 0
-      next() if next
-      return
+  createVisualization: ->
+    walls = @createWalls()
+    console.log walls
+    robots = @createRobots()
+    console.log robots
+    $('#board').css { height: "#{@args.height * 70}px", width: "#{@args.width * 70}px" }
+    kablammo.Visualization 'board', @args.width, @args.height, walls, robots
 
-    sq = lof.shift()
-    square = @squareFor sq[0], sq[1]
-    square.fire()
-    setTimeout =>
-      square.unfire()
-      @fire lof, next
-    , 50
+  createWalls: ->
+    walls = []
+    for square in @args.walls
+      x = square.x
+      y = square.y
+      walls[x] ||= []
+      walls[x][y] = true
+    walls
 
-  alive_robots: ->
-    isRobot = (square) -> ( square.args.state == 'robot' )
-    toRobot = (square) -> square.robot
-    isAlive = (robot) -> robot.alive()
-    _.chain(@squares).filter(isRobot).map(toRobot).filter(isAlive).value()
+  createRobots: ->
+    count = -1
+    console.log @args.robots
+    _(@args.robots).map (robot) =>
+      @last = { x: robot.x, y: robot.y, direction: 0, turretAngle: robot.rotation * Math.PI / 180.0 }
+      count += 1
+      {
+        id: ((1<<30)*Math.random())
+        color: count % 4
+        x: robot.x
+        y: robot.y
+        ammo: robot.ammo
+        armor: robot.armor
+        direction: 0
+        bodyRotation: 0
+        turretAngle: robot.rotation * Math.PI / 180.0
+        turns: _(robot.turns).map @toTurn
+      }
 
-  squareFor: (x, y) ->
-    _(@squares).find (s) ->
-      s.args.x == x && s.args.y == y
+  toTurn: (turn) =>
+    str = turn.value
+    action = str.slice 0, 1
+    value = str.substr.to_i 1 if str.length > 1
+    t = switch action
+      when 'f' then @fireTurn value
+      when 'r' then @rotateTurn value
+      when 'n' then @moveNorthTurn()
+      when 's' then @moveSouthTurn()
+      when 'e' then @moveEastTurn()
+      when 'w' then @moveWestTurn()
+      else @restTurn()
+
+  fireTurn: (value) ->
+    _.chain(@last).clone().extend({ fire: true }).value()
+
+  rotateTurn: (value) ->
+    _(@last).extend { turretAngle: (value * Math.PI / 180.0) }
+
+  moveNorthTurn: ->
+    _(@last).extend { y: @last.y + 1, direction: 0 }
+
+  moveSouthTurn: ->
+    _(@last).extend { y: @last.y - 1, direction: 1 }
+
+  moveEastTurn: ->
+    _(@last).extend { x: @last.x + 1, direction: 2 }
+
+  moveWestTurn: ->
+    _(@last).extend { x: @last.x - 1, direction: 3 }
+
+  restTurn: ->
+    @last
