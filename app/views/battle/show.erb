@@ -1,12 +1,6 @@
 <div class="battle">
   <div class="board">
-    <% battle.board.rows.reverse.each do |row| %>
-      <div class="row">
-        <% row.each do |square| %>
-          <div class="square square-<%= square.x %>-<%= square.y %>"><img/></div>
-        <% end %>
-      </div>
-    <% end %>
+    <canvas id="board"/>
   </div>
   <div class="stats">
     <% battle.robots.each do |robot| %>
@@ -26,7 +20,7 @@
   
   <div class="buttons">
     <span class="link turn">Turn</span> |
-    <span class="link play">Play</span> |
+    <span class="link playstop">Play</span> |
     <a href="/battles/new">New</a>
   </div>
 </div>

@@ -1,10 +1,15 @@
 class Robot
   include MongoMapper::EmbeddedDocument
+  include Target
 
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
   key :username,  String,  required: true
+  key :x,         Integer, required: true
+  key :y,         Integer, required: true
+  key :start_x,   Integer, required: true
+  key :start_y,   Integer, required: true
   key :rotation,  Integer, required: true, default: 0
   key :ammo,      Integer, required: true, default: MAX_AMMO
   key :armor,     Integer, required: true, default: MAX_ARMOR
@@ -12,7 +17,17 @@ class Robot
 
   many :turns
   many :power_ups
-  embedded_in :square
+  embedded_in :board
+
+  def initialize(*args)
+    super
+    @rotation = 0
+    @ammo = MAX_AMMO
+    @armor = MAX_ARMOR
+    @abilities = []
+    self.turns = []
+    self.power_ups = []
+  end
 
   def assign_abilities(abilities)
     new_abilities = self.abilities + abilities
@@ -44,6 +59,11 @@ class Robot
     @rotation = rotation
   end
 
+  def move_to(target)
+    @x = target.x
+    @y = target.y
+  end
+
   def alive?
     @armor >= 0
   end
@@ -56,18 +76,18 @@ class Robot
     @ammo > 0
   end
 
-  def can_see?(other_square)
-    return true if square == other_square
+  def can_see?(target)
+    return true if located_at? target
 
-    direction = square.board.geometry.direction_to square, other_square
-    los = square.board.line_of_sight square, direction
+    direction = direction_to target
+    los = line_of_sight_to direction
     return true if los.empty?
 
-    hit = los.index { |s| ! s.empty? }
-    return true unless hit
+    first_hit = los.index { |p| board.hit? p }
+    return true unless first_hit
 
-    other_index = los.index other_square
-    other_index <= hit
+    target_hit = los.index { |p| p.located_at? target }
+    target_hit <= first_hit
   end
 
   def can_fire_through_walls?
@@ -75,17 +95,16 @@ class Robot
   end
 
   def line_of_sight(skew = 0)
-    pixels = square.board.line_of_sight(square, @rotation + skew)
-    pixels.map { |p| square.board.square_at(p.x, p.y) }
+    board.line_of_sight(self, @rotation + skew)
   end
 
   def line_of_fire(skew = 0)
     los = line_of_sight skew
 
     if can_fire_through_walls?
-      hit = los.index { |s| s.robot? }
+      hit = los.index { |p| board.robot? p }
     else
-      hit = los.index { |s| ! s.empty? }
+      hit = los.index { |p| board.hit? p }
     end
 
     hit ? los[0..hit] : los

@@ -36,12 +36,8 @@ module Engine
       turn
     end
 
-    def square
-      robot.square
-    end
-
     def board
-      square.board
+      robot.board
     end
 
     # turns are prioritized by type, and secondarily by who has more rest (ie: armor)

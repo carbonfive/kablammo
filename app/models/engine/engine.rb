@@ -13,6 +13,7 @@ module Engine
       degrade_power_ups alive_robots
       alive_robots.each do |robot|
         msg_handler = Proc.new do |str|
+          puts "Turn for #{robot.username}: #{str}"
           turn_handlers << TurnHandler.parse(robot, str)
         end
         msg_handlers[robot.username] = msg_handler

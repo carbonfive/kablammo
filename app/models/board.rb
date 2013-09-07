@@ -4,59 +4,68 @@ class Board
   key :height, Integer, required: true
   key :width,  Integer, required: true
 
-  many :squares
+  many :walls
+  many :robots
+  many :power_ups
   embedded_in :battle
 
-  attr_protected :squares
+  def initialize(*args)
+    super
+    self.walls = []
+    self.robots = []
+    self.power_ups = []
+  end
 
   def geometry
     @geometry ||= Geometry.new(@width, @height)
   end
 
-  def rows
-    squares.each_slice(@width).to_a
+  def hittable(target)
+    walls.detect { |w| w.located_at? target } || robots.detect { |r| r.located_at? target }
   end
-
-  def square_at(x, y)
-    return nil if x < 0 || x >= @width
-    return nil if y < 0 || y >= @height
-    squares[@width * y + x]
-  end
+  alias_method :hit?, :hittable
+  alias_method :occupied?, :hittable
 
   def add_wall(x, y)
-    square_at(x, y).place_wall
+    self.walls << Wall.new.at(x, y)
   end
 
   def add_robot(robot, x, y)
-    square_at(x, y).place_robot robot
+    robot = robot.at(x, y)
+    robot.start_x = x
+    robot.start_y = y
+    self.robots << robot
   end
 
   def add_power_up(power_up, x, y)
-    square_at(x, y).place_power_up power_up
+    self.power_ups << power_up.at(x, y)
+  end
+
+  def move_robot(robot, target)
+    power_up = power_ups.detect { |p| p.located_at? target }
+    if power_up
+      power_ups.delete power_up
+      power_up.x = nil
+      power_up.y = nil
+      robot.power_ups << power_up
+      power_up.grant
+    end
+
+    robot.move_to target unless occupied? target
   end
 
   def line_of_sight(source, degrees)
-    los = geometry.line_of_sight source, degrees
-    los.map { |p| square_at(p.x, p.y) }
+    geometry.line_of_sight source, degrees
   end
+
+  def robot_at(target)
+    robots.detect { |r| r.located_at? target }
+  end
+  alias_method :robot?, :robot_at
 
   def as_seen_by(robot)
     board = self.dup
-    board.squares = self.squares.map { |s| s.as_seen_by robot }
+    board.robots = self.robots.select { |r| robot.can_see? r }
     board
-  end
-
-  private
-
-  def length
-    height * width
-  end
-
-  def fill_in_empty_squares
-    self.squares = Array.new(length).fill { Square.new }
-    self.squares.each_with_index do |square, i|
-      square.x = i % @width
-      square.y = i / @width
-    end
   end
 end

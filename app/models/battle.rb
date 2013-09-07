@@ -10,7 +10,6 @@ class Battle
 
     battle = Battle.new(args)
     battle.board = Board.new(board_args)
-    battle.board.fill_in_empty_squares
     battle.save!
     battle
   end
@@ -28,7 +27,7 @@ class Battle
   end
 
   def robots
-    self.board.squares.map(&:robot).compact.sort_by(&:username)
+    board.robots.sort_by(&:username)
   end
 
   def alive_robots
