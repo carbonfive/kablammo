@@ -9,6 +9,7 @@ class PowerUp
   key :abilities, Array
   key :type,      String, required: true
 
+  embedded_in :board
   embedded_in :robot
 
   def grant

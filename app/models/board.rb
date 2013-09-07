@@ -20,34 +20,48 @@ class Board
     @geometry ||= Geometry.new(@width, @height)
   end
 
-  def square_at(x, y)
-    return nil if x < 0 || x >= @width
-    return nil if y < 0 || y >= @height
-    squares[@width * y + x]
-  end
-
   def hittable(target)
     walls.detect { |w| w.located_at? target } || robots.detect { |r| r.located_at? target }
   end
   alias_method :hit?, :hittable
+  alias_method :occupied?, :hittable
 
   def add_wall(x, y)
     self.walls << Wall.new.at(x, y)
   end
 
   def add_robot(robot, x, y)
-    self.robots << robot.at(x, y)
+    robot = robot.at(x, y)
+    robot.start_x = x
+    robot.start_y = y
+    self.robots << robot
   end
 
   def add_power_up(power_up, x, y)
     self.power_ups << power_up.at(x, y)
   end
 
-  def line_of_sight(source, degrees)
-    los = geometry.line_of_sight source, degrees
-    los
-    #los.map { |p| square_at(p.x, p.y) }
+  def move_robot(robot, target)
+    power_up = power_ups.detect { |p| p.located_at? target }
+    if power_up
+      power_ups.delete power_up
+      power_up.x = nil
+      power_up.y = nil
+      robot.power_ups << power_up
+      power_up.grant
+    end
+
+    robot.move_to target unless occupied? target
   end
+
+  def line_of_sight(source, degrees)
+    geometry.line_of_sight source, degrees
+  end
+
+  def robot_at(target)
+    robots.detect { |r| r.located_at? target }
+  end
+  alias_method :robot?, :robot_at
 
   def as_seen_by(robot)
     board = self.dup

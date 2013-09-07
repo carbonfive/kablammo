@@ -7,16 +7,17 @@ class kablammo.Board
     @parent.$el().find @el
 
   render: ->
-    @viz.draw()
+    @viz.play()
 
   play: ->
     @viz.play()
 
+  stop: ->
+    @viz.stop()
+
   createVisualization: ->
     walls = @createWalls()
-    console.log walls
     robots = @createRobots()
-    console.log robots
     $('#board').css { height: "#{@args.height * 70}px", width: "#{@args.width * 70}px" }
     kablammo.Visualization 'board', @args.width, @args.height, walls, robots
 
@@ -30,54 +31,57 @@ class kablammo.Board
     walls
 
   createRobots: ->
-    count = -1
-    console.log @args.robots
     _(@args.robots).map (robot) =>
-      @last = { x: robot.x, y: robot.y, direction: 0, turretAngle: robot.rotation * Math.PI / 180.0 }
-      count += 1
-      {
-        id: ((1<<30)*Math.random())
-        color: count % 4
-        x: robot.x
-        y: robot.y
+      hash = robot.username.hashCode()
+      bot =
+        id: hash
+        color: hash % 4
+        x: robot.start_x
+        y: robot.start_y
         ammo: robot.ammo
         armor: robot.armor
         direction: 0
         bodyRotation: 0
         turretAngle: robot.rotation * Math.PI / 180.0
-        turns: _(robot.turns).map @toTurn
-      }
+        turns: []
 
-  toTurn: (turn) =>
+      first = { x: robot.start_x, y: robot.start_y, direction: 0, turretAngle: robot.rotation * Math.PI / 180.0 }
+      bot.turns.push first
+      for t in robot.turns
+        last = _(bot.turns).last()
+        bot.turns.push @nextTurn(t, last)
+      bot
+
+  nextTurn: (turn, last) =>
     str = turn.value
     action = str.slice 0, 1
-    value = str.substr.to_i 1 if str.length > 1
-    t = switch action
-      when 'f' then @fireTurn value
-      when 'r' then @rotateTurn value
-      when 'n' then @moveNorthTurn()
-      when 's' then @moveSouthTurn()
-      when 'e' then @moveEastTurn()
-      when 'w' then @moveWestTurn()
-      else @restTurn()
+    value = parseInt str.substr(1) if str.length > 1
+    switch action
+      when 'f' then @fireTurn last, value
+      when 'r' then @rotateTurn last, value
+      when 'n' then @moveNorthTurn last
+      when 's' then @moveSouthTurn last
+      when 'e' then @moveEastTurn last
+      when 'w' then @moveWestTurn last
+      else @restTurn last
 
-  fireTurn: (value) ->
-    _.chain(@last).clone().extend({ fire: true }).value()
+  fireTurn: (last, value) ->
+    _.chain(last).clone().extend({ fire: true }).value()
 
-  rotateTurn: (value) ->
-    _(@last).extend { turretAngle: (value * Math.PI / 180.0) }
+  rotateTurn: (last, value) ->
+    _.chain(last).clone().extend({ turretAngle: (value * Math.PI / 180.0) }).value()
 
-  moveNorthTurn: ->
-    _(@last).extend { y: @last.y + 1, direction: 0 }
+  moveNorthTurn: (last) ->
+    _.chain(last).clone().extend({ y: last.y + 1, direction: 0 }).value()
 
-  moveSouthTurn: ->
-    _(@last).extend { y: @last.y - 1, direction: 1 }
+  moveSouthTurn: (last) ->
+    _.chain(last).clone().extend({ y: last.y - 1, direction: 0 }).value()
 
-  moveEastTurn: ->
-    _(@last).extend { x: @last.x + 1, direction: 2 }
+  moveEastTurn: (last) ->
+    _.chain(last).clone().extend({ x: last.x + 1, direction: 0 }).value()
 
-  moveWestTurn: ->
-    _(@last).extend { x: @last.x - 1, direction: 3 }
+  moveWestTurn: (last) ->
+    _.chain(last).clone().extend({ x: last.x - 1, direction: 0 }).value()
 
-  restTurn: ->
-    @last
+  restTurn: (last) ->
+    _(last).clone()

@@ -20,10 +20,9 @@ module Engine
 
       robot.fire
       lof = line_of_fire
-      enemy = lof.last
-      if enemy && enemy.robot?
-        enemy.robot.hit
-      end
+      target = lof.last
+      enemy = target && robot.board.robot_at(target)
+      enemy.hit if enemy
     end
   end
 end
