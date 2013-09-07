@@ -23,11 +23,8 @@ class kablammo.Board
 
   createWalls: ->
     walls = []
-    for square in @args.walls
-      x = square.x
-      y = square.y
-      walls[x] ||= []
-      walls[x][y] = true
+    for w in @args.walls
+      (walls[w.x] ||= [])[w.y] = true
     walls
 
   createRobots: ->
@@ -72,16 +69,16 @@ class kablammo.Board
     _.chain(last).clone().extend({ fire: false, turretAngle: @convertAngle(value) }).value()
 
   moveNorthTurn: (last) ->
-    _.chain(last).clone().extend({ fire: false, y: last.y + 1, direction: 0 }).value()
+    _.chain(last).clone().extend({ fire: false, y: last.y + 1, direction: 2 }).value()
 
   moveSouthTurn: (last) ->
     _.chain(last).clone().extend({ fire: false, y: last.y - 1, direction: 0 }).value()
 
   moveEastTurn: (last) ->
-    _.chain(last).clone().extend({ fire: false, x: last.x + 1, direction: 0 }).value()
+    _.chain(last).clone().extend({ fire: false, x: last.x + 1, direction: 3 }).value()
 
   moveWestTurn: (last) ->
-    _.chain(last).clone().extend({ fire: false, x: last.x - 1, direction: 0 }).value()
+    _.chain(last).clone().extend({ fire: false, x: last.x - 1, direction: 1 }).value()
 
   restTurn: (last) ->
     _.chain(last).clone().extend({ fire: false }).value()
