@@ -4,6 +4,8 @@ class Strategy
   include MongoMapper::Document
 
   cattr_accessor :strategies_location
+  cattr_accessor :start_code_file_name
+  cattr_accessor :start_code_file_location
 
   key :username, String, required: true
   key :github_url, String, required: true, unique: true
@@ -23,9 +25,14 @@ class Strategy
 
   def launch
     puts "Lauching #{username}"
-    cmd = "cd #{path} && bundle && ruby ./index.rb #{username}"
+    start_code_file_destination = File.join(path, @@start_code_file_name)
+    forced = true
+    FileUtils.remove_file(start_code_file_destination, forced)
+    FileUtils.cp @@start_code_file_location, start_code_file_destination
+    cmd = "cd #{path} && bundle && ruby #{@@start_code_file_name} #{username}"
+    puts cmd
     Process.spawn(cmd)
-    puts "Lauched #{username}"
+    puts "Launched #{username}"
   end
 
   def url= url
