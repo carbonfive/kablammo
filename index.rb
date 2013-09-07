@@ -27,12 +27,9 @@ assets {
   js :application, '/js/application.js', [
     '/js/vendor/**/*.js',
     '/js/app/ext.js',
-    '/js/app/kablammo.js',
     '/js/app/battle.js',
     '/js/app/board.js',
     '/js/app/visualization.js'
-    #'/js/app/kablammo.js',
-    #'/js/app/**/*.js'
   ]
 
   css :application, '/js/application.css', [

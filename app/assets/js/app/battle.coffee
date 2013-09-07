@@ -1,3 +1,4 @@
+@kablammo = {}
 class @kablammo.Battle
   constructor: (@args) ->
     @el = '.battle'
