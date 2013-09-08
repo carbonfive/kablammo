@@ -1,3 +1,4 @@
+
 def usage
   puts "Usage: ruby index.rb <channel> <strategy>"
   exit 1
@@ -17,9 +18,16 @@ require './player.rb'
 strategy = Player.load_strategy username
 
 raise "Player.load_strategy must return a Strategy not a #{strategy.class.name}!" unless strategy.kind_of? Strategy::Base
+
 def next_turn(strategy, args)
   battle = Strategy::Model::Battle.new args
   strategy.execute_turn battle
+end
+
+def shutdown(process, msg=nil)
+  puts "\n\n#{msg}" if msg
+  process[:shutdown] = true
+  Thread.exit
 end
 
 capsule = RedisMessageCapsule.capsule
@@ -27,18 +35,25 @@ send_channel = capsule.channel "#{username}-send"
 receive_channel = capsule.channel "#{username}-receive"
 
 send_channel.clear
-receive_channel.clear
 Thread.abort_on_exception = true
 
 process = Thread.current
 
 receive_channel.register do |msg|
-  if 'shutdown'.eql? msg
-    process[:shutdown] = true
-    Thread.exit
+  if 'ready?'.eql? msg
+    puts 'Battle is on!'
+    send_channel.send :ready
+  elsif 'looser'.eql? msg
+    shutdown process, "#{username} you lost."
+  elsif 'winner'.eql? msg
+    shutdown process, "#{username} you won! Of Course."
+  elsif 'shutdown'.eql? msg
+    shutdown process
+  else
+    print '.'
+    turn = next_turn strategy, msg
+    send_channel.send turn
   end
-  turn = next_turn strategy, msg
-  send_channel.send turn
 end
 
 puts "Welcome to Kablammo, #{username}!"
@@ -49,6 +64,6 @@ begin
   end
 rescue SignalException => e
   puts
-  puts 'Quit'
+  puts 'You Quit'
 end
-puts "Game Over for #{username}"
+puts "Game Over"

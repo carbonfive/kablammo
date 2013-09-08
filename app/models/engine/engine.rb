@@ -6,6 +6,30 @@ module Engine
       @channels = build_channels capsule
     end
 
+    def prepare_for_battle!
+      puts "preparing for battle!"
+      ready_handlers = {}
+      ready_robots = []
+      robots = @battle.robots
+      robots.each do |robot|
+        ready_handler = Proc.new do |str|
+          puts "@#{robot.username} is prepared with message: #{str}"
+          ready_robots << robot.username
+          this_handler = ready_handlers[robot.username]
+          receive_channel(robot).listener.unregister(&this_handler)
+        end
+        ready_handlers[robot.username] = ready_handler
+        receive_channel(robot).register(&ready_handler)
+        send_channel(robot).send :ready?
+      end
+      max_wait = 30 # seconds
+      while max_wait > 0 and ready_robots.count < robots.count
+        sleep 1
+        max_wait -= 1
+        # puts "waiting #{max_wait}: #{ready_robots}"
+      end
+    end
+
     def turn
       msg_handlers = {}
       turn_handlers = []
@@ -46,7 +70,11 @@ module Engine
 
       if @battle.game_over?
         @battle.robots.each do |robot|
-          send_channel(robot).send :shutdown
+          if robot.alive?
+            send_channel(robot).send :winner
+          else
+            send_channel(robot).send :looser
+          end
         end
       end
     end

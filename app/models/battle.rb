@@ -14,6 +14,11 @@ class Battle
     battle
   end
 
+  def prepare_for_battle!
+    engine.prepare_for_battle!
+    self
+  end
+
   def find_by_id(id)
     self.find id
   end
