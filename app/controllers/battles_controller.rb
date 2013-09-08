@@ -38,6 +38,9 @@ class BattlesController
     walls.each { |pos| board.add_wall pos[0], pos[1] }
     robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
     #board.add_power_up new_power_up, 0, 0
+
+    battle.prepare_for_battle! # wait for player processes to spawn up
+
     100.times { battle.turn }
     battle.save!
 
