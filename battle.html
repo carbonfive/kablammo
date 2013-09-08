@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kablammo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/application.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Kablammo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="arena.html">Arena</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="rules.html">Rules</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">David Hendee <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="robots.html">My Robots</a></li>
+                <li><a href="battle.html">Training Grounds</a></li>
+                <li class="divider"></li>
+                <li><a href="index.html">Sign Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="page-header">
+        <h1>Training Grounds</h1>
+      </div>
+      <h2>Select Map</h2>
+      <div class="row">
+        <div class="col-md-2">
+          <p>
+            <a href="#" class="active"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-primary btn-xs">Symmetry</a>
+          </p>
+        </div>
+        <div class="col-md-2">
+          <p>
+            <a href="#"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-default btn-xs">Chaos</a>
+          </p>
+        </div>
+        <div class="col-md-2">
+          <p>
+            <a href="#"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-default btn-xs">Tactics</a>
+          </p>
+        </div>
+        <div class="col-md-2">
+          <p>
+            <a href="#"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-default btn-xs">Anarchy</a>
+          </p>
+        </div>
+        <div class="col-md-2">
+          <p>
+            <a href="#"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-default btn-xs">Juiced</a>
+          </p>
+        </div>
+        <div class="col-md-2">
+          <p>
+            <a href="#"><img data-src="holder.js/155x155" class="img-thumbnail"></a>
+          </p>
+          <p>
+            <a href="#" class="btn btn-default btn-xs">Neutrality</a>
+          </p>
+        </div>
+      </div>
+      <h2>Add Robots to Map</h2>
+      <form method="post" action="arena.html">
+        <div class="form-group">
+          <label for="robot1">Robot 1</label>
+          <select name="robot1" id="robot1" class="form-control">
+            <option>dhendee/kablammo-strategy</option>
+            <option>dhendee/kablammo-strategy2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="robot2">Robot 2</label>
+          <select name="robot2" id="robot2" class="form-control">
+            <option>dhendee/kablammo-strategy</option>
+            <option selected="selected">dhendee/kablammo-strategy2</option>
+          </select>
+        </div>
+        <p class="clearfix">
+          <a href="#" class="btn btn-default pull-left">Add Robot to Map</a>
+          <a href="arena.html" class="btn btn-success pull-right">Enter The Arena</a>
+        </p>
+      </form>      
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/holder.js"></script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kablammo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/application.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Kablammo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="arena.html">Arena</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="rules.html">Rules</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">David Hendee <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="robots.html">My Robots</a></li>
+                <li><a href="battle.html">Training Grounds</a></li>
+                <li class="divider"></li>
+                <li><a href="index.html">Sign Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="page-header">
+        <h1>Enter Robot</h1>
+      </div>
+      <p>For information on how to create a robot, read the <a href="docs.html">docs</a>.
+      <form method="post" action="robots.html">
+        <div class="form-group">
+          <input type="text" class="form-control" id="fork" placeholder="Kablammo Strategy fork SSH clone URL">
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Add Robot</button>
+        </div>
+      </form>
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

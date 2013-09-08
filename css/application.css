@@ -1,0 +1,33 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 20px;
+}
+
+.active .img-thumbnail {
+	border-color: #357ebd;
+}
+
+.health {
+  margin-bottom: 5px;
+}
+
+.ammo .btn {
+  width: 34px; 
+  height: 20px;
+  cursor: default;
+}
+
+.ammo .btn:hover {
+  background: #fff;
+  border-color: #ccc;
+}
+
+.ammo .btn:first-child, .ammo .btn:last-child {
+  width: 36px;
+}
+
+.ammo .btn-info,
+.ammo .btn-info:hover { 
+  background-color: #ddd;
+  border-color: #ccc;
+}
