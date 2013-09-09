@@ -30,12 +30,6 @@ module Engine
       RestHandler.new robot
     end
 
-    def turn
-      turn = ::Turn.new
-      turn.value = @value
-      turn
-    end
-
     def board
       robot.board
     end

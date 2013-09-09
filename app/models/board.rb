@@ -36,9 +36,9 @@ class Board
   end
 
   def add_robot(robot, x, y)
-    robot = robot.at(x, y)
-    robot.start_x = x
-    robot.start_y = y
+    turn = Turn.new.at(x, y)
+    turn.value = '*'
+    robot.turns << turn
     self.robots << robot
   end
 

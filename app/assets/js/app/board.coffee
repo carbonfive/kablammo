@@ -18,6 +18,7 @@ class kablammo.Board
   createVisualization: ->
     walls = @createWalls()
     robots = @createRobots()
+    console.log robots
     $('#board').css { height: "#{@args.height * 70}px", width: "#{@args.width * 70}px" }
     kablammo.Visualization 'board', @args.width, @args.height, walls, robots
 
@@ -30,24 +31,22 @@ class kablammo.Board
   createRobots: ->
     _(@args.robots).map (robot) =>
       hash = robot.username.hashCode()
-      bot =
+      {
         id: hash
         color: hash % 4
-        x: robot.start_x
-        y: robot.start_y
-        ammo: robot.ammo
-        armor: robot.armor
+        x: 0
+        y: 0
+        ammo: 0
+        armor: 0
         direction: 0
         bodyRotation: 0
-        turretAngle: robot.rotation * Math.PI / 180.0
-        turns: []
+        turretAngle: 0
+        turns: _(robot.turns).map @toTurn
+      }
 
-      first = { x: robot.start_x, y: robot.start_y, direction: 0, turretAngle: robot.rotation * Math.PI / 180.0 }
-      bot.turns.push first
-      for t in robot.turns
-        last = _(bot.turns).last()
-        bot.turns.push @nextTurn(t, last)
-      bot
+  toTurn: (turn) =>
+    turn.turretAngle = @convertToRadians(turn.rotation + 90)
+    turn
 
   nextTurn: (turn, last) =>
     str = turn.value

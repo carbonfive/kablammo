@@ -7,23 +7,15 @@ module Engine
       @direction = direction
     end
 
-    def execute
+    def execute(base_turn)
       x, y = robot.x, robot.y
-      move_to(robot, x, y + 1) if @direction == 'north'
-      move_to(robot, x, y - 1) if @direction == 'south'
-      move_to(robot, x + 1, y) if @direction == 'east'
-      move_to(robot, x - 1, y) if @direction == 'west'
+      board = robot.board
+      direction = %w(south west north east).index @direction
+      y += 1 if @direction == 'north' && y+1 < board.height
+      y -= 1 if @direction == 'south' && y-1 >= 0
+      x += 1 if @direction == 'east'  && x+1 < board.width
+      x -= 1 if @direction == 'west'  && x-1 >= 0
+      base_turn.extend value: @value, x: x, y: y, direction: direction
     end
-
-    private
-
-    def move_to(robot, x, y)
-      return if x < 0 || x >= board.width
-      return if y < 0 || y >= board.height
-
-      dest = Pixel.new x, y
-      board.move_robot robot, dest
-    end
-
   end
 end

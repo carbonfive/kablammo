@@ -7,9 +7,8 @@ module Engine
       @rotation = rotation
     end
 
-    def execute
-      robot.rotate_to @rotation
+    def execute(base_turn)
+      base_turn.extend value: @value, rotation: @rotation
     end
-
   end
 end

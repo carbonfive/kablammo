@@ -62,8 +62,18 @@ module Engine
       turn_handlers = turn_handlers.sort_by(&:priority)
 
       turn_handlers.each do |turn_handler|
-        turn_handler.robot.turns << turn_handler.turn
-        turn_handler.execute
+        robot = turn_handler.robot
+        base_turn = robot.turns.last.dup.extend fire: nil
+        turn = turn_handler.execute base_turn
+        robot.turns << turn
+      end
+
+      # handle hits (this needs to be refactored!)
+      turn_handlers.each do |turn_handler|
+        robot = turn_handler.robot
+        fire = robot.turns.last.fire
+        enemy = fire && robot.board.robot_at(fire)
+        enemy.turns.last.armor -= 1 if enemy
       end
 
       @battle.save!
