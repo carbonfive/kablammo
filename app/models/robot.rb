@@ -56,7 +56,11 @@ class Robot
   end
 
   def rotate_to(rotation)
-    @rotation = rotation
+    @rotation = rotation % 360
+  end
+
+  def rotate_by(degrees)
+    @rotation = (@rotation + degrees) % 360
   end
 
   def move_to(target)

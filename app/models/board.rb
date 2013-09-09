@@ -26,6 +26,11 @@ class Board
   alias_method :hit?, :hittable
   alias_method :occupied?, :hittable
 
+  def robot_at(target)
+    robots.detect { |r| r.located_at? target }
+  end
+  alias_method :robot?, :robot_at
+
   def add_wall(x, y)
     self.walls << Wall.new.at(x, y)
   end
@@ -57,11 +62,6 @@ class Board
   def line_of_sight(source, degrees)
     geometry.line_of_sight source, degrees
   end
-
-  def robot_at(target)
-    robots.detect { |r| r.located_at? target }
-  end
-  alias_method :robot?, :robot_at
 
   def as_seen_by(robot)
     board = self.dup

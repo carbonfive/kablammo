@@ -18,6 +18,7 @@ module Engine
     def execute
       return if ! robot.can_fire?
 
+      robot.rotate_by skew
       robot.fire
       lof = line_of_fire
       target = lof.last

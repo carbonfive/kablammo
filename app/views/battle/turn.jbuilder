@@ -8,7 +8,7 @@ json.board do
       json.(power_up, :name, :type, :duration)
     end
     json.turns robot.turns do |turn|
-      json.(turn, :value)
+      json.(turn, :value, :hit)
     end
   end
 

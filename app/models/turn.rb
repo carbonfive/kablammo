@@ -5,10 +5,11 @@ class Turn
 
   embedded_in :robot
 
-  def line_of_fire
+  def hit
     handler = Engine::TurnHandler.parse self.robot, @value
 
     return nil unless handler.is_a?(Engine::FireHandler)
-    handler.line_of_fire.map {|s| [s.x, s.y]}
+    lof = handler.line_of_fire
+    robot.board.hit?(lof.last) ? [lof.last.x, lof.last.y] : nil
   end
 end
