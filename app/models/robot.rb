@@ -55,31 +55,6 @@ class Robot
     Strategy::Base.lookup @username
   end
 
-  def rest
-    @ammo  = [MAX_AMMO,  @ammo  + 1].min
-  end
-
-  def hit
-    @armor -= 1
-  end
-
-  def fire
-    @ammo -= 1
-  end
-
-  def rotate_to(rotation)
-    @rotation = rotation % 360
-  end
-
-  def rotate_by(degrees)
-    @rotation = (@rotation + degrees) % 360
-  end
-
-  def move_to(target)
-    @x = target.x
-    @y = target.y
-  end
-
   def alive?
     turns.last.armor >= 0
   end
