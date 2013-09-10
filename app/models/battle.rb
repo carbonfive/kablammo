@@ -24,7 +24,7 @@ class Battle
   end
 
   def engine
-    @engine ||= Engine::Engine.new(self)
+    @engine ||= Engine::Engine.instance(self)
   end
 
   def turn

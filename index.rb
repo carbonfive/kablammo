@@ -30,12 +30,14 @@ end
 
 require './config/mongo'
 
-require './app/models/engine/turn_handler'
 require './app/models/target'
 require './app/models/board' # need this before Battle
-Dir['./app/models/**/*.rb'].each   { |file| require file }
+Dir['./app/models/**/*.rb'].each { |file| require file }
+
 Dir['./app/controllers/*.rb'].each { |file| require file }
 
-require './config/strategy'
+require './app/engine/turn_handler'
+Dir['./app/engine/*.rb'].each { |file| require file }
 
+require './config/strategy'
 require './config/routes'
