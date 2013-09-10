@@ -11,19 +11,20 @@ module Engine
       @skew = MAX_SKEW      if @skew > MAX_SKEW
     end
 
-    def line_of_fire
-      robot.line_of_fire @skew
-    end
-
-    def execute
+    def execute(base_turn)
       return if ! robot.can_fire?
 
-      robot.rotate_by skew
-      robot.fire
-      lof = line_of_fire
-      target = lof.last
-      enemy = target && robot.board.robot_at(target)
-      enemy.hit if enemy
+      rotation = base_turn.rotation + skew
+      ammo = base_turn.ammo - 1
+      hit = robot.line_of_fire(@skew).last
+      fire = nil
+      if hit
+        fire = Coordinate.new
+        fire.x = hit.x
+        fire.y = hit.y
+      end
+
+      base_turn.extend value: @value, fire: fire, rotation: rotation, ammo: ammo
     end
   end
 end

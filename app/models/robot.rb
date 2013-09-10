@@ -6,27 +6,39 @@ class Robot
   MAX_ARMOR = 5
 
   key :username,  String,  required: true
-  key :x,         Integer, required: true
-  key :y,         Integer, required: true
-  key :start_x,   Integer, required: true
-  key :start_y,   Integer, required: true
-  key :rotation,  Integer, required: true, default: 0
-  key :ammo,      Integer, required: true, default: MAX_AMMO
-  key :armor,     Integer, required: true, default: MAX_ARMOR
-  key :abilities, Array,   required: true, default: []
 
   many :turns
   many :power_ups
   embedded_in :board
 
   def initialize(*args)
-    super
-    @rotation = 0
-    @ammo = MAX_AMMO
-    @armor = MAX_ARMOR
-    @abilities = []
     self.turns = []
     self.power_ups = []
+    super
+  end
+
+  def x
+    turns.last.x
+  end
+
+  def y
+    turns.last.y
+  end
+
+  def armor
+    turns.last.armor
+  end
+
+  def ammo
+    turns.last.ammo
+  end
+
+  def rotation
+    turns.last.rotation
+  end
+
+  def abilities
+    turns.last.abilities
   end
 
   def assign_abilities(abilities)
@@ -43,33 +55,8 @@ class Robot
     Strategy::Base.lookup @username
   end
 
-  def rest
-    @ammo  = [MAX_AMMO,  @ammo  + 1].min
-  end
-
-  def hit
-    @armor -= 1
-  end
-
-  def fire
-    @ammo -= 1
-  end
-
-  def rotate_to(rotation)
-    @rotation = rotation % 360
-  end
-
-  def rotate_by(degrees)
-    @rotation = (@rotation + degrees) % 360
-  end
-
-  def move_to(target)
-    @x = target.x
-    @y = target.y
-  end
-
   def alive?
-    @armor >= 0
+    turns.last.armor >= 0
   end
 
   def dead?
@@ -77,7 +64,7 @@ class Robot
   end
 
   def can_fire?
-    @ammo > 0
+    ammo > 0
   end
 
   def can_see?(target)
@@ -99,7 +86,7 @@ class Robot
   end
 
   def line_of_sight(skew = 0)
-    board.line_of_sight(self, @rotation + skew)
+    board.line_of_sight(self, rotation + skew)
   end
 
   def line_of_fire(skew = 0)
