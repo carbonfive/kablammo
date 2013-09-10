@@ -1,36 +1,68 @@
 module Engine
   class Engine
+    def self.instance(battle)
+      @instances ||= {}
+      @instances[battle.id] = self.new battle
+    end
+
     def initialize(battle)
       @battle = battle
-      capsule = RedisMessageCapsule.capsule
-      @channels = build_channels capsule
+      @players = battle.robots.map { |r| Player.new r }
+    end
+
+    def alive_players
+      @players.select { |p| p.alive? }
+    end
+
+    def ready?
+      alive_players.all? { |p| p.ready? }
+    end
+
+    def wait(seconds, opts)
+      now = Time.now
+      sleep opts[:by] while Time.now - now < seconds && ! ready?
     end
 
     def prepare_for_battle!
-      puts "preparing for battle!"
-      ready_handlers = {}
-      ready_robots = []
-      robots = @battle.robots
-      robots.each do |robot|
-        ready_handler = Proc.new do |str|
-          puts "@#{robot.username} is prepared with message: #{str}"
-          ready_robots << robot.username
-          this_handler = ready_handlers[robot.username]
-          receive_channel(robot).listener.unregister(&this_handler)
-        end
-        ready_handlers[robot.username] = ready_handler
-        receive_channel(robot).register(&ready_handler)
-        send_channel(robot).send :ready?
+      puts "Preparing for battle!"
+      @players.each do |player|
+        player.send :ready?
       end
-      max_wait = 30 # seconds
-      while max_wait > 0 and ready_robots.count < robots.count
-        sleep 1
-        max_wait -= 1
-        # puts "waiting #{max_wait}: #{ready_robots}"
-      end
+
+      wait 30, by: 1
+      ready? ? true : false
     end
 
     def turn
+      alive_players.each do |player|
+        player.send @battle.as_seen_by player.robot
+      end
+
+      wait 0.5, by: 0.01
+
+      alive_players.each do |player|
+        player.timeout unless player.ready?
+      end
+
+      alive_players.sort_by(&:priority).each do |player|
+        player.turn!
+      end
+
+      alive_players.each do |player|
+        player.handle_hits
+        player.handle_power_ups
+      end
+
+      @battle.save!
+
+      if @battle.game_over?
+        @players.each do |player|
+          player.sign_off
+        end
+      end
+    end
+
+    def turn2
       msg_handlers = {}
       turn_handlers = []
       alive_robots = @battle.alive_robots
