@@ -14,7 +14,7 @@ class Turn
   key :armor,     Integer, required: true
   key :abilities, Array,   required: true
 
-  one :fire, class_name: 'Coordinate'
+  one :fire
 
   embedded_in :robot
 

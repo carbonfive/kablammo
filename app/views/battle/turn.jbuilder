@@ -10,7 +10,7 @@ json.board do
     json.turns robot.turns do |turn|
       json.(turn, :value, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
       json.fire do
-        json.(turn.fire, :x, :y)
+        json.(turn.fire, :x, :y, :hit)
       end if turn.fire
     end
   end

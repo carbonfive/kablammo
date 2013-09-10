@@ -17,11 +17,10 @@ module Engine
       rotation = base_turn.rotation + skew
       ammo = base_turn.ammo - 1
       hit = robot.line_of_fire(@skew).last
-      fire = nil
       if hit
-        fire = Coordinate.new
-        fire.x = hit.x
-        fire.y = hit.y
+        fire = Fire.new x: hit.x, y: hit.y, hit: true
+      else
+        fire = Fire.new hit: false
       end
 
       base_turn.extend value: @value, fire: fire, rotation: rotation, ammo: ammo
