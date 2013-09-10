@@ -5,6 +5,12 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   var ch = canvas.height = canvas.offsetHeight;
   var ctx = canvas.getContext('2d');
 
+  for (var i=0,tank; tank=tanks[i]; i++) {
+    for (var j=0,turn; turn = tank.turns[j]; j++) {
+      if (turn.fire) console.log(i,turn.fire);
+    }
+  }
+
   var GRID_WIDTH = gridWidth;
   var GRID_HEIGHT = gridHeight;
   var SHADOW_OFFSET = .07*ch/GRID_HEIGHT;
@@ -19,7 +25,11 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		tw: .65 * ROBOT_WIDTH,
 		tc: .25 * ROBOT_WIDTH,
 		inx: .15 * ROBOT_WIDTH,
-		iny: .6 * ROBOT_WIDTH
+		iny: .6 * ROBOT_WIDTH,
+    turretY: .2*ROBOT_WIDTH,
+    gunStart: .6*ROBOT_WIDTH,
+    gunEnd: .7*ROBOT_WIDTH,
+    gunWidth: .2*ROBOT_WIDTH
   }
 
   var COLORS = [
@@ -133,12 +143,11 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   }
 
   function turretPath() {
-  	var gunWidth = .2*ROBOT_WIDTH;
-
 		ctx.beginPath();
 		ctx.arc(0,0, ROBOT_WIDTH/2, 0, 2*Math.PI, true);
 		ctx.fill();
-		ctx.fillRect(-gunWidth/2,-.6*ROBOT_WIDTH,gunWidth,-.7*ROBOT_WIDTH);
+		ctx.fillRect(-TANK_DIMENSIONS.gunWidth/2, -TANK_DIMENSIONS.gunStart,
+                  TANK_DIMENSIONS.gunWidth,-TANK_DIMENSIONS.gunEnd);
   }
 
   function offStyle() {
@@ -147,8 +156,6 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   }
 
   function decorateTurret( tank ) {
-  	var gunWidth = .2*ROBOT_WIDTH;
-
   	(( tank.id & (1<<11) ) ? decorateStyle : offStyle)( tank );
 		ctx.lineWidth = 5;
 		ctx.beginPath();
@@ -166,39 +173,53 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		ctx.fill();
 
   	(( tank.id & (1<<14) ) ? decorateStyle : offStyle)( tank );
-		ctx.fillRect(-.6*gunWidth/2,-.75*ROBOT_WIDTH,.6*gunWidth,-.2*ROBOT_WIDTH);
+		ctx.fillRect(-.6*TANK_DIMENSIONS.gunWidth/2,-.75*ROBOT_WIDTH,.6*TANK_DIMENSIONS.gunWidth,-.2*ROBOT_WIDTH);
 
   	(( tank.id & (1<<15) ) ? decorateStyle : offStyle)( tank );
-		ctx.fillRect(-.6*gunWidth/2,-1.05*ROBOT_WIDTH,.6*gunWidth,-.2*ROBOT_WIDTH);
+		ctx.fillRect(-.6*TANK_DIMENSIONS.gunWidth/2,-1.05*ROBOT_WIDTH,.6*TANK_DIMENSIONS.gunWidth,-.2*ROBOT_WIDTH);
   }
 
-  function renderTank( tank, time ) {
-  	var lastTurn = tank.turns[Math.max((time-1)|0,0)];
-  	var turn = tank.turns[time|0];
-    //console.log(turn);
-  	var subStep = time % 1;
-  	if ( lastTurn.direction != turn.direction ) {
-  		if ( subStep < .5 ) {
-		  	tank.x = lastTurn.x;
-  			tank.y = lastTurn.y;
-  			var startRotation = -lastTurn.direction * Math.PI / 2;
-  			var endRotation = -turn.direction * Math.PI / 2;
-  			if (endRotation-startRotation > Math.PI)
-  				endRotation -= 2*Math.PI;
-  			if (endRotation-startRotation < -Math.PI)
-  				endRotation += 2*Math.PI;
-  			tank.bodyRotation = startRotation + 2*subStep*(endRotation-startRotation);
-  		} else {
-		  	tank.x = lastTurn.x + 2*(subStep-.5)*(turn.x-lastTurn.x);
-  			tank.y = lastTurn.y + 2*(subStep-.5)*(turn.y-lastTurn.y);
-  			tank.bodyRotation = -turn.direction * Math.PI / 2;
-  		}
-  	} else {
-	  	tank.x = lastTurn.x + subStep*(turn.x-lastTurn.x);
-  		tank.y = lastTurn.y + subStep*(turn.y-lastTurn.y);
-  	}
-  	tank.turretAngle = lastTurn.turretAngle + subStep*(turn.turretAngle-lastTurn.turretAngle);
+  // finds end of gun in canvas coordinates
+  function gunEnd( tank ) {
+    return {
+      x: (tank.x+.5)*cw/GRID_WIDTH + ROBOT_SCALE*
+          (-Math.sin(tank.bodyRotation)*TANK_DIMENSIONS.turretY + 
+            (TANK_DIMENSIONS.gunStart+TANK_DIMENSIONS.gunEnd)*Math.sin(tank.turretAngle)),
+      y: (tank.y+.5)*ch/GRID_HEIGHT +  ROBOT_SCALE*
+          (Math.cos(tank.bodyRotation)*TANK_DIMENSIONS.turretY - 
+            (TANK_DIMENSIONS.gunStart+TANK_DIMENSIONS.gunEnd)*Math.cos(tank.turretAngle))
+    }
+  }
 
+  function updateTank( tank, time ) {
+    var lastTurn = tank.turns[Math.max((time-1)|0,0)];
+    var turn = tank.turns[time|0];
+    var subStep = time % 1;
+    if ( (lastTurn.direction - turn.direction) % 2 ) {
+      if ( subStep < .5 ) {
+        tank.x = lastTurn.x;
+        tank.y = lastTurn.y;
+        var startRotation = -lastTurn.direction * Math.PI / 2;
+        var endRotation = -turn.direction * Math.PI / 2;
+        if (endRotation-startRotation > Math.PI)
+          endRotation -= 2*Math.PI;
+        if (endRotation-startRotation < -Math.PI)
+          endRotation += 2*Math.PI;
+        tank.bodyRotation = startRotation + 2*subStep*(endRotation-startRotation);
+      } else {
+        tank.x = lastTurn.x + 2*(subStep-.5)*(turn.x-lastTurn.x);
+        tank.y = lastTurn.y + 2*(subStep-.5)*(turn.y-lastTurn.y);
+        tank.bodyRotation = -turn.direction * Math.PI / 2;
+      }
+    } else {
+      tank.x = lastTurn.x + subStep*(turn.x-lastTurn.x);
+      tank.y = lastTurn.y + subStep*(turn.y-lastTurn.y);
+    }
+    tank.turretAngle = lastTurn.turretAngle + subStep*(turn.turretAngle-lastTurn.turretAngle);
+    tank.target = turn.fire && subStep >= .05 ? turn.fire : false;
+  }
+
+  function renderTank( tank ) {
   	ctx.save();
   		ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
   		ctx.scale(ROBOT_SCALE, ROBOT_SCALE);
@@ -216,13 +237,11 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		  ctx.fillStyle = 'rgba(255,255,255,.5)';
 		  tankBase(tank);
 
-			var turretY = .2*ROBOT_WIDTH;
-
   		ctx.save();
   			// turret shadow
 				ctx.save();
 		  		ctx.rotate(tank.bodyRotation)
-					ctx.translate(0,turretY);
+					ctx.translate(0,TANK_DIMENSIONS.turretY);
 		  		ctx.rotate(-tank.bodyRotation)
 					ctx.translate(shadowOffset,-shadowOffset);
 					ctx.rotate(tank.turretAngle);
@@ -236,7 +255,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 	  		// turret
 				ctx.save();
 		  		ctx.rotate(tank.bodyRotation)
-					ctx.translate(0,turretY);
+					ctx.translate(0,TANK_DIMENSIONS.turretY);
 		  		ctx.rotate(-tank.bodyRotation)
 					ctx.rotate(tank.turretAngle);
 				  ctx.fillStyle = 'rgba(235,235,235,.7)';
@@ -244,21 +263,49 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
 				  decorateTurret( tank );
 
-			  	if (turn.fire && subStep >= .75) {
-			  		decorateStyle(tank);
-			  		ctx.shadowColor = '#fff';
-			  		ctx.lineWidth = 16;
-			  		ctx.beginPath();
-			  		ctx.moveTo(0, -1.4*ROBOT_WIDTH);
-			  		ctx.lineTo(0, -10000 )
-			  		ctx.stroke();
-			  	}
-
 				ctx.restore();
 
 	  	ctx.restore();
 
   	ctx.restore();
+  }
+
+
+  function renderTankFire( tank, target ) {
+    ctx.fillStyle = '#ff0';
+    ctx.fillRect(target[0]*cw/GRID_WIDTH, target[1]*ch/GRID_HEIGHT, cw/GRID_WIDTH, ch/GRID_HEIGHT);
+
+    ctx.strokeStyle = '#ff0';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT)
+    ctx.lineTo((target[0]+.5)*cw/GRID_WIDTH, (target[1]+.5)*ch/GRID_HEIGHT)
+    ctx.stroke();
+
+    var gunPos = gunEnd(tank);
+    var dx = (target[0]+.5)*cw/GRID_WIDTH - gunPos.x;
+    var dy = (target[1]+.5)*ch/GRID_HEIGHT - gunPos.y;
+    var distance = Math.sqrt(dx*dx + dy*dy);
+    ctx.save();
+      ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
+      ctx.scale(ROBOT_SCALE, ROBOT_SCALE);
+
+      ctx.save();
+        ctx.rotate(tank.bodyRotation)
+        ctx.translate(0,TANK_DIMENSIONS.turretY);
+        ctx.rotate(-tank.bodyRotation)
+        ctx.rotate(tank.turretAngle);
+
+        decorateStyle(tank);
+        ctx.shadowColor = '#fff';
+        ctx.lineWidth = 16;
+        ctx.beginPath();
+        ctx.moveTo(0, -1.4*ROBOT_WIDTH);
+        ctx.lineTo(0, -distance/ROBOT_SCALE )
+        ctx.stroke();
+      ctx.restore();
+
+    ctx.restore();
   }
 
   var startTime = 0;
@@ -301,7 +348,14 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	ctx.stroke();
 
   	for (var i=0,tank; tank = tanks[i]; i++)
-	  	renderTank(tank, gameTime);
+	  	updateTank(tank, gameTime);
+
+    for (var i=0,tank; tank = tanks[i]; i++)
+      if (tank.target)
+        renderTankFire(tank, tank.target);
+
+    for (var i=0,tank; tank = tanks[i]; i++)
+      renderTank(tank);
 
     var turnIndex = gameTime|0;
     var subStep = gameTime % 1
