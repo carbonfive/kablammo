@@ -83,7 +83,7 @@ module Engine
           if robot.alive?
             send_channel(robot).send :winner
           else
-            send_channel(robot).send :looser
+            send_channel(robot).send :loser
           end
         end
       end
