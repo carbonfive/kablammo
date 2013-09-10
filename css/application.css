@@ -31,3 +31,15 @@ body {
   background-color: #ddd;
   border-color: #ccc;
 }
+
+body#arena {
+  padding-top: 20px;
+}
+
+body#arena .navbar {
+  opacity: 0;
+}
+
+body#arena .navbar:hover {
+  opacity: 1;
+}
