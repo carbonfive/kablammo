@@ -42,7 +42,7 @@ receive_channel.register do |msg|
   if 'ready?'.eql? msg
     puts 'Battle is on!'
     send_channel.send :ready
-  elsif 'looser'.eql? msg
+  elsif 'loser'.eql? msg
     shutdown process, "#{username} you lost."
   elsif 'winner'.eql? msg
     shutdown process, "#{username} you won! Of Course."
