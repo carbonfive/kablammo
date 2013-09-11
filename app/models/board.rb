@@ -62,10 +62,4 @@ class Board
   def line_of_sight(source, degrees)
     geometry.line_of_sight source, degrees
   end
-
-  def as_seen_by(robot)
-    board = self.dup
-    board.robots = self.robots.select { |r| robot.can_see? r }
-    board
-  end
 end

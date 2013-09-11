@@ -1,5 +1,3 @@
-require 'benchmark'
-
 module Engine
   class Player
     attr_reader :robot, :handler

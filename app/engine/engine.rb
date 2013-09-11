@@ -32,12 +32,17 @@ module Engine
 
     def turn
       @count += 1
-      bm = Benchmark.measure do
+      bm_send = bm_receive = bm_save = 0
+      benchmark = Benchmark.measure do
+        bm_send = Benchmark.measure do
         alive_players.each do |player|
           player.send @battle.as_seen_by player.robot
         end
+        end
 
+        bm_receive = Benchmark.measure do
         wait 0.5, by: 0.01
+        end
 
         alive_players.each do |player|
           player.timeout unless player.ready?
@@ -52,10 +57,12 @@ module Engine
           player.handle_power_ups
         end
 
+        bm_save = Benchmark.measure do
         @battle.save!
+        end
       end
 
-      output bm
+      output [ benchmark, bm_send, bm_receive, bm_save ]
 
       if @battle.game_over?
         @players.each do |player|
@@ -68,14 +75,18 @@ module Engine
 
     private
 
-    def output(tms)
+    def f(tms)
+      "%.2f" % tms.total
+    end
+
+    def output(benchmarks)
       turns = alive_players.map.with_index do |player|
         value = "%4s" % player.handler.value
         "#{player.robot.username}: #{value}"
       end.join('  ')
-      time = "%.3f" % tms.total
       num = "%3s" % @count
-      puts "#{num}: #{time}s - #{turns}"
+      time = benchmarks.map { |b| f b }.join ' / '
+      puts "#{num}: #{time} - #{turns}"
     end
 
     def alive_players

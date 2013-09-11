@@ -48,8 +48,36 @@ class Battle
   end
 
   def as_seen_by(robot)
-    battle = self.dup
-    battle.board = self.board.as_seen_by robot
-    battle
+    #t1 = Time.now
+    hash = self.serializable_hash
+    hide_robots hash, robot
+    clear_turns hash, robot
+    clear_ids hash
+    #t2 = Time.now
+    #puts "%.4f" % (t2-t1)
+    hash
+  end
+
+  private
+
+  def clear_ids(hash)
+    hash.delete 'id'
+    hash.each do |k, v|
+      v.each { |h| clear_ids h } if v.is_a? Array
+      clear_ids v if v.is_a? Hash
+    end
+  end
+
+  def clear_turns(hash, robot)
+    hash['board']['robots'].each do |robot_hash|
+      robot_hash['turns'] = [ robot_hash['turns'].last ]
+    end
+  end
+
+  def hide_robots(hash, robot)
+    hash['board']['robots'].select! do |robot_hash|
+      turn_hash = robot_hash['turns'].last
+      robot.can_see? Pixel.new.at(turn_hash['x'], turn_hash['y'])
+    end
   end
 end
