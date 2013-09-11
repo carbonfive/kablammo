@@ -20,7 +20,7 @@ class BattlesController
 
     # get_players_from_request
     name = request['name'] || 'Battle Royale'
-    map = BattleMap.new({
+    map = Map.new({
       width: 9,
       height: 9,
       walls: [ [2,3], [2,5], [6,3], [6,5] ],

@@ -1,4 +1,4 @@
-class BattleMap
+class Map
   attr_accessor :width, :height, :walls, :starts
 
   def initialize(args)
