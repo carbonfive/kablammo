@@ -23,21 +23,12 @@ class BattlesController
 
     player_names = player_ids.map{|player| activate_player(player)}
 
-    robots = Hash[player_names.zip([[0,4], [15,4]])]
-    walls = [ [2,3],  [2,5],  [4, 4],
-              [13,3], [13,5], [11,4],
-              [6,1],  [7,1],  [8,1],  [9,1],
-              [6,7],  [7,7],  [8,7],  [9,7] ]
-    battle = Battle.wage({ name: name, board: { height: 9, width: 16 } })
+    walls = [ [2,3], [2,5], [6,3], [6,5] ]
+    starts = [ [0,4], [8,4] ]
+    battle = Battle.wage({ name: name, board: { height: 9, width: 9, walls: walls, starts: starts } })
 
-    #robots = Hash[player_names.zip([[0,2], [4,2]])]
-    #walls = [[2, 2]]
-    #battle = Battle.wage({ name: name, board: { height: 5, width: 5 } })
-
-    board = battle.board
-    walls.each { |pos| board.add_wall pos[0], pos[1] }
-    robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
-    #board.add_power_up new_power_up, 0, 0
+    robots = player_names.map { |n| Robot.new username: n }
+    robots.each { |r| battle.add_robot r }
 
     ready = battle.prepare_for_battle! # wait for player processes to spawn up
     unless ready

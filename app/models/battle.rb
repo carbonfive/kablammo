@@ -27,6 +27,10 @@ class Battle
     @engine ||= Engine::Engine.instance(self)
   end
 
+  def add_robot(robot)
+    board.add_robot robot
+  end
+
   def turn
     engine.turn if game_on?
   end

@@ -10,8 +10,9 @@ class Board
   embedded_in :battle
 
   def initialize(*args)
+    walls = args[0].delete :walls
     super
-    self.walls = []
+    self.walls = walls.map { |w| Wall.new.at(w[0], w[1]) }
     self.robots = []
     self.power_ups = []
   end
@@ -31,12 +32,10 @@ class Board
   end
   alias_method :robot?, :robot_at
 
-  def add_wall(x, y)
-    self.walls << Wall.new.at(x, y)
-  end
-
-  def add_robot(robot, x, y)
-    turn = Turn.new.at(x, y)
+  def add_robot(robot)
+    raise "Too many robots!" if robots.length == @starts.length
+    start = @starts[robots.length]
+    turn = Turn.new.at start[0], start[1]
     turn.value = '*'
     robot.turns << turn
     self.robots << robot
