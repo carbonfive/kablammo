@@ -24,7 +24,7 @@ class Battle
   end
 
   def engine
-    @engine ||= Engine::Engine.new(self)
+    @engine ||= Engine::Engine.instance(self)
   end
 
   def turn
@@ -48,8 +48,46 @@ class Battle
   end
 
   def as_seen_by(robot)
-    battle = self.dup
-    battle.board = self.board.as_seen_by robot
-    battle
+    JsonValue.new jbuild(robot)
+  end
+
+  private
+
+  def jbuild(the_robot)
+    Jbuilder.encode do |json|
+      json.(self, :name)
+      json.board do
+        json.(board, :width, :height)
+        visible_robots = board.robots.select { |robot| the_robot.can_see? robot }
+        json.robots visible_robots do |robot|
+          json.(robot, :username)
+          json.power_ups robot.power_ups do |power_up|
+            json.(power_up, :name, :type, :duration)
+          end
+          json.turns [robot.turns.last] do |turn|
+            json.(turn, :value, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
+            json.fire do
+              json.(turn.fire, :x, :y, :hit) if turn.fire
+            end
+          end
+        end
+        json.walls board.walls do |wall|
+          json.(wall, :x, :y)
+        end
+        json.power_ups board.power_ups do |power_up|
+          json.(power_up, :x, :y, :name, :type, :duration)
+        end
+      end
+    end
+  end
+end
+
+class JsonValue
+  def initialize(value)
+    @value = value
+  end
+
+  def to_json
+    @value
   end
 end

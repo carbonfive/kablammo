@@ -100,11 +100,4 @@ class Robot
 
     hit ? los[0..hit] : los
   end
-
-  def as_seen_by(robot)
-    return self if robot == self
-    clone = self.dup
-    clone.turns = self.turns.empty? ? [] : [ self.turns.last ]
-    clone
-  end
 end

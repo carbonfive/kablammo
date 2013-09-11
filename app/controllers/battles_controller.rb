@@ -39,7 +39,11 @@ class BattlesController
     robots.each { |robot, pos| board.add_robot new_robot(robot.to_s), pos[0], pos[1] }
     #board.add_power_up new_power_up, 0, 0
 
-    battle.prepare_for_battle! # wait for player processes to spawn up
+    ready = battle.prepare_for_battle! # wait for player processes to spawn up
+    unless ready
+      puts 'Players not prepared for battle'
+      return [500, "Players not prepared"]
+    end
 
     100.times { battle.turn }
     battle.save!
