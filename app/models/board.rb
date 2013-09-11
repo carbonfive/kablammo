@@ -9,10 +9,18 @@ class Board
   many :power_ups
   embedded_in :battle
 
+  def self.draw(map, robots)
+    raise "Too many robots!" if map.starts.length < robots.length
+
+    board = Board.new width: map.width, height: map.height
+    board.walls = map.walls.map { |w| Wall.new.at(w[0], w[1]) }
+    robots.each_with_index { |r, i| board.add_robot r, map.starts[i] }
+    board
+  end
+
   def initialize(*args)
-    walls = args[0].delete :walls
     super
-    self.walls = walls.map { |w| Wall.new.at(w[0], w[1]) }
+    self.walls = []
     self.robots = []
     self.power_ups = []
   end
@@ -32,9 +40,7 @@ class Board
   end
   alias_method :robot?, :robot_at
 
-  def add_robot(robot)
-    raise "Too many robots!" if robots.length == @starts.length
-    start = @starts[robots.length]
+  def add_robot(robot, start)
     turn = Turn.new.at start[0], start[1]
     turn.value = '*'
     robot.turns << turn

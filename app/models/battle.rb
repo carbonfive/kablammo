@@ -5,11 +5,9 @@ class Battle
 
   one :board
 
-  def self.wage(args = {})
-    board_args = args.delete :board
-
-    battle = Battle.new(args)
-    battle.board = Board.new(board_args)
+  def self.wage(name, map, robots)
+    battle = Battle.new name: name
+    battle.board = Board.draw map, robots
     battle.save!
     battle
   end
@@ -25,10 +23,6 @@ class Battle
 
   def engine
     @engine ||= Engine::Engine.instance(self)
-  end
-
-  def add_robot(robot)
-    board.add_robot robot
   end
 
   def turn

@@ -20,15 +20,15 @@ class BattlesController
 
     # get_players_from_request
     name = request['name'] || 'Battle Royale'
-
+    map = BattleMap.new({
+      width: 9,
+      height: 9,
+      walls: [ [2,3], [2,5], [6,3], [6,5] ],
+      starts: [ [0,4], [8,4] ],
+    })
     player_names = player_ids.map{|player| activate_player(player)}
-
-    walls = [ [2,3], [2,5], [6,3], [6,5] ]
-    starts = [ [0,4], [8,4] ]
-    battle = Battle.wage({ name: name, board: { height: 9, width: 9, walls: walls, starts: starts } })
-
     robots = player_names.map { |n| Robot.new username: n }
-    robots.each { |r| battle.add_robot r }
+    battle = Battle.wage name, map, robots
 
     ready = battle.prepare_for_battle! # wait for player processes to spawn up
     unless ready
