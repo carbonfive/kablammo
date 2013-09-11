@@ -48,36 +48,46 @@ class Battle
   end
 
   def as_seen_by(robot)
-    #t1 = Time.now
-    hash = self.serializable_hash
-    hide_robots hash, robot
-    clear_turns hash, robot
-    clear_ids hash
-    #t2 = Time.now
-    #puts "%.4f" % (t2-t1)
-    hash
+    JsonValue.new jbuild(robot)
   end
 
   private
 
-  def clear_ids(hash)
-    hash.delete 'id'
-    hash.each do |k, v|
-      v.each { |h| clear_ids h } if v.is_a? Array
-      clear_ids v if v.is_a? Hash
+  def jbuild(the_robot)
+    Jbuilder.encode do |json|
+      json.(self, :name)
+      json.board do
+        json.(board, :width, :height)
+        visible_robots = board.robots.select { |robot| the_robot.can_see? robot }
+        json.robots visible_robots do |robot|
+          json.(robot, :username)
+          json.power_ups robot.power_ups do |power_up|
+            json.(power_up, :name, :type, :duration)
+          end
+          json.turns [robot.turns.last] do |turn|
+            json.(turn, :value, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
+            json.fire do
+              json.(turn.fire, :x, :y, :hit) if turn.fire
+            end
+          end
+        end
+        json.walls board.walls do |wall|
+          json.(wall, :x, :y)
+        end
+        json.power_ups board.power_ups do |power_up|
+          json.(power_up, :x, :y, :name, :type, :duration)
+        end
+      end
     end
   end
+end
 
-  def clear_turns(hash, robot)
-    hash['board']['robots'].each do |robot_hash|
-      robot_hash['turns'] = [ robot_hash['turns'].last ]
-    end
+class JsonValue
+  def initialize(value)
+    @value = value
   end
 
-  def hide_robots(hash, robot)
-    hash['board']['robots'].select! do |robot_hash|
-      turn_hash = robot_hash['turns'].last
-      robot.can_see? Pixel.new.at(turn_hash['x'], turn_hash['y'])
-    end
+  def to_json
+    @value
   end
 end

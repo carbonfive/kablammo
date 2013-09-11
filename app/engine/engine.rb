@@ -36,7 +36,7 @@ module Engine
       benchmark = Benchmark.measure do
         bm_send = Benchmark.measure do
         alive_players.each do |player|
-          player.send @battle.as_seen_by player.robot
+          player.send @battle.as_seen_by(player.robot)
         end
         end
 
