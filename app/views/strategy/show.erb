@@ -1,11 +1,32 @@
-New Strategy <%= strategy.id %>
-
-<div>
-<%= strategy.github_url %>
-</div>
-<div>
-<%= strategy.username %>
-</div>
-<div>
-<%= strategy.path %>
+<table class="table table-striped">
+  <h3>New Strategy <%= strategy.github_url %></h3>
+  <tr>
+    <td><label>Github URL</label></td>
+    <td>
+      <%= strategy.github_url %>
+    </td>
+  </tr>
+  <tr>
+    <td><label>User</label></td>
+    <td>
+      <%= strategy.username %>
+    </td>
+  </tr>
+  <tr>
+    <td><label>Local Repo path</label></td>
+    <td>
+      <%= strategy.path %>
+    </td>
+  </tr>
+  <tr>
+    <td><label>SHA</label></td>
+    <td>
+      <%= strategy.sha %>
+    </td>
+  </tr>
+</table>
+<div class="controls">
+  <form action="/strategies/<%= strategy.id %>/pull">
+    <input type="submit" class="btn btn-default" value="Fetch the latest">
+  </form>
 </div>

@@ -40,6 +40,10 @@ class KablammoServer < Sinatra::Base
     StrategiesController.new(self).show id
   end
 
+  get '/strategies/:id/pull' do |id|
+    StrategiesController.new(self).pull id
+  end
+
   run! if app_file == $0
 
 end

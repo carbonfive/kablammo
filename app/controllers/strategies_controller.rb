@@ -9,6 +9,13 @@ class StrategiesController
     erb :'strategy/index', locals: { strategies: strategies }
   end
 
+  def pull(id)
+    # make sure the repo is up to date
+    strategy = Strategy.find(id)
+    strategy.clone_repo
+    @app.redirect "/strategies/#{strategy.id}"
+  end
+
   def create
     url = @app.request['github_url']
     # given a github repo, clone it locally

@@ -1,3 +1,4 @@
+require File.expand_path('../../lib/kablammo/git', __FILE__)
 class Strategy
 
   REPO_REGEX = /git@github\.com:([^\/]*)\/(.*)\.git/
@@ -61,12 +62,16 @@ class Strategy
   def clone_repo
     # may want some error protection around this system command
     begin
-      Git.clone(github_url,path)
+      Kablammo::Git.pull_or_clone(github_url,path)
     rescue Git::GitExecuteError => ex
       puts "GIT ERROR: ", ex
       self.errors.add :github_url, "Unable to clone url.  Check your Url and permissions"
       false
     end
+  end
+
+  def sha
+    Kablammo::Git.sha(path)
   end
 
   private

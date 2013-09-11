@@ -22,7 +22,7 @@ class KablammoServer < Sinatra::Base
     ]
 
     css :application, '/js/application.css', [
-      '/css/reset.css',
+      '/css/bootstrap.min.css',
       '/css/**/*.css'
     ]
   }
