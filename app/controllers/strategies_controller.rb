@@ -5,8 +5,22 @@ class StrategiesController
   end
 
   def index
+    def histogram inp; hash = Hash.new(0); inp.each {|k,v| hash[k]+=1}; hash; end
+
     strategies = Strategy.all
-    erb :'strategy/index', locals: { strategies: strategies }
+
+    # compute wins/losses
+    plays = Battle.all.map(&:board).flatten.map(&:robots).flatten.compact
+    wins = histogram plays.select(&:alive?).map(&:username)
+    losses = histogram plays.select(&:dead?).map(&:username)
+
+    scoreboard = {}.tap do |scores|
+      (wins.keys + losses.keys).flatten.compact.uniq.each do |k|
+        scores[k] = {wins: wins[k].to_i, losses: losses[k].to_i}
+      end
+    end
+
+    erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard }
   end
 
   def pull(id)

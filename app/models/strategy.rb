@@ -8,7 +8,7 @@ class Strategy
   cattr_accessor :start_code_file_name
   cattr_accessor :start_code_file_location
 
-  key :username, String, required: true
+  key :username, String, required: true, unique: true
   key :github_url, String, required: true, unique: true
   validates_format_of :github_url, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
 
@@ -16,6 +16,7 @@ class Strategy
   key :path, String, required: true
 
   before_save :clone_repo
+  after_destroy :delete_repo
 
   def initialize(url = nil)
     if url
@@ -29,6 +30,7 @@ class Strategy
     start_code_file_destination = File.join(path, @@start_code_file_name)
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
+    puts @@start_code_file_location
     FileUtils.cp @@start_code_file_location, start_code_file_destination
     cmd = "cd #{path} && bundle && ruby #{@@start_code_file_name} #{username}"
     puts cmd
@@ -57,6 +59,12 @@ class Strategy
     matches = github_url.to_s.match(REPO_REGEX)
     puts "Validating url #{github_url} #{matches}"
     !!(matches && matches[1])
+  end
+
+  def delete_repo
+    if File.exists?(path)
+      FileUtils.rm_rf(path)
+    end
   end
 
   def clone_repo

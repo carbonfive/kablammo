@@ -11,7 +11,6 @@ class Board
 
   def self.draw(map, robots)
     raise "Too many robots!" if map.starts.length < robots.length
-
     board = Board.new width: map.width, height: map.height
     board.walls = map.walls.map { |w| Wall.new.at(w[0], w[1]) }
     robots.each_with_index { |r, i| board.add_robot r, map.starts[i] }
