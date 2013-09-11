@@ -1,6 +1,8 @@
+require 'benchmark'
+
 module Engine
   class Player
-    attr_reader :robot
+    attr_reader :robot, :handler
 
     def initialize(robot)
       # Note: these channel names look backwards, but it's correct because they
@@ -31,7 +33,6 @@ module Engine
       if message == 'ready'
         puts "Player #{@robot.username} is ready!"
       else
-        puts "Player #{@robot.username} turn: #{message}"
         @handler = TurnHandler.parse @robot, message
       end
       @ready = true
