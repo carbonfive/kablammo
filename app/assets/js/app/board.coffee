@@ -32,7 +32,7 @@ class kablammo.Board
       hash = robot.username.hashCode()
       {
         id: hash
-        color: hash % 4
+        color: Math.abs(hash % 4)
         turns: _(robot.turns).map @toTurn
       }
 
