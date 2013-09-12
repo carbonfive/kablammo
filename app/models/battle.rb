@@ -9,7 +9,7 @@ class Battle
 
   key :name, String, required: true
 
-  one :board
+  many :board
 
   def self.wage(name, map, robots)
     battle = Battle.new name: name
@@ -50,11 +50,15 @@ class Battle
   end
 
   def turn
-    engine.turn if game_on?
+    engine.turn! if game_on?
+  end
+
+  def current_board
+    boards.last
   end
 
   def robots
-    board.robots.sort_by(&:username)
+    current_board.robots.sort_by(&:username)
   end
 
   def alive_robots
@@ -79,8 +83,8 @@ class Battle
     Jbuilder.encode do |json|
       json.(self, :name)
       json.board do
-        json.(board, :width, :height)
-        visible_robots = board.robots.select { |robot| the_robot.can_see? robot }
+        json.(current_board, :width, :height)
+        visible_robots = current_board.robots.select { |robot| the_robot.can_see? robot }
         json.robots visible_robots do |robot|
           json.(robot, :username)
           json.power_ups robot.power_ups do |power_up|

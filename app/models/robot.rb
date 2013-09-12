@@ -6,39 +6,26 @@ class Robot
   MAX_ARMOR = 5
 
   key :username,  String,  required: true
+  key :turn,      String,  required: true
+  key :x,         Integer, required: true
+  key :y,         Integer, required: true
+  key :rotation,  Integer, required: true
+  key :direction, Integer, required: true
+  key :ammo,      Integer, required: true
+  key :armor,     Integer, required: true
+  key :abilities, Array,   required: true
 
-  many :turns
-  many :power_ups
-  embedded_in :board
+  one :fire
+
+  embedded_in :turn
 
   def initialize(*args)
-    self.turns = []
-    self.power_ups = []
+    self.rotation = 0
+    self.direction = -1
+    self.ammo = MAX_AMMO
+    self.armor = MAX_ARMOR
+    self.abilities = []
     super
-  end
-
-  def x
-    turns.last.x
-  end
-
-  def y
-    turns.last.y
-  end
-
-  def armor
-    turns.last.armor
-  end
-
-  def ammo
-    turns.last.ammo
-  end
-
-  def rotation
-    turns.last.rotation
-  end
-
-  def abilities
-    turns.last.abilities
   end
 
   def assign_abilities(abilities)
@@ -53,6 +40,33 @@ class Robot
 
   def strategy
     Strategy::Base.lookup @username
+  end
+
+  def rest!
+    self.ammo = [self.ammo + 1, MAX_AMMO].min
+  end
+
+  def fire!
+    self.ammo -= 1
+    hit = line_of_fire.last
+    if hit
+      robot.fire = Fire.new x: hit.x, y: hit.y, hit: true
+    else
+      robot.fire = Fire.new hit: false
+    end
+    robot.fire
+  end
+
+  def hit!
+    self.armor -= 1
+  end
+
+  def rotate_by!(degrees)
+    self.rotation = (self.rotation + degrees) % 360
+  end
+
+  def rotate_to!(degrees)
+    self.rotation = degrees % 360
   end
 
   def alive?
@@ -89,8 +103,8 @@ class Robot
     board.line_of_sight(self, rotation + skew)
   end
 
-  def line_of_fire(skew = 0)
-    los = line_of_sight skew
+  def line_of_fire
+    los = line_of_sight
 
     if can_fire_through_walls?
       hit = los.index { |p| board.robot? p }

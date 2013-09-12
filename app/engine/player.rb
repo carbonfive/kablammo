@@ -49,20 +49,12 @@ module Engine
     end
 
     def turn!
-      base_turn = @robot.turns.last.dup.extend fire: nil
-      turn = @handler.execute base_turn
-      @robot.turns << turn
+      @handler.execute
     end
 
     def timeout
       puts "Player #{@robot.username} turn timed out"
       @handler = RestHandler.new @robot
-    end
-
-    def handle_hits
-      fire = @robot.turns.last.fire
-      enemy = fire && @robot.board.robot_at(fire)
-      enemy.turns.last.armor -= 1 if enemy
     end
 
     def handle_power_ups

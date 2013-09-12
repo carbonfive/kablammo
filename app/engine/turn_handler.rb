@@ -8,13 +8,7 @@ module Engine
 
     def initialize(robot, value)
       @robot = robot
-      @value = value
-    end
-
-    def self.next_turn(robot)
-      strategy = robot.strategy
-      str = strategy.execute_turn robot
-      parse robot, str
+      @value = @robot.value = value
     end
 
     def self.parse(robot, str)

@@ -1,21 +1,18 @@
 module Engine
   class MoveHandler < TurnHandler
-    attr_reader :direction
+    attr_reader :move
 
-    def initialize(robot, str, direction)
+    def initialize(robot, str, move)
       super robot, str
-      @direction = direction
+      @move = move
     end
 
-    def execute(base_turn)
-      x, y = robot.x, robot.y
-      board = robot.board
-      direction = %w(south west north east).index @direction
-      y += 1 if @direction == 'north' && y+1 < board.height
-      y -= 1 if @direction == 'south' && y-1 >= 0
-      x += 1 if @direction == 'east'  && x+1 < board.width
-      x -= 1 if @direction == 'west'  && x-1 >= 0
-      base_turn.extend value: @value, x: x, y: y, direction: direction
+    def execute
+      robot.direction = %w(south west north east).index @direction
+      robot.y += 1 if move == 'north' && y+1 < robot.board.height
+      robot.y -= 1 if move == 'south' && y-1 >= 0
+      robot.x += 1 if move == 'east'  && x+1 < robot.board.width
+      robot.x -= 1 if move == 'west'  && x-1 >= 0
     end
   end
 end

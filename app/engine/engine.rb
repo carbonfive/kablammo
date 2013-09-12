@@ -34,8 +34,10 @@ module Engine
       @count += 1
       bm_send = bm_receive = bm_save = 0
       benchmark = Benchmark.measure do
+        players = alive_players
+
         bm_send = Benchmark.measure do
-        alive_players.each do |player|
+        players.each do |player|
           player.send @battle.as_seen_by(player.robot)
         end
         end
@@ -44,16 +46,17 @@ module Engine
         wait 0.5, by: 0.01
         end
 
-        alive_players.each do |player|
+        players.each do |player|
           player.timeout unless player.ready?
         end
 
-        alive_players.sort_by(&:priority).each do |player|
+        @battle.boards << @battle.current_board.deep_dup
+
+        players.sort_by(&:priority).each do |player|
           player.turn!
         end
 
-        alive_players.each do |player|
-          player.handle_hits
+        players.each do |player|
           player.handle_power_ups
         end
 

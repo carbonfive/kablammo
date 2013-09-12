@@ -40,10 +40,7 @@ class Board
   alias_method :robot?, :robot_at
 
   def add_robot(robot, start)
-    turn = Turn.new.at start[0], start[1]
-    turn.value = '*'
-    robot.turns << turn
-    self.robots << robot
+    self.robots << robot.at(start[0], start[1])
   end
 
   def add_power_up(power_up, x, y)
@@ -65,5 +62,15 @@ class Board
 
   def line_of_sight(source, degrees)
     geometry.line_of_sight source, degrees
+  end
+
+  def deep_dup
+    duper = Proc.new { |o| o.dup }
+
+    dup = duper.call self
+    dup.walls = self.walls.map(&duper)
+    dup.robots = self.robots.map(&duper)
+    dup.power_ups = self.power_ups.map(&duper)
+    dup
   end
 end
