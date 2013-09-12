@@ -1,6 +1,18 @@
 class KablammoServer < Sinatra::Base
   set :views, Proc.new { File.join(root, 'app/views') }
 
+  get '/' do
+    HomesController.new(self).index
+  end
+
+  get '/docs/' do
+    DocsController.new(self).index
+  end
+
+  get '/rules/' do
+    RulesController.new(self).index
+  end
+
   get '/battles/new' do
     BattlesController.new(self).new
   end

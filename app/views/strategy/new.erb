@@ -1,20 +1,26 @@
-<h2>New Strategy</h2>
-
-<% if strategy.errors.any? %>
-<div class="errors">
-  <div>We were unable to save the strategy because 
-    <%= strategy.errors.full_messages %>
-    .</div>
+<div class="page-header">
+  <h1>Enter Robot</h1>
 </div>
-<% end %>
-
-<form method="post" action="/strategies">
-  <div class="control-group">
-  <label>Github Repo Url:</label>
-  <input type="text" name="github_url" size="200"></input>
+<% if strategy.errors.any? %>
+  <div class="alert alert-danger">
+    <p>We were unable to save the strategy.</p>
+    <ul>
+      <% strategy.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
   </div>
-  <div class="control-group">
-  <input type="submit" name="go"></input>
+<% end %>
+<div class="alert alert-info">
+  <p>
+    For information on how to create a robot, read the <a href="<%= url('/docs/') %>">docs</a>.
+  </p>
+</div>
+<form method="post" action="/strategies">
+  <div class="form-group">
+    <input name="github_url" type="text" class="form-control" placeholder="Kablammo Strategy fork SSH clone URL">
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Add Robot</button>
   </div>
 </form>
-

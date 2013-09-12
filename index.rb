@@ -7,6 +7,7 @@ require 'json'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)
+
   register Sinatra::AssetPack
   assets {
     serve '/js',     from: 'app/assets/js'

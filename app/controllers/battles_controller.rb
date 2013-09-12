@@ -9,7 +9,7 @@ class BattlesController
 
   def new()
     strategies = Strategy.all
-    erb :"battle/new", locals: { strategies: strategies }
+    erb :"battle/new", locals: { strategies: strategies, active_nav: 'arena' }
   end
 
   def create()
