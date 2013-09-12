@@ -4,7 +4,7 @@
 
 <h2>Add Robots to Map</h2>
 
-<form method="post" action="/battles/">
+<form method="post" action="<%= url('/battles') %>">
   <div class="form-group">
     <label for="player1">Robot 1</label>
     <select name="player1" id="player1" class="form-control">
@@ -23,8 +23,7 @@
       <% end %>
     </select>
   </div>
-  <p class="clearfix">
-    <a href="<%= url('/strategies/new')%>" class="btn btn-default pull-left">Add Robot</a>
-    <button type="submit" class="btn btn-primary pull-right">Enter The Arena</button>
+  <p>
+    <button type="submit" class="btn btn-primary">Enter The Arena</button>
   </p>
 </form>

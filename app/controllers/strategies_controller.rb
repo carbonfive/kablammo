@@ -15,7 +15,7 @@ class StrategiesController
 
     # sort strategies by score
     strategies.sort_by!{ |s| -scoreboard[s.username] || 1000000 } # put nil last
-    erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard }
+    erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard, active_nav: 'robots' }
   end
 
   def pull(id)
@@ -31,7 +31,7 @@ class StrategiesController
     strategy = Strategy.find_or_create_by_url(url)
     if strategy.errors.any?
       puts "Found errors", strategy.errors.full_messages
-      erb :"strategy/new", locals: { strategy: strategy }
+      erb :"strategy/new", locals: { strategy: strategy, active_nav: 'robots' }
     else
       @app.redirect "/strategies/#{strategy.id}"
     end
@@ -39,12 +39,12 @@ class StrategiesController
 
   def show(id)
     strategy = Strategy.find(id)
-    erb :'strategy/show', locals: { strategy: strategy }
+    erb :'strategy/show', locals: { strategy: strategy, active_nav: 'robots' }
   end
 
   def new
     strategy = Strategy.new
-    erb :"strategy/new", locals: { strategy: strategy }
+    erb :"strategy/new", locals: { strategy: strategy, active_nav: 'robots' }
   end
 
   def erb(*args)

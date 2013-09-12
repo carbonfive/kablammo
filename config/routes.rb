@@ -5,11 +5,11 @@ class KablammoServer < Sinatra::Base
     HomesController.new(self).index
   end
 
-  get '/docs/' do
+  get '/docs' do
     DocsController.new(self).index
   end
 
-  get '/rules/' do
+  get '/rules' do
     RulesController.new(self).index
   end
 
@@ -17,7 +17,7 @@ class KablammoServer < Sinatra::Base
     BattlesController.new(self).new
   end
 
-  post '/battles/' do
+  post '/battles' do
     BattlesController.new(self).create
   end
 

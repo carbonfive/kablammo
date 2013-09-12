@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Enter Robot</h1>
+  <h1>Add Robot</h1>
 </div>
 <% if strategy.errors.any? %>
   <div class="alert alert-danger">
@@ -16,7 +16,7 @@
     For information on how to create a robot, read the <a href="<%= url('/docs/') %>">docs</a>.
   </p>
 </div>
-<form method="post" action="/strategies">
+<form method="post" action="<%= url('/strategies') %>">
   <div class="form-group">
     <input name="github_url" type="text" class="form-control" placeholder="Kablammo Strategy fork SSH clone URL">
   </div>
