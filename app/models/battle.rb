@@ -1,19 +1,15 @@
 class Battle
-  SCORING = {
-    tie: 1,
-    win: 3,
-    loss: -1
-  }
-
   include MongoMapper::Document
 
   key :name, String, required: true
 
-  many :board
+  many :turns
 
   def self.wage(name, map, robots)
     battle = Battle.new name: name
-    battle.board = Board.draw map, robots
+    turn = Turn.new
+    turn.board = Board.draw map, robots
+    battle.turns << turn
     battle.save!
     battle
   end
@@ -27,38 +23,28 @@ class Battle
     self.find id
   end
 
-  def score
-    players = board.robots.flatten.compact
-    if players.all?(&:alive?)
-      # tie
-      Hash[players.map(&:username).zip (players.count.times.map{SCORING[:tie]})]
-    else
-      results = {}
-      alive, dead = robots.partition(&:alive?)
-      alive.each do |r|
-        results[r.username] = SCORING[:win]
-      end
-      dead.each do |r|
-        results[r.username] = SCORING[:loss]
-      end
-      results
-    end
-  end
-
   def engine
     @engine ||= Engine::Engine.instance(self)
   end
 
-  def turn
+  def turn!
     engine.turn! if game_on?
   end
 
+  def current_turn
+    turns.last
+  end
+
   def current_board
-    boards.last
+    current_turn.board
   end
 
   def robots
     current_board.robots.sort_by(&:username)
+  end
+
+  def robot_named(username)
+    current_board.robots.detect { |r| r.username == username }
   end
 
   def alive_robots
@@ -82,26 +68,32 @@ class Battle
   def jbuild(the_robot)
     Jbuilder.encode do |json|
       json.(self, :name)
-      json.board do
-        json.(current_board, :width, :height)
-        visible_robots = current_board.robots.select { |robot| the_robot.can_see? robot }
-        json.robots visible_robots do |robot|
-          json.(robot, :username)
-          json.power_ups robot.power_ups do |power_up|
-            json.(power_up, :name, :type, :duration)
+      json.turn do
+        turn = current_turn
+        json.board do
+          json.(turn.board, :width, :height)
+          visible_robots = turn.board.robots.select { |robot| the_robot.can_see? robot }
+          if visible_robots.empty?
+            puts '---------------'
+            p the_robot
+            puts '...'
+            p turn.board.robots
           end
-          json.turns [robot.turns.last] do |turn|
-            json.(turn, :value, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
+          json.robots visible_robots do |robot|
+            json.(robot, :last_turn, :username, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
             json.fire do
-              json.(turn.fire, :x, :y, :hit) if turn.fire
+              json.(robot.fire, :x, :y, :hit)
+            end if robot.fire
+            json.power_ups robot.power_ups do |power_up|
+              json.(power_up, :name, :type, :duration)
             end
           end
-        end
-        json.walls board.walls do |wall|
-          json.(wall, :x, :y)
-        end
-        json.power_ups board.power_ups do |power_up|
-          json.(power_up, :x, :y, :name, :type, :duration)
+          json.walls turn.board.walls do |wall|
+            json.(wall, :x, :y)
+          end
+          json.power_ups turn.board.power_ups do |power_up|
+            json.(power_up, :x, :y, :name, :type, :duration)
+          end
         end
       end
     end

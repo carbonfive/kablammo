@@ -1,6 +1,7 @@
 module Engine
   class Player
-    attr_reader :robot, :handler
+    attr_reader :handler
+    attr_accessor :robot
 
     def initialize(robot)
       # Note: these channel names look backwards, but it's correct because they
@@ -22,6 +23,8 @@ module Engine
     end
 
     def send(message)
+      #puts "Player.send to #{robot.username} -->"
+      #p message
       @ready = false
       @handler = nil
       @send.send message

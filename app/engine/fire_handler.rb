@@ -16,7 +16,7 @@ module Engine
 
       robot.rotate_by! skew
       fire = robot.fire!
-      enemy = fire.hit && robot.board_at(fire)
+      enemy = fire.hit && board.robot_at(fire)
       enemy.hit! if enemy
     end
   end

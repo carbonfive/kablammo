@@ -5,6 +5,7 @@ class Robot
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
+  key :last_turn, String,  required: true
   key :username,  String,  required: true
   key :turn,      String,  required: true
   key :x,         Integer, required: true
@@ -16,10 +17,12 @@ class Robot
   key :abilities, Array,   required: true
 
   one :fire
+  many :power_ups
 
-  embedded_in :turn
+  embedded_in :board
 
   def initialize(*args)
+    self.last_turn = '*'
     self.rotation = 0
     self.direction = -1
     self.ammo = MAX_AMMO
@@ -43,18 +46,18 @@ class Robot
   end
 
   def rest!
-    self.ammo = [self.ammo + 1, MAX_AMMO].min
+    self.ammo = [ammo + 1, MAX_AMMO].min
   end
 
   def fire!
     self.ammo -= 1
     hit = line_of_fire.last
     if hit
-      robot.fire = Fire.new x: hit.x, y: hit.y, hit: true
+      fire = Fire.new x: hit.x, y: hit.y, hit: true
     else
-      robot.fire = Fire.new hit: false
+      fire = Fire.new hit: false
     end
-    robot.fire
+    self.fire = fire
   end
 
   def hit!
@@ -62,7 +65,7 @@ class Robot
   end
 
   def rotate_by!(degrees)
-    self.rotation = (self.rotation + degrees) % 360
+    self.rotation = (rotation + degrees) % 360
   end
 
   def rotate_to!(degrees)
@@ -70,7 +73,7 @@ class Robot
   end
 
   def alive?
-    turns.last.armor >= 0
+    armor >= 0
   end
 
   def dead?

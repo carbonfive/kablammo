@@ -7,21 +7,22 @@ class Board
   many :walls
   many :robots
   many :power_ups
-  embedded_in :battle
+
+  embedded_in :turn
 
   def self.draw(map, robots)
     raise "Too many robots!" if map.starts.length < robots.length
     board = Board.new width: map.width, height: map.height
     board.walls = map.walls.map { |w| Wall.new.at(w[0], w[1]) }
-    robots.each_with_index { |r, i| board.add_robot r, map.starts[i] }
+    robots.each_with_index { |r, i| board.add_robot(r, map.starts[i]) }
     board
   end
 
   def initialize(*args)
-    super
     self.walls = []
     self.robots = []
     self.power_ups = []
+    super
   end
 
   def geometry

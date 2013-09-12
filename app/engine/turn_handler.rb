@@ -8,7 +8,7 @@ module Engine
 
     def initialize(robot, value)
       @robot = robot
-      @value = @robot.value = value
+      @value = robot.last_turn = value
     end
 
     def self.parse(robot, str)

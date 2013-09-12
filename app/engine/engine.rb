@@ -27,13 +27,21 @@ module Engine
       end
 
       wait 30, by: 1
+
       ready? ? true : false
     end
 
-    def turn
+    def turn!
       @count += 1
-      bm_send = bm_receive = bm_save = 0
+      bm_dup = bm_send = bm_receive = bm_save = 0
       benchmark = Benchmark.measure do
+        bm_dup = Benchmark.measure do
+        @battle.turns << @battle.current_turn.deep_dup
+        @players.each do |player|
+          player.robot = @battle.robot_named player.robot.username
+        end
+        end
+
         players = alive_players
 
         bm_send = Benchmark.measure do
@@ -50,8 +58,6 @@ module Engine
           player.timeout unless player.ready?
         end
 
-        @battle.boards << @battle.current_board.deep_dup
-
         players.sort_by(&:priority).each do |player|
           player.turn!
         end
@@ -65,7 +71,7 @@ module Engine
         end
       end
 
-      output [ benchmark, bm_send, bm_receive, bm_save ]
+      output [ benchmark, bm_dup, bm_send, bm_receive, bm_save ]
 
       if @battle.game_over?
         @players.each do |player|
