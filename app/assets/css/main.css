@@ -3,41 +3,6 @@ body {
   padding-bottom: 20px;
 }
 
-.board {
-  display: inline-block;
-}
-
-#board {
-}
-
-.square {
-  background-color: #eee;
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  position: relative;
-}
-
-.square img {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 40px;
-  height: 40px;
-}
-
-.wall {
-  background-color: black;
-}
-
-.dead {
-  background-color: #B80000;
-}
-
-.fire {
-  background-color: #B80000;
-}
-
 /* Stats */
 
 .stats {
@@ -74,17 +39,4 @@ body {
 .stat table td {
   padding: 3px 0 3px 20px;
 }
-
-/* Buttons  -hmm. */
-
-.buttons {
-  margin-top: 20px;
-}
-
-.buttons .link {
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 

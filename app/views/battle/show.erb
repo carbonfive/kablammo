@@ -1,33 +1,59 @@
-<div class="battle">
-  <div class="board">
-    <canvas id="board"/>
+<div class="row">
+  <div class="col-md-6">
+    <canvas id="board"></canvas>
   </div>
-  <div class="stats">
+  <div class="col-md-3">
     <% battle.robots.each do |robot| %>
       <div class="stat robot-<%= robot.username %>">
-        <img src="https://identicons.github.com/<%= robot.username %>.png"/>
-        <div class="username"><%= robot.username %></div>
-        <table>
-          <tr class="rotation"><th>Rotation</th><td><%= robot.rotation %></td></tr>
-          <tr class="armor"><th>Armor</th><td><%= robot.armor %></td></tr>
-          <tr class="ammo"><th>Ammo</th><td><%= robot.ammo %></td></tr>
-          <tr class="power-ups"><th>Power Ups</th><td><%= robot.power_ups.map(&:name).join(', ') %></td></tr>
-          <tr class="last-turn"><th>Last Turn</th><td><%= robot.turns.last %></td></tr>
-        </table>
+        <h2>
+          <img src="https://identicons.github.com/<%= robot.username %>.png" width="24" height="24"> 
+          <%= robot.username %> 
+          <small>0 &ndash; 0</small> 
+        </h2>
+        <div class="progress health">
+          <div class="progress-bar progress-bar-danger" style="width: <%= robot.armor * 20 %>%">
+            <span class="sr-only"><%= robot.armor %></span>
+          </div>
+        </div>
+        <div class="btn-group ammo" title="ammo">
+          <% 10.times do |i| %>
+            <button type="button" class="btn btn-xs <%= robot.ammo > i ? 'btn-info' : 'btn-default' %>">&nbsp;</button>
+          <% end %>
+        </div>
+        <small class="help-block">
+          <%= robot.turns.last %>
+        </small>
+        <small class="help-block">
+          <%= robot.power_ups.map(&:name).join(', ') %>
+        </small>
       </div>
     <% end %>
   </div>
-  
-  <div class="buttons">
-    <span class="link turn">Turn</span> |
-    <span class="link playstop">Play</span> |
-    <a href="/battles/new">New</a>
+  <div class="col-md-3">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th colspan="3">Leaderboard</th>
+          <th>W</th>
+          <th>L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1.</td>
+          <td><img src="https://identicons.github.com/zero.png" width="24" height="24"></td>
+          <td>zero</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</div>
+</div> 
 
 <script type="text/javascript">
-$(function() {
-  var json = <%= json %>;
-  new kablammo.Battle(json).render();
-})
+  $(function() {
+    var json = <%= json %>;
+    new kablammo.Battle(json).render();
+  })
 </script>
