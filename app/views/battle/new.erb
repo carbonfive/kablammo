@@ -1,31 +1,30 @@
-<h2>Got no strategies?</h2>
-<a href="/strategies/new">Add your github repo strategy and BATTLE!</a>
+<div class="page-header">
+  <h1>Training Grounds</h1>
+</div>
 
-<hr>
-<h2>Start a new battle</h2>
+<h2>Add Robots to Map</h2>
 
 <form method="post" action="/battles/">
-
-  <div class="player_chooser">
-    <label>Player 1</label>
-    <select name="player1">
-      <option value="dhendee" selected="selected">Hendee</option>
+  <div class="form-group">
+    <label for="player1">Robot 1</label>
+    <select name="player1" id="player1" class="form-control">
+      <option value="dhendee" selected="selected">dhendee</option>
       <% strategies.each do |s| %>
-      <option value="<%= s.id %>"><%= s.username %></option>
+        <option value="<%= s.id %>"><%= s.username %></option>
       <% end %>
     </select>
   </div>
-
-  <div class="player_chooser">
-    <label>Player 2</label>
-    <select name="player2">
-      <option value="mwynholds" selected="selected">Mikey</option>
+  <div class="form-group">
+    <label for="player2">Robot 2</label>
+    <select name="player2" id="player2" class="form-control">
+      <option value="mwynholds" selected="selected">mwynholds</option>
       <% strategies.each do |s| %>
-      <option value="<%= s.id %>"><%= s.username %></option>
+        <option value="<%= s.id %>"><%= s.username %></option>
       <% end %>
     </select>
   </div>
-  <div class="clear start_battle">
-    <input type="submit" value="fight!" />
-  </div>
+  <p class="clearfix">
+    <a href="<%= url('/strategies/new')%>" class="btn btn-default pull-left">Add Robot</a>
+    <button type="submit" class="btn btn-primary pull-right">Enter The Arena</button>
+  </p>
 </form>

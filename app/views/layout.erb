@@ -1,10 +1,38 @@
+<!DOCTYPE html>
 <html>
   <head>
-  <title>Kablammo!</title>
+  <title>Kablammo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= css :application, media: 'screen' %>
   <%= js :application %>
   </head>
   <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Kablammo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <% active_nav = 'home' if !defined?(active_nav) %>
+          <ul class="nav navbar-nav">
+            <li<%= active_nav == 'arena' ? ' class="active"' : '' %>>
+              <a href="<%= url('/battles/new') %>">Arena</a>
+            </li>
+            <li<%= active_nav == 'docs' ? ' class="active"' : '' %>>
+              <a href="<%= url('/docs/') %>">Docs</a>
+            </li>
+            <li<%= active_nav == 'rules' ? ' class="active"' : '' %>>
+              <a href="<%= url('/rules/') %>">Rules</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <%= yield %>
     </div>
