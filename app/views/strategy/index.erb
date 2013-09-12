@@ -1,30 +1,35 @@
-<h2>All Strategies</h2>
+<div class="page-header">
+  <h1>All Robots</h1>
+</div>
 
-<a href="/strategies/new">Add new</a>
-
-<table class="strategies table table-striped">
-  <tr>
-    <th>User</th>
-    <th>Repo</th>
-    <th>Overall Score</th>
-  </tr>
-  <% strategies.each_with_index do |strategy, idx| %>
-  <tr class="<%= (idx % 2) > 0 ? 'odd' : 'even' %>">
-    <td>
-      <div class="gravatar">
-        <% g = strategy.gravatar %>
-        <% if (g) %>
-        <img src="<%= g %>">
-        <% end %>
-      </div>
-      <div class="user">
-        <a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a>
-      </div>
-    </td>
-    <td><%= strategy.github_url %></td>
-    <td>
-      <%= scoreboard[strategy.username].nil? ? 'n/a' : scoreboard[strategy.username] %>
-    </td>
-  </tr>
-  <% end %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th colspan="2">Leaderboard</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% strategies.each_with_index do |strategy, idx| %>
+      <tr>
+        <td>
+          <a href="/strategies/<%= strategy.id %>">
+            <img src="https://identicons.github.com/<%= strategy.username %>.png" width="24" height="24">
+          </a>
+        </td>
+        <td>
+          <a href="/strategies/<%= strategy.id %>">
+            <%= strategy.username %>
+          </a>
+        </td>
+        <td>
+          <%= scoreboard[strategy.username].nil? ? 'N/A' : scoreboard[strategy.username] %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
+
+<p>
+  <a href="<%= url('/strategies/new') %>" class="btn btn-primary">Add Robot</a>
+</p>

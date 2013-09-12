@@ -46,7 +46,7 @@ class BattlesController
     battle = Battle.find_by_id id
     return [404, "Unknown battle: #{id}"] unless battle
     json = jbuilder :"battle/turn", locals: { battle: battle }
-    erb :"battle/show", locals: { battle: battle, json: json }
+    erb :"battle/show", locals: { battle: battle, json: json, active_nav: 'arena' }
   end
 
   def turn(id, count=1)
