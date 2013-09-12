@@ -5,18 +5,25 @@
 <table class="strategies table table-striped">
   <tr>
     <th>User</th>
-    <th>Path</th>
     <th>Repo</th>
-    <th>Wins/Losses</th>
+    <th>Overall Score</th>
   </tr>
   <% strategies.each_with_index do |strategy, idx| %>
   <tr class="<%= (idx % 2) > 0 ? 'odd' : 'even' %>">
-    <td><a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a></td>
-    <td><%= strategy.path %></td>
+    <td>
+      <div class="gravatar">
+        <% g = strategy.gravatar %>
+        <% if (g) %>
+        <img src="<%= g %>">
+        <% end %>
+      </div>
+      <div class="user">
+        <a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a>
+      </div>
+    </td>
     <td><%= strategy.github_url %></td>
-    <td><% if scores = scoreboard[strategy.username] %>
-      <%= "%d/%d" % [scores[:wins], scores[:losses]] %>
-      <% end %>
+    <td>
+      <%= scoreboard[strategy.username].nil? ? 'n/a' : scoreboard[strategy.username] %>
     </td>
   </tr>
   <% end %>

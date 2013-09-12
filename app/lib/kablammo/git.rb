@@ -1,7 +1,16 @@
 module Kablammo
   class Git
     class << self
-      def sha path
+      def latest_author path
+        begin
+          g = ::Git.open(path)
+          g.object('HEAD').author
+        rescue ::Git::GitExecuteError => ex
+          nil
+        end
+      end
+
+     def sha path
         begin
           g = ::Git.open(path)
           g.object('HEAD').sha

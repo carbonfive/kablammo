@@ -1,4 +1,10 @@
 class Battle
+  SCORING = {
+    tie: 1,
+    win: 3,
+    loss: -1
+  }
+
   include MongoMapper::Document
 
   key :name, String, required: true
@@ -19,6 +25,24 @@ class Battle
 
   def find_by_id(id)
     self.find id
+  end
+
+  def score
+    players = board.robots.flatten.compact
+    if players.all?(&:alive?)
+      # tie
+      Hash[players.map(&:username).zip (players.count.times.map{SCORING[:tie]})]
+    else
+      results = {}
+      alive, dead = robots.partition(&:alive?)
+      alive.each do |r|
+        results[r.username] = SCORING[:win]
+      end
+      dead.each do |r|
+        results[r.username] = SCORING[:loss]
+      end
+      results
+    end
   end
 
   def engine
