@@ -36,7 +36,9 @@ class BattlesController
       return [500, "Players not prepared"]
     end
 
-    3.times { battle.turn! }
+    100.times do
+      battle.turn!
+    end
     battle.save!
 
     @app.redirect "/battles/#{battle.id}"

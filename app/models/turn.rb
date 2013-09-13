@@ -1,12 +1,21 @@
 class Turn
-  include MongoMapper::EmbeddedDocument
+  include MongoMapper::Document
+  #include MongoMapper::EmbeddedDocument
 
   one :board
-  embedded_in :battle
+  belongs_to :battle
+  #embedded_in :battle
 
-  def deep_dup
-    dup = self.dup
-    dup.board = board.deep_dup
-    dup
+  def robot_named(username)
+    board.robots.detect { |r| r.username == username }
+  end
+
+  def doppel
+    Turn.new board: board.doppel
+  end
+
+  def to_s
+    moves = board.robots.map {|r| "#{r.username}: #{r.last_turn}"}.join(', ')
+    "#{id} - #{moves}"
   end
 end

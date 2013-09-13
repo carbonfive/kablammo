@@ -117,4 +117,9 @@ class Robot
 
     hit ? los[0..hit] : los
   end
+
+  def doppel
+    Robot.new last_turn: last_turn, username: username, x: x, y: y, ammo: ammo, armor: armor,
+              rotation: rotation, direction: direction, abilities: abilities
+  end
 end

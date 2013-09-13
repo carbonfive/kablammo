@@ -65,13 +65,11 @@ class Board
     geometry.line_of_sight source, degrees
   end
 
-  def deep_dup
-    duper = Proc.new { |o| o.dup }
-
-    dup = duper.call self
-    dup.walls = self.walls.map(&duper)
-    dup.robots = self.robots.map(&duper)
-    dup.power_ups = self.power_ups.map(&duper)
-    dup
+  def doppel
+    doppelize = Proc.new { |o| o.doppel }
+    walls = self.walls.map( &doppelize )
+    robots = self.robots.map( &doppelize )
+    power_ups = self.power_ups.map( &doppelize )
+    Board.new width: width, height: height, walls: walls, robots: robots, power_ups: power_ups
   end
 end

@@ -5,13 +5,20 @@ class Battle
 
   many :turns
 
+  before_save :save_turns
+
   def self.wage(name, map, robots)
     battle = Battle.new name: name
     turn = Turn.new
     turn.board = Board.draw map, robots
+    turn.save!
     battle.turns << turn
     battle.save!
     battle
+  end
+
+  def save_turns
+    #turns.each { |t| t.save! }
   end
 
   def prepare_for_battle!
@@ -32,7 +39,7 @@ class Battle
   end
 
   def current_turn
-    turns.last
+    turns[turns.length - 1]
   end
 
   def current_board
@@ -41,10 +48,6 @@ class Battle
 
   def robots
     current_board.robots.sort_by(&:username)
-  end
-
-  def robot_named(username)
-    current_board.robots.detect { |r| r.username == username }
   end
 
   def alive_robots
@@ -73,12 +76,6 @@ class Battle
         json.board do
           json.(turn.board, :width, :height)
           visible_robots = turn.board.robots.select { |robot| the_robot.can_see? robot }
-          if visible_robots.empty?
-            puts '---------------'
-            p the_robot
-            puts '...'
-            p turn.board.robots
-          end
           json.robots visible_robots do |robot|
             json.(robot, :last_turn, :username, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
             json.fire do

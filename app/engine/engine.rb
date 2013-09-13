@@ -9,7 +9,7 @@ module Engine
 
     def initialize(battle)
       @battle = battle
-      @players = battle.robots.map { |r| Player.new r }
+      @players = battle.robots.map { |r| Player.new battle, r.username }
     end
     private :initialize
 
@@ -32,14 +32,16 @@ module Engine
     end
 
     def turn!
+      #puts "======= START ========="
       @count += 1
+      players = turn = nil
       bm_dup = bm_send = bm_receive = bm_save = 0
+
       benchmark = Benchmark.measure do
         bm_dup = Benchmark.measure do
-        @battle.turns << @battle.current_turn.deep_dup
-        @players.each do |player|
-          player.robot = @battle.robot_named player.robot.username
-        end
+        #puts "current turn #{@battle.current_turn}"
+        turn = @battle.current_turn.doppel
+        @battle.turns << turn
         end
 
         players = alive_players
@@ -67,11 +69,16 @@ module Engine
         end
 
         bm_save = Benchmark.measure do
+        #puts "saving turn #{turn}"
+        #puts "and battle current turn #{@battle.current_turn}"
+        #puts "are they == ? #{turn == @battle.current_turn}"
+        #puts "are they .eql ? #{turn.eql?(@battle.current_turn)}"
+        turn.save!
         @battle.save!
         end
       end
 
-      output [ benchmark, bm_dup, bm_send, bm_receive, bm_save ]
+      output players, [ benchmark, bm_dup, bm_send, bm_receive, bm_save ]
 
       if @battle.game_over?
         @players.each do |player|
@@ -80,6 +87,7 @@ module Engine
         @underway = false
         @count = 0
       end
+      #puts "======= END ========="
     end
 
     private
@@ -88,8 +96,8 @@ module Engine
       "%.2f" % tms.total
     end
 
-    def output(benchmarks)
-      turns = alive_players.map.with_index do |player|
+    def output(players, benchmarks)
+      turns = players.map.with_index do |player|
         value = "%4s" % player.handler.value
         "#{player.robot.username}: #{value}"
       end.join('  ')
