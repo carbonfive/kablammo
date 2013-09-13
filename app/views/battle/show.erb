@@ -21,7 +21,7 @@
           <% end %>
         </ul>
         <small class="help-block">
-          <%= robot.turns.last %>
+          <%= robot.last_turn %>
         </small>
         <small class="help-block">
           <%= robot.power_ups.map(&:name).join(', ') %>
