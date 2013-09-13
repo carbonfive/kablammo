@@ -7,9 +7,8 @@ module Engine
       super robot, '.'
     end
 
-    def execute(base_turn)
-      ammo = [base_turn.ammo + 1, MAX_AMMO].min
-      base_turn.extend value: '.', ammo: ammo
+    def execute
+      robot.rest!
     end
 
   end

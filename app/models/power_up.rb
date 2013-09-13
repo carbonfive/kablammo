@@ -28,6 +28,10 @@ class PowerUp
     duration <= 0
   end
 
+  def doppel
+    PowerUp.new x: x, y: y, name: name, duration: duration, abilities: abilities, type: type
+  end
+
   def self.instance(type)
     case type
     when :golden_bullet

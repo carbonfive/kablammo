@@ -1,40 +1,21 @@
 class Turn
-  include MongoMapper::EmbeddedDocument
-  include Target
+  include MongoMapper::Document
+  #include MongoMapper::EmbeddedDocument
 
-  MAX_AMMO = 10
-  MAX_ARMOR = 5
+  one :board
+  belongs_to :battle
+  #embedded_in :battle
 
-  key :value,     String,  required: true
-  key :x,         Integer, required: true
-  key :y,         Integer, required: true
-  key :rotation,  Integer, required: true
-  key :direction, Integer, required: true
-  key :ammo,      Integer, required: true
-  key :armor,     Integer, required: true
-  key :abilities, Array,   required: true
-
-  one :fire
-
-  embedded_in :robot
-
-  def initialize(*args)
-    self.rotation = 0
-    self.direction = -1
-    self.ammo = MAX_AMMO
-    self.armor = MAX_ARMOR
-    self.abilities = []
-    super
+  def robot_named(username)
+    board.robots.detect { |r| r.username == username }
   end
 
-  def extend(props = {})
-    props.each do |key, value|
-      send "#{key}=", value
-    end
-    self
+  def doppel
+    Turn.new board: board.doppel
   end
 
-  def board
-    robot.board
+  def to_s
+    moves = board.robots.map {|r| "#{r.username}: #{r.last_turn}, #{r.rotation}, #{r.fire}"}.join(', ')
+    "#{id} - #{moves}"
   end
 end

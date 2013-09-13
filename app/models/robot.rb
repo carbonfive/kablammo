@@ -5,40 +5,31 @@ class Robot
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
+  key :last_turn, String,  required: true
   key :username,  String,  required: true
+  key :turn,      String,  required: true
+  key :x,         Integer, required: true
+  key :y,         Integer, required: true
+  key :rotation,  Integer, required: true
+  key :direction, Integer, required: true
+  key :ammo,      Integer, required: true
+  key :armor,     Integer, required: true
+  key :abilities, Array,   required: true
 
-  many :turns
+  one :fire
   many :power_ups
+
   embedded_in :board
 
   def initialize(*args)
-    self.turns = []
+    self.last_turn = '*'
+    self.rotation = 0
+    self.direction = -1
+    self.ammo = MAX_AMMO
+    self.armor = MAX_ARMOR
+    self.abilities = []
     self.power_ups = []
     super
-  end
-
-  def x
-    turns.last.x
-  end
-
-  def y
-    turns.last.y
-  end
-
-  def armor
-    turns.last.armor
-  end
-
-  def ammo
-    turns.last.ammo
-  end
-
-  def rotation
-    turns.last.rotation
-  end
-
-  def abilities
-    turns.last.abilities
   end
 
   def assign_abilities(abilities)
@@ -55,8 +46,35 @@ class Robot
     Strategy::Base.lookup @username
   end
 
+  def rest!
+    self.ammo = [ammo + 1, MAX_AMMO].min
+  end
+
+  def fire!
+    self.ammo -= 1
+    hit = line_of_fire.last
+    if hit
+      fire = Fire.new x: hit.x, y: hit.y, hit: true
+    else
+      fire = Fire.new hit: false
+    end
+    self.fire = fire
+  end
+
+  def hit!
+    self.armor -= 1
+  end
+
+  def rotate_by!(degrees)
+    self.rotation = (rotation + degrees) % 360
+  end
+
+  def rotate_to!(degrees)
+    self.rotation = degrees % 360
+  end
+
   def alive?
-    turns.last.armor >= 0
+    armor >= 0
   end
 
   def dead?
@@ -89,8 +107,8 @@ class Robot
     board.line_of_sight(self, rotation + skew)
   end
 
-  def line_of_fire(skew = 0)
-    los = line_of_sight skew
+  def line_of_fire
+    los = line_of_sight
 
     if can_fire_through_walls?
       hit = los.index { |p| board.robot? p }
@@ -99,5 +117,11 @@ class Robot
     end
 
     hit ? los[0..hit] : los
+  end
+
+  def doppel
+    power_ups = self.power_ups.map {|p| p.doppel}
+    Robot.new last_turn: last_turn, username: username, x: x, y: y, ammo: ammo, armor: armor,
+              rotation: rotation, direction: direction, abilities: abilities, power_ups: power_ups
   end
 end

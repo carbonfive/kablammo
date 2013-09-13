@@ -9,7 +9,7 @@ module Engine
 
     def initialize(battle)
       @battle = battle
-      @players = battle.robots.map { |r| Player.new r }
+      @players = battle.robots.map { |r| Player.new battle, r.username }
     end
     private :initialize
 
@@ -27,15 +27,28 @@ module Engine
       end
 
       wait 30, by: 1
+
       ready? ? true : false
     end
 
-    def turn
+    def turn!
+      #puts "======= TURN! ========="
       @count += 1
-      bm_send = bm_receive = bm_save = 0
+      players = turn = nil
+      bm_dup = bm_send = bm_receive = bm_save = 0
+
       benchmark = Benchmark.measure do
+        bm_dup = Benchmark.measure do
+        #puts "pre: #{@battle.current_turn}"
+        turn = @battle.current_turn.doppel
+        @battle.turns << turn
+        #puts "post: #{@battle.current_turn}"
+        end
+
+        players = alive_players
+
         bm_send = Benchmark.measure do
-        alive_players.each do |player|
+        players.each do |player|
           player.send @battle.as_seen_by(player.robot)
         end
         end
@@ -44,25 +57,25 @@ module Engine
         wait 0.5, by: 0.01
         end
 
-        alive_players.each do |player|
+        players.each do |player|
           player.timeout unless player.ready?
         end
 
-        alive_players.sort_by(&:priority).each do |player|
+        players.sort_by(&:priority).each do |player|
           player.turn!
         end
 
-        alive_players.each do |player|
-          player.handle_hits
+        players.each do |player|
           player.handle_power_ups
         end
 
         bm_save = Benchmark.measure do
-        @battle.save!
+        #puts "before save: #{@battle.current_turn}"
+        @battle.current_turn.save!
         end
       end
 
-      output [ benchmark, bm_send, bm_receive, bm_save ]
+      output players, [ benchmark, bm_dup, bm_send, bm_receive, bm_save ]
 
       if @battle.game_over?
         @players.each do |player|
@@ -71,6 +84,7 @@ module Engine
         @underway = false
         @count = 0
       end
+      #puts "======= END ========="
     end
 
     private
@@ -79,8 +93,8 @@ module Engine
       "%.2f" % tms.total
     end
 
-    def output(benchmarks)
-      turns = alive_players.map.with_index do |player|
+    def output(players, benchmarks)
+      turns = players.map.with_index do |player|
         value = "%4s" % player.handler.value
         "#{player.robot.username}: #{value}"
       end.join('  ')

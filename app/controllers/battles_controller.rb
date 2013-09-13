@@ -36,7 +36,9 @@ class BattlesController
       return [500, "Players not prepared"]
     end
 
-    100.times { battle.turn }
+    100.times do
+      battle.turn!
+    end
     battle.save!
 
     @app.redirect "/battles/#{battle.id}"
@@ -45,7 +47,7 @@ class BattlesController
   def show(id)
     battle = Battle.find_by_id id
     return [404, "Unknown battle: #{id}"] unless battle
-    json = jbuilder :"battle/turn", locals: { battle: battle }
+    json = jbuilder :"battle/show", locals: { battle: battle }
     erb :"battle/show", locals: { battle: battle, json: json, active_nav: 'arena' }
   end
 

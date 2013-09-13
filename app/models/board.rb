@@ -7,21 +7,22 @@ class Board
   many :walls
   many :robots
   many :power_ups
-  embedded_in :battle
+
+  embedded_in :turn
 
   def self.draw(map, robots)
     raise "Too many robots!" if map.starts.length < robots.length
     board = Board.new width: map.width, height: map.height
     board.walls = map.walls.map { |w| Wall.new.at(w[0], w[1]) }
-    robots.each_with_index { |r, i| board.add_robot r, map.starts[i] }
+    robots.each_with_index { |r, i| board.add_robot(r, map.starts[i]) }
     board
   end
 
   def initialize(*args)
-    super
     self.walls = []
     self.robots = []
     self.power_ups = []
+    super
   end
 
   def geometry
@@ -40,10 +41,7 @@ class Board
   alias_method :robot?, :robot_at
 
   def add_robot(robot, start)
-    turn = Turn.new.at start[0], start[1]
-    turn.value = '*'
-    robot.turns << turn
-    self.robots << robot
+    self.robots << robot.at(start[0], start[1])
   end
 
   def add_power_up(power_up, x, y)
@@ -65,5 +63,13 @@ class Board
 
   def line_of_sight(source, degrees)
     geometry.line_of_sight source, degrees
+  end
+
+  def doppel
+    doppelize = Proc.new { |o| o.doppel }
+    walls = self.walls.map( &doppelize )
+    robots = self.robots.map( &doppelize )
+    power_ups = self.power_ups.map( &doppelize )
+    Board.new width: width, height: height, walls: walls, robots: robots, power_ups: power_ups
   end
 end

@@ -10,7 +10,7 @@ class @kablammo.Battle
     $(@el)
 
   render: =>
-    @board = new kablammo.Board(@, @args.board)
+    @board = new kablammo.Board(@, @args.turns)
     @board.render()
 
   turn: =>

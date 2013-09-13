@@ -6,4 +6,8 @@ class Wall
   key :y, Integer, required: true
 
   embedded_in :board
+
+  def doppel
+    Wall.new x: x, y: y
+  end
 end
