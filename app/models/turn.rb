@@ -15,7 +15,7 @@ class Turn
   end
 
   def to_s
-    moves = board.robots.map {|r| "#{r.username}: #{r.last_turn}"}.join(', ')
+    moves = board.robots.map {|r| "#{r.username}: #{r.last_turn}, #{r.rotation}, #{r.fire}"}.join(', ')
     "#{id} - #{moves}"
   end
 end

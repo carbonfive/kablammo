@@ -28,6 +28,7 @@ class Robot
     self.ammo = MAX_AMMO
     self.armor = MAX_ARMOR
     self.abilities = []
+    self.power_ups = []
     super
   end
 
@@ -119,7 +120,8 @@ class Robot
   end
 
   def doppel
+    power_ups = self.power_ups.map {|p| p.doppel}
     Robot.new last_turn: last_turn, username: username, x: x, y: y, ammo: ammo, armor: armor,
-              rotation: rotation, direction: direction, abilities: abilities
+              rotation: rotation, direction: direction, abilities: abilities, power_ups: power_ups
   end
 end

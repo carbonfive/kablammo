@@ -5,8 +5,6 @@ class Battle
 
   many :turns
 
-  before_save :save_turns
-
   def self.wage(name, map, robots)
     battle = Battle.new name: name
     turn = Turn.new
@@ -15,10 +13,6 @@ class Battle
     battle.turns << turn
     battle.save!
     battle
-  end
-
-  def save_turns
-    #turns.each { |t| t.save! }
   end
 
   def prepare_for_battle!

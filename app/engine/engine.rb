@@ -32,16 +32,17 @@ module Engine
     end
 
     def turn!
-      #puts "======= START ========="
+      #puts "======= TURN! ========="
       @count += 1
       players = turn = nil
       bm_dup = bm_send = bm_receive = bm_save = 0
 
       benchmark = Benchmark.measure do
         bm_dup = Benchmark.measure do
-        #puts "current turn #{@battle.current_turn}"
+        #puts "pre: #{@battle.current_turn}"
         turn = @battle.current_turn.doppel
         @battle.turns << turn
+        #puts "post: #{@battle.current_turn}"
         end
 
         players = alive_players
@@ -69,12 +70,8 @@ module Engine
         end
 
         bm_save = Benchmark.measure do
-        #puts "saving turn #{turn}"
-        #puts "and battle current turn #{@battle.current_turn}"
-        #puts "are they == ? #{turn == @battle.current_turn}"
-        #puts "are they .eql ? #{turn.eql?(@battle.current_turn)}"
-        turn.save!
-        @battle.save!
+        #puts "before save: #{@battle.current_turn}"
+        @battle.current_turn.save!
         end
       end
 
