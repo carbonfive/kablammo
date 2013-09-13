@@ -1,4 +1,46 @@
 body {
   padding-top: 70px;
   padding-bottom: 20px;
+  background: #222;  
+  color: #909090;
+  font-size: 18px;
+}
+
+h1, .jumbotron h1, .navbar-inverse .navbar-brand {
+  color: #ef5a28;
+}
+
+h2, .jumbotron h2 {
+  color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .navbar {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, 
+.h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small {
+  text-transform: none;
+}
+
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'brandon-grotesque';
+}
+
+h2 img {
+  vertical-align: inherit;
+}
+
+.jumbotron {
+  background-color: #333;  
+}
+
+.page-header, .table thead>tr>th {
+  border-color: #444;
+}
+
+.btn-primary {
+  background-color: #ef5a28;
+  border-color: #df5425;
 }
