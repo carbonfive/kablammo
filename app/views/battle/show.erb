@@ -1,25 +1,25 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     <canvas id="board"></canvas>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-4">
     <% battle.robots.each do |robot| %>
       <div class="stat robot-<%= robot.username %>">
         <h2>
           <img src="https://identicons.github.com/<%= robot.username %>.png" width="24" height="24"> 
           <%= robot.username %> 
-          <small>0</small> 
+          <small>0 pts</small> 
         </h2>
         <div class="progress health">
           <div class="progress-bar progress-bar-danger" style="width: <%= robot.armor * 20 %>%">
             <span class="sr-only"><%= robot.armor %></span>
           </div>
         </div>
-        <div class="btn-group ammo" title="ammo">
+        <ul class="ammo list-unstyled">
           <% 10.times do |i| %>
-            <button type="button" class="btn btn-xs <%= robot.ammo > i ? 'btn-info' : 'btn-default' %>">&nbsp;</button>
+            <li class="<%= robot.ammo > i ? 'ammo-full' : 'ammo-empty' %>">&nbsp;</li>
           <% end %>
-        </div>
+        </ul>
         <small class="help-block">
           <%= robot.turns.last %>
         </small>
@@ -28,24 +28,6 @@
         </small>
       </div>
     <% end %>
-  </div>
-  <div class="col-md-3">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th colspan="3">Leaderboard</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1.</td>
-          <td><img src="https://identicons.github.com/zero.png" width="24" height="24"></td>
-          <td>zero</td>
-          <td>0</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div> 
 

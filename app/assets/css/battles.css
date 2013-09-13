@@ -1,20 +1,30 @@
 .health {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-.ammo .btn {
-  width: 27px; 
-  height: 20px;
-  cursor: default;
+.ammo li {
+  width: 16px; 
+  height: 16px;
+  margin: 0 0 0 18px;
+  display: inline-block;
 }
 
-.ammo .btn:hover {
-  background: #fff;
-  border-color: #ccc;
+.ammo li:first-child {
+  margin-left: 0;
 }
 
-.ammo .btn-info,
-.ammo .btn-info:hover { 
-  background-color: #ddd;
-  border-color: #ccc;
+.ammo .ammo-full { 
+  background-color: #fff;
+}
+
+.ammo .ammo-empty { 
+  background-color: #333;
+}
+
+.progress {
+  height: 16px;
+	background-color: #333;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 }

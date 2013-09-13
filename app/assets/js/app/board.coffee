@@ -18,7 +18,7 @@ class kablammo.Board
   createVisualization: ->
     walls = @createWalls()
     robots = @createRobots()
-    $('#board').css { height: "#{@args.height * 61}px", width: "#{@args.width * 61}px" }
+    $('#board').css { height: "#{@args.height * 83}px", width: "#{@args.width * 83}px" }
     kablammo.Visualization 'board', @args.width, @args.height, walls, robots
 
   createWalls: ->
