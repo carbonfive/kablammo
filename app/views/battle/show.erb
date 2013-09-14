@@ -4,9 +4,16 @@
   </div>
   <div class="col-md-4">
     <% battle.robots.each do |robot| %>
-      <div class="stat robot-<%= robot.username %>">
+      <div class="stats" id="stats-<%= robot.username %>">
         <h2>
-          <img src="https://identicons.github.com/<%= robot.username %>.png" width="24" height="24"> 
+          <canvas class="robot" id="robot-<%= robot.username %>"></canvas>
+          <script type="text/javascript">
+            $(function() {
+              var hash = ('<%= robot.username %>').hashCode();
+              var robot = kablammo.Visualization('robot-<%= robot.username %>', 1, 1, [], [{id: hash, color: Math.abs(hash % 4), 'turns': [{'x': 0, 'y': 0}]}]);
+              robot.draw();
+            })
+          </script>
           <%= robot.username %> 
           <small>0 pts</small> 
         </h2>

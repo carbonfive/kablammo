@@ -1,12 +1,19 @@
 body {
-  padding-top: 70px;
-  padding-bottom: 20px;
   background: #222;  
   color: #909090;
-  font-size: 18px;
+  font-size: 21px;
 }
 
-h1, .jumbotron h1, .navbar-inverse .navbar-brand {
+a, .navbar-inverse .navbar-brand {
+  color: #fee500;
+}
+
+a:hover {
+  color: #eed700;
+  text-decoration: underline;
+}
+
+h1, .jumbotron h1 {
   color: #ef5a28;
 }
 
@@ -14,7 +21,7 @@ h2, .jumbotron h2 {
   color: #fff;
 }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .navbar {
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .navbar, .btn {
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -36,11 +43,36 @@ h2 img {
   background-color: #333;  
 }
 
-.page-header, .table thead>tr>th {
+.page-header, .table thead>tr>th,
+.table thead>tr>th, .table tbody>tr>th, .table tfoot>tr>th, .table thead>tr>td, .table tbody>tr>td, .table tfoot>tr>td {
   border-color: #444;
 }
 
 .btn-primary {
   background-color: #ef5a28;
   border-color: #df5425;
+}
+
+.btn-primary:hover {
+  background-color: #df5425;
+  border-color: #cf4e22;
+}
+
+footer {
+  border-top: 1px solid #080808;
+  padding: 20px 0;
+  margin: 20px 0 0 0;
+}
+
+footer img {
+  opacity: .2;
+}
+
+.robot {
+  width: 83px;
+  height: 83px;
+}
+
+.leaderboard {
+  font-size: 30px;
 }

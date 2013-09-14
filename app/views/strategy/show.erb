@@ -1,31 +1,17 @@
-<h1>Show Robot</h1>
-<table class="table">
-  <tr>
-    <td><label>Github URL</label></td>
-    <td>
-      <%= strategy.github_url %>
-    </td>
-  </tr>
-  <tr>
-    <td><label>User</label></td>
-    <td>
-      <%= strategy.username %>
-    </td>
-  </tr>
-  <tr>
-    <td><label>Local Repo path</label></td>
-    <td>
-      <%= strategy.path %>
-    </td>
-  </tr>
-  <tr>
-    <td><label>SHA</label></td>
-    <td>
-      <%= strategy.sha %>
-    </td>
-  </tr>
-</table>
+<h1>Examine Robot</h1>
+<h2><%= strategy.username %></h2>
+
+<canvas id="robot" class="robot"></canvas>
+<h3><%= strategy.github_url %></h3>
 
 <form action="/strategies/<%= strategy.id %>/pull">
-  <input type="submit" class="btn btn-primary" value="Fetch the latest">
+  <input type="submit" class="btn btn-primary" value="Fetch Latest Code">
 </form>
+
+<script type="text/javascript">
+  $(function() {
+    var hash = ('<%= strategy.username %>').hashCode();
+    var robot = kablammo.Visualization('robot', 1, 1, [], [{id: hash, color: Math.abs(hash % 4), 'turns': [{'x': 0, 'y': 0}]}]);
+    robot.draw();
+  })
+</script>

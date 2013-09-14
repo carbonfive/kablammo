@@ -12,7 +12,7 @@ class KablammoServer < Sinatra::Base
   assets {
     serve '/js',     from: 'app/assets/js'
     serve '/css',    from: 'app/assets/css'
-    serve '/images', from: 'app/assets/images'
+    serve '/img', from: 'app/assets/img'
 
     js :application, '/js/application.js', [
       '/js/vendor/**/*.js',

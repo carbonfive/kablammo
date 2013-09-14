@@ -9,7 +9,7 @@
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
   <body>
-    <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+    <div class="navbar navbar-default navbar-static navbar-inverse">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,17 +22,17 @@
         <div class="navbar-collapse collapse">
           <% active_nav = 'home' if !defined?(active_nav) %>
           <ul class="nav navbar-nav">
-            <li<%= active_nav == 'arena' ? ' class="active"' : '' %>>
-              <a href="<%= url('/battles/new') %>">Arena</a>
-            </li>
-            <li<%= active_nav == 'robots' ? ' class="active"' : '' %>>
-              <a href="<%= url('/strategies') %>">Robots</a>
-            </li>
             <li<%= active_nav == 'docs' ? ' class="active"' : '' %>>
               <a href="<%= url('/docs') %>">Docs</a>
             </li>
             <li<%= active_nav == 'rules' ? ' class="active"' : '' %>>
               <a href="<%= url('/rules') %>">Rules</a>
+            </li>
+            <li<%= active_nav == 'robots' ? ' class="active"' : '' %>>
+              <a href="<%= url('/strategies') %>">Robots</a>
+            </li>
+            <li<%= active_nav == 'arena' ? ' class="active"' : '' %>>
+              <a href="<%= url('/battles/new') %>">Arena</a>
             </li>
           </ul>
         </div>
@@ -41,5 +41,8 @@
     <div class="container">
       <%= yield %>
     </div>
+    <footer class="text-center">
+      <a href="http://carbonfive.com"><img src="/img/carbonfive.png" width="42" height="42"></a>
+    </footer>
   </body>
 </head>
