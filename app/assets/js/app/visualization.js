@@ -7,7 +7,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   var GRID_WIDTH = gridWidth;
   var GRID_HEIGHT = gridHeight;
-  var SHADOW_OFFSET = .15*ch/GRID_HEIGHT;
+  var SHADOW_OFFSET = .07*ch/GRID_HEIGHT;
   var ROBOT_WIDTH = 100;
   var ROBOT_SCALE = .3;
   var TANK_DIMENSIONS = {
@@ -103,32 +103,32 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		var MARGIN = .05 * ROBOT_WIDTH;
 
 		ctx.save();
-  		ctx.rotate(tank.bodyRotation)
-			decorateStyle( tank );
+		ctx.rotate(tank.bodyRotation);
+		decorateStyle( tank );
 
-  		for (var i=1,row; row = GRID_POINTS[i]; i++) {
-  			var prev = GRID_POINTS[i-1];
-				var prevCenter = between(prev.left,prev.right);
-				var rowCenter = between(row.left,row.right);
+		for (var i=1,row; row = GRID_POINTS[i]; i++) {
+			var prev = GRID_POINTS[i-1];
+			var prevCenter = between(prev.left,prev.right);
+			var rowCenter = between(row.left,row.right);
 
-		  	(( tank.id & (1<<i) ) ? decorateStyle : offStyle)( tank );
+	  	(( tank.id & (1<<i) ) ? decorateStyle : offStyle)( tank );
+			warp(ctx,prev.left,prevCenter,row.left,rowCenter,MARGIN,row.bend);
+			ctx.fill();
+			ctx.save();
+				ctx.scale(-1,1);
   			warp(ctx,prev.left,prevCenter,row.left,rowCenter,MARGIN,row.bend);
 				ctx.fill();
-				ctx.save();
-					ctx.scale(-1,1);
-	  			warp(ctx,prev.left,prevCenter,row.left,rowCenter,MARGIN,row.bend);
-					ctx.fill();
-				ctx.restore();
+			ctx.restore();
 
-		  	(( tank.id & (1<<(i+5)) ) ? decorateStyle : offStyle)( tank );
-  			warp(ctx,prevCenter,prev.right,rowCenter,row.right,MARGIN,row.bend);
+	  	(( tank.id & (1<<(i+5)) ) ? decorateStyle : offStyle)( tank );
+			warp(ctx,prevCenter,prev.right,rowCenter,row.right,MARGIN,row.bend);
+			ctx.fill();
+			ctx.save();
+				ctx.scale(-1,1);
+				warp(ctx,prevCenter,prev.right,rowCenter,row.right,MARGIN,row.bend);
 				ctx.fill();
-				ctx.save();
-					ctx.scale(-1,1);
-  				warp(ctx,prevCenter,prev.right,rowCenter,row.right,MARGIN,row.bend);
-					ctx.fill();
-				ctx.restore();
-  		}
+			ctx.restore();
+		}
   	ctx.restore();
   }
 
@@ -276,10 +276,10 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	for (var i=0; i<GRID_WIDTH; i++) {
   		for (var j=GRID_HEIGHT-1; j>=0; j--) {
   			if (walls[i] && walls[i][j]) {
-  				ctx.fillStyle = 'rgba(10,10,10,.4)';
+  				ctx.fillStyle = 'rgba(0,0,0,.75)';
   				ctx.fillRect(cw*i/GRID_WIDTH + SHADOW_OFFSET, ch*j/GRID_HEIGHT - SHADOW_OFFSET, 
   					cw/GRID_WIDTH, ch/GRID_HEIGHT)
-  				ctx.fillStyle = 'rgba(255,255,255,.5)';
+  				ctx.fillStyle = 'rgba(235,235,235,.7)';
   				ctx.fillRect(cw*i/GRID_WIDTH, ch*j/GRID_HEIGHT, 
   					cw/GRID_WIDTH, ch/GRID_HEIGHT)
   			}

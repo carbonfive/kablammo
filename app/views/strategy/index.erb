@@ -1,19 +1,11 @@
-<h1>All Robots</h1>
+<h1>Leaderboard</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th colspan="2">Leaderboard</th>
-      <th>Score</th>
-    </tr>
-  </thead>
+<table class="table leaderboard">
   <tbody>
-    <% strategies.each_with_index do |strategy, idx| %>
+    <% strategies.each_with_index do |strategy, i| %>
       <tr>
         <td>
-          <a href="/strategies/<%= strategy.id %>">
-            <img src="https://identicons.github.com/<%= strategy.username %>.png" width="24" height="24">
-          </a>
+          <%= i + 1 %>.
         </td>
         <td>
           <a href="/strategies/<%= strategy.id %>">
@@ -29,5 +21,5 @@
 </table>
 
 <p>
-  <a href="<%= url('/strategies/new') %>" class="btn btn-primary">Add Robot</a>
+  <a href="<%= url('/strategies/new') %>" class="btn btn-primary">Enter Your Robot</a>
 </p>

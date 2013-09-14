@@ -1,4 +1,4 @@
-<h1>Add Robot</h1>
+<h1>Enter Your Robot</h1>
 <% if strategy.errors.any? %>
   <div class="alert alert-danger">
     <p>We were unable to save the strategy.</p>
@@ -9,16 +9,15 @@
     </ul>
   </div>
 <% end %>
-<div class="alert alert-info">
-  <p>
-    For information on how to create a robot, read the <a href="<%= url('/docs/') %>">docs</a>.
-  </p>
-</div>
+<p>
+  For instructions on how to create a robot, read the <a href="<%= url('/docs/') %>">docs</a>. For contest info, read the <a href="<%= url('/rules/') %>">rules</a>.
+</p>
 <form method="post" action="<%= url('/strategies') %>">
   <div class="form-group">
-    <input name="github_url" type="text" class="form-control" placeholder="Kablammo Strategy fork SSH clone URL">
+    <label for="github_url">Robot Repo</label>
+    <input name="github_url" type="text" id="github_url" class="form-control" placeholder="Your Kablammo Strategy Github SSH clone URL">
   </div>
   <div class="form-group">
-    <button type="submit" class="btn btn-primary">Add Robot</button>
+    <button type="submit" class="btn btn-primary">Create Robot</button>
   </div>
 </form>
