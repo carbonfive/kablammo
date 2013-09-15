@@ -66,7 +66,7 @@ module Engine
 
     def timeout
       puts "Player #{robot.username} turn timed out"
-      @handler = RestHandler.new @robot
+      @handler = RestHandler.new robot
     end
 
     def handle_power_ups
