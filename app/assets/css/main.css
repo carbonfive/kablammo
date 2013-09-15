@@ -68,6 +68,18 @@ footer img {
   opacity: .2;
 }
 
+footer a {
+  color: #444;
+}
+
+footer a:hover {
+  color: #333;
+}
+
+footer small {
+  display: block;
+}
+
 .robot {
   width: 83px;
   height: 83px;
