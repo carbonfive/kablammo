@@ -13,7 +13,7 @@ class Board
   def self.draw(map, robots)
     raise "Too many robots!" if map.starts.length < robots.length
     board = Board.new width: map.width, height: map.height
-    board.walls = map.walls.map { |w| Wall.new.at(w[0], w[1]) }
+    board.walls = map.walls
     robots.each_with_index { |r, i| board.add_robot(r, map.starts[i]) }
     board
   end
@@ -41,7 +41,10 @@ class Board
   alias_method :robot?, :robot_at
 
   def add_robot(robot, start)
-    self.robots << robot.at(start[0], start[1])
+    r = robot.at start.position.x, start.position.y
+    r.direction = start.direction
+    r.rotation = start.rotation
+    self.robots << r
   end
 
   def add_power_up(power_up, x, y)
