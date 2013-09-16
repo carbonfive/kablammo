@@ -273,18 +273,18 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   function renderTankFire( tank, target ) {
     ctx.fillStyle = '#ff0';
-    ctx.fillRect(target[0]*cw/GRID_WIDTH, target[1]*ch/GRID_HEIGHT, cw/GRID_WIDTH, ch/GRID_HEIGHT);
+    ctx.fillRect(target.x*cw/GRID_WIDTH, target.y*ch/GRID_HEIGHT, cw/GRID_WIDTH, ch/GRID_HEIGHT);
 
     ctx.strokeStyle = '#ff0';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT)
-    ctx.lineTo((target[0]+.5)*cw/GRID_WIDTH, (target[1]+.5)*ch/GRID_HEIGHT)
+    ctx.lineTo((target.x+.5)*cw/GRID_WIDTH, (target.y+.5)*ch/GRID_HEIGHT)
     ctx.stroke();
 
     var gunPos = gunEnd(tank);
-    var dx = (target[0]+.5)*cw/GRID_WIDTH - gunPos.x;
-    var dy = (target[1]+.5)*ch/GRID_HEIGHT - gunPos.y;
+    var dx = (target.x+.5)*cw/GRID_WIDTH - gunPos.x;
+    var dy = (target.x+.5)*ch/GRID_HEIGHT - gunPos.y;
     var distance = Math.sqrt(dx*dx + dy*dy);
     ctx.save();
       ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
