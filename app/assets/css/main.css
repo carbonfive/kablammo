@@ -4,7 +4,7 @@ body {
 }
 
 body, .navbar-brand {
-  font-size: 24px;
+  font-size: 21px;
 }
 
 a, .navbar-inverse .navbar-brand {
@@ -14,10 +14,6 @@ a, .navbar-inverse .navbar-brand {
 a:hover {
   color: #eed700;
   text-decoration: underline;
-}
-
-p {
-  margin: 0 0 20px 0;
 }
 
 h1, .jumbotron h1 {
