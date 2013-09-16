@@ -19,7 +19,8 @@ class KablammoServer < Sinatra::Base
       '/js/app/ext.js',
       '/js/app/battle.js',
       '/js/app/board.js',
-      '/js/app/visualization.js'
+      '/js/app/visualization.js',
+      '/js/app/main.js'
     ]
 
     css :application, '/css/application.css', [
