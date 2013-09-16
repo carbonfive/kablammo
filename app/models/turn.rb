@@ -1,13 +1,15 @@
 class Turn
   include MongoMapper::Document
-  #include MongoMapper::EmbeddedDocument
 
   one :board
   belongs_to :battle
-  #embedded_in :battle
+
+  def robots
+    board.robots
+  end
 
   def robot_named(username)
-    board.robots.detect { |r| r.username == username }
+    robots.detect { |r| r.username == username }
   end
 
   def doppel

@@ -21,7 +21,19 @@ class kablammo.Board
     console.log robots
     board = @firstBoard()
     $('#board').css { height: "#{board.height * 83}px", width: "#{board.width * 83}px" }
-    kablammo.Visualization 'board', board.width, board.height, walls, robots
+    kablammo.Visualization 'board', board.width, board.height, walls, robots, @updateStats
+
+  updateStats: (turnIndex) =>
+    board = @args[turnIndex].board
+    _(board.robots).each (robot) ->
+      stats = $("#stats-#{robot.username}")
+      stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
+      ammos = stats.find('.ammo')
+      ammos.find("li:lt(#{robot.ammo})").removeClass('ammo-empty').addClass('ammo-full')
+      if robot.ammo == 0
+        ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
+      else
+        ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
 
   createWalls: ->
     walls = []

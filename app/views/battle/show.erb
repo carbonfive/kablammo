@@ -3,7 +3,7 @@
     <canvas id="board"></canvas>
   </div>
   <div class="col-md-4">
-    <% battle.robots.each do |robot| %>
+    <% battle.turns[0].robots.each do |robot| %>
       <div class="stats" id="stats-<%= robot.username %>">
         <h2>
           <canvas class="robot" id="robot-<%= robot.username %>"></canvas>

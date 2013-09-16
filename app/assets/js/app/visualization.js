@@ -1,5 +1,5 @@
 kablammo = (window.kablammo || {})
-kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight, walls, tanks ) {
+kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight, walls, tanks, onTurn ) {
   var canvas = document.getElementById(canvasId);
   var cw = canvas.width = canvas.offsetWidth;
   var ch = canvas.height = canvas.offsetHeight;
@@ -263,6 +263,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   var startTime = 0;
   var gameTime = 0;
+  var currentTurn = -1;
   function render( time ) {
   	if ( startTime == 0 ) startTime = time;
   	gameTime = (time - startTime) / 1000;
@@ -301,6 +302,15 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   	for (var i=0,tank; tank = tanks[i]; i++)
 	  	renderTank(tank, gameTime);
+
+    var turnIndex = gameTime|0;
+    var subStep = gameTime % 1
+    if (turnIndex > currentTurn && subStep >= 0.5) {
+      currentTurn = turnIndex;
+      if (onTurn) {
+        onTurn(currentTurn);
+      }
+    }
 
     return true;
   }
