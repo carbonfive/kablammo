@@ -53,7 +53,7 @@ class Robot
   def fire!
     self.ammo -= 1
     hit = line_of_fire.last
-    if hit
+    if board.hit? hit
       fire = Fire.new x: hit.x, y: hit.y, hit: true
     else
       fire = Fire.new hit: false
