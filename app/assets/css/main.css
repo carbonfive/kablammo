@@ -64,16 +64,14 @@ footer {
   margin: 20px 0 0 0;
 }
 
-footer img {
+footer a, footer small {
+  color: #fff;
   opacity: .2;
 }
 
-footer a {
-  color: #444;
-}
-
-footer a:hover {
-  color: #333;
+footer a:hover, footer a:hover small {
+  opacity: 1;
+  text-decoration: none;
 }
 
 footer small {

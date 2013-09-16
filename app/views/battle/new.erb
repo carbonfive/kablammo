@@ -4,7 +4,6 @@
   <div class="form-group">
     <label for="player1">Robot 1</label>
     <select name="player1" id="player1" class="form-control">
-      <option value="dhendee" selected="selected">dhendee</option>
       <% strategies.each do |s| %>
         <option value="<%= s.id %>"><%= s.username %></option>
       <% end %>
@@ -13,7 +12,6 @@
   <div class="form-group">
     <label for="player2">Robot 2</label>
     <select name="player2" id="player2" class="form-control">
-      <option value="mwynholds" selected="selected">mwynholds</option>
       <% strategies.each do |s| %>
         <option value="<%= s.id %>"><%= s.username %></option>
       <% end %>
