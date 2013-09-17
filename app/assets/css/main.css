@@ -76,6 +76,14 @@ footer a:hover, footer a:hover small {
   text-decoration: none;
 }
 
+footer a {
+  opacity: .2;
+}
+
+footer a:hover {
+  opacity: .5;
+}
+
 .robot {
   width: 83px;
   height: 83px;
@@ -94,7 +102,7 @@ code {
 .gravatar {
   width: 48px;
   height: 48px;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
   border: 1px solid #444;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
 }
