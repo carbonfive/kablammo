@@ -110,3 +110,11 @@ code {
 .leaderboard td:last-child {
   text-align: right;
 }
+
+.turns {
+  font-size: 85%;
+  height: 380px;
+  overflow-y: scroll;
+  color: #444;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}

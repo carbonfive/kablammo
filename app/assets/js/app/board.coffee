@@ -28,7 +28,10 @@ class kablammo.Board
 
   updateStats: (turn) =>
     board = @args[turn.index].board
-    _(board.robots).each (robot) ->
+    _(board.robots).each (robot, i) ->
+      $turns = $('.turns')
+      console.log(turn)
+      $turns.append("<div>Turn #{turn.index} [#{robot.username}] #{turn.turns[i].last_turn}</div>").scrollTop($turns[0].scrollHeight)
       stats = $("#stats-#{robot.username}")
       stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
       ammos = stats.find('.ammo')
