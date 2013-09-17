@@ -1,5 +1,5 @@
 kablammo = (window.kablammo || {})
-kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight, walls, tanks, onTurn ) {
+kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight, walls, tanks ) {
   var canvas = document.getElementById(canvasId);
   var cw = canvas.width = canvas.offsetWidth;
   var ch = canvas.height = canvas.offsetHeight;
@@ -379,9 +379,12 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   	if ( startTime == 0 ) startTime = time;
   	gameTime = (time - startTime) / 1000;
-		for (var i=0,tank; tank = tanks[i]; i++)
-      if (gameTime >= tank.turns.length)
+		for (var i=0,tank; tank = tanks[i]; i++) {
+      if (gameTime >= tank.turns.length) {
+        eventDispatcher.trigger('gameOver', (gameTime|0)-1);
         return false;
+      }
+    }
 
     var hits = {}, tankHit=false;
     if (gameTime%1 > .75) {
@@ -445,15 +448,6 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	for (var i=0,tank; tank = tanks[i]; i++)
 	  	renderTank(tank, gameTime);
 
-    var turnIndex = gameTime|0;
-    var subStep = gameTime % 1
-    if (turnIndex > currentTurn && subStep >= 0.5) {
-      currentTurn = turnIndex;
-      if (onTurn) {
-        onTurn(currentTurn);
-      }
-    }
-
     if (firing) {
       for (var i=0,tank; tank=tanks[i]; i++) {
         var turn = tank.turns[gameTime|0];
@@ -461,6 +455,14 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
           renderTankDamage(tank, gameTime);
         }
       }
+    }
+
+    var turnIndex = gameTime|0;
+    if (!eventsSent['turn:'+turnIndex]) {
+      eventsSent['turn:'+turnIndex] = true;
+      var turn = {index:turnIndex, turns:[]}
+      for (var i=0,tank; tank = tanks[i]; i++) turn.turns.push(tank.turns[turnIndex])
+      eventDispatcher.trigger('turn', turn)
     }
 
     return true;
