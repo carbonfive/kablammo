@@ -175,33 +175,56 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   function renderTank( tank, time ) {
   	var lastTurn = tank.turns[Math.max((time-1)|0,0)];
   	var turn = tank.turns[time|0];
-    //console.log(turn);
   	var subStep = time % 1;
-  	if ( lastTurn.direction != turn.direction ) {
-  		if ( subStep < .5 ) {
-		  	tank.x = lastTurn.x;
-  			tank.y = lastTurn.y;
-  			var startRotation = -lastTurn.direction * Math.PI / 2;
-  			var endRotation = -turn.direction * Math.PI / 2;
-  			if (endRotation-startRotation > Math.PI)
-  				endRotation -= 2*Math.PI;
-  			if (endRotation-startRotation < -Math.PI)
-  				endRotation += 2*Math.PI;
-  			tank.bodyRotation = startRotation + 2*subStep*(endRotation-startRotation);
-  		} else {
-		  	tank.x = lastTurn.x + 2*(subStep-.5)*(turn.x-lastTurn.x);
-  			tank.y = lastTurn.y + 2*(subStep-.5)*(turn.y-lastTurn.y);
-  			tank.bodyRotation = -turn.direction * Math.PI / 2;
-  		}
-  	} else {
-	  	tank.x = lastTurn.x + subStep*(turn.x-lastTurn.x);
-  		tank.y = lastTurn.y + subStep*(turn.y-lastTurn.y);
-  	}
-  	tank.turretAngle = lastTurn.turretAngle + subStep*(turn.turretAngle-lastTurn.turretAngle);
+
+    if (turn.direction == null) {
+      if (lastTurn.direction == null) lastTurn.direction = 0;
+      if (turn.x == lastTurn.x && turn.y == lastTurn.y)
+        turn.direction = lastTurn.direction;
+      else if (turn.x > lastTurn.x)
+        turn.direction = 3;
+      else if (turn.x < lastTurn.x)
+        turn.direction = 1;
+      else if (turn.y > lastTurn.y)
+        turn.direction = 2;
+      else if (turn.y < lastTurn.y)
+        turn.direction = 0;
+      if ( (lastTurn.direction - turn.direction) % 2 == 0 )
+        turn.direction = lastTurn.direction;
+    }
+
+    if ( (lastTurn.direction - turn.direction) % 2 ) {
+      if ( subStep < .5 ) {
+        tank.x = lastTurn.x;
+        tank.y = lastTurn.y;
+        var startRotation = -lastTurn.direction * Math.PI / 2;
+        var endRotation = -turn.direction * Math.PI / 2;
+        if (endRotation-startRotation > Math.PI)
+          endRotation -= 2*Math.PI;
+        if (endRotation-startRotation < -Math.PI)
+          endRotation += 2*Math.PI;
+        tank.bodyRotation = startRotation + 2*subStep*(endRotation-startRotation);
+      } else {
+        tank.x = lastTurn.x + 2*(subStep-.5)*(turn.x-lastTurn.x);
+        tank.y = lastTurn.y + 2*(subStep-.5)*(turn.y-lastTurn.y);
+        tank.bodyRotation = -turn.direction * Math.PI / 2;
+      }
+    } else {
+      tank.x = lastTurn.x + subStep*(turn.x-lastTurn.x);
+      tank.y = lastTurn.y + subStep*(turn.y-lastTurn.y);
+    }
+    if (turn.turretAngle - lastTurn.turretAngle < -Math.PI)
+      tank.turretAngle = lastTurn.turretAngle + subStep*(turn.turretAngle+2*Math.PI-lastTurn.turretAngle);
+    else if (turn.turretAngle - lastTurn.turretAngle > Math.PI)
+      tank.turretAngle = lastTurn.turretAngle+2*Math.PI + subStep*(turn.turretAngle-lastTurn.turretAngle-2*Math.PI);
+    else
+      tank.turretAngle = lastTurn.turretAngle + subStep*(turn.turretAngle-lastTurn.turretAngle);
+
 
   	ctx.save();
-  		ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
+      ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
   		ctx.scale(ROBOT_SCALE, ROBOT_SCALE);
+
 
 	  	var shadowOffset = .15*ROBOT_WIDTH;
 
@@ -215,6 +238,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 	  	// body
 		  ctx.fillStyle = 'rgba(255,255,255,.5)';
 		  tankBase(tank);
+
 
 			var turretY = .2*ROBOT_WIDTH;
 
