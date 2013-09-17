@@ -10,8 +10,11 @@ class StrategiesController
     strategies = Strategy.all
 
     # compute wins/losses
+    t = Time.now.to_f
     scores = Battle.all.map(&:score).reject(&:empty?)
     scoreboard = tally scores
+    puts "StrategiesController spent %0.3f ms to compute scoreboard" % (Time.now - t.to_f)
+
 
     # sort strategies by score
     strategies.sort_by!{ |s| -scoreboard[s.username] || 1000000 } # put nil last
