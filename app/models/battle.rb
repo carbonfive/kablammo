@@ -1,4 +1,8 @@
 class Battle
+
+  SCORING = { tie: 1, win: 3, loss: -1 }
+
+
   include MongoMapper::Document
 
   key :name, String, required: true
@@ -58,6 +62,15 @@ class Battle
 
   def as_seen_by(robot)
     JsonValue.new jbuild(robot)
+  end
+
+  def score
+    survivors, losers = robots.partition(&:alive?)
+
+    # if more than one survivor, survivors get a :tie score
+    survivors_booty = (survivors.count > 1) ? SCORING[:tie] : SCORING[:win]
+    Hash[ survivors.map(&:username).zip ([survivors_booty] * survivors.length) +
+          losers.map(&:username).zip([SCORING[:loss]] * losers.length) ]
   end
 
   private
