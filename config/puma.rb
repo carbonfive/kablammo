@@ -52,7 +52,7 @@ state_path '/home/deploy/apps/kablammo/shared/sockets/puma.state'
 # “false”.
 #
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
-# stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr', true
+stdout_redirect '/home/deploy/apps/kablammo/shared/log/stdout.log', '/home/deploy/apps/kablammo/shared/log/stderr.log', true
 
 # Disable request logging.
 #
