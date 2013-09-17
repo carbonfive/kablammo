@@ -3,6 +3,8 @@ class kablammo.Board
     @el = '.board'
     @viz = @createVisualization()
     @viz.addEventListener 'hit', ((data) -> console.log('hit',data))
+    @viz.addEventListener 'turn', (turn) => @updateStats(turn)
+    @viz.addEventListener 'gameOver', (index) => console.log('gameOver',index)
 
   $el: ->
     @parent.$el().find @el
@@ -22,10 +24,10 @@ class kablammo.Board
     console.log robots
     board = @firstBoard()
     $('#board').css { height: "#{board.height * 83}px", width: "#{board.width * 83}px" }
-    kablammo.Visualization 'board', board.width, board.height, walls, robots, @updateStats
+    kablammo.Visualization 'board', board.width, board.height, walls, robots
 
-  updateStats: (turnIndex) =>
-    board = @args[turnIndex].board
+  updateStats: (turn) =>
+    board = @args[turn.index].board
     _(board.robots).each (robot) ->
       stats = $("#stats-#{robot.username}")
       stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
