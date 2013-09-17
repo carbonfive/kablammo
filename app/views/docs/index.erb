@@ -19,12 +19,22 @@
 
 Your robot's strategy should be contained in the `strategy/strategy.rb` file located in your fork of the Kablammo Strategy repo.
 
-Your strategy must implement a single method called `next_turn`. This method has access to the current battle including the game board with all robots and walls. The method must return one of four commands (strings):
+Your strategy must implement a method called `next_turn`. This method has access to the current battle including the game board with all robots and walls. The method should return one of four commands (strings):
 
 * Rotate your turret: `r180`
 * Fire your laser with optional compensation factor: `f10`
 * Move in a cardinal direction: `n`
 * Rest to regain ammo: `.`
+
+### Hello, Robot
+
+`
+def next_turn
+  return 'f'
+end
+`
+
+### Details
 
 Each robot begins with 5 ammo and 10 armor. If your robot's armor reaches 0, you are eliminated from the arena and lose 1 point. If your robot is the last remaining robot in the arena, you are victorious and gain 3 points.
 
@@ -39,7 +49,7 @@ All robot turns are resolved in phases, simultaneously:
 
 Because all movement is resolved before firing, your firing solution can be adjusted by up to 10 degrees in either direction from your turret's current facing. In this manner, your robot can 'guess' which direction the enemy robot is going to move and fire at the predicted location.
 
-## Tips
+### Tips
 
 To help you get started, there are sample strategies provided for agressive, defensive, and hybrid robots. 
 

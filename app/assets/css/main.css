@@ -102,3 +102,11 @@ code {
 .leaderboard .gravatar {
   margin: 0 10px;
 }
+
+.leaderboard td:first-child {
+  width: 60px;
+}
+
+.leaderboard td:last-child {
+  text-align: right;
+}

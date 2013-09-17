@@ -10,10 +10,10 @@
       <tr>
         <td>
           <%= i + 1 %>.
-          <a href="/strategies/<%= strategy.id %>">
-            <img class="gravatar" src="<%= strategy.gravatar %>">
-            <%= strategy.username %>
-          </a>
+        </td>
+        <td>
+          <a href="/strategies/<%= strategy.id %>"><img class="gravatar" src="<%= strategy.gravatar %>"></a>
+          <a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a>
         </td>
         <td>
           <%= scoreboard[strategy.username].nil? ? 'N/A' : scoreboard[strategy.username] %>
