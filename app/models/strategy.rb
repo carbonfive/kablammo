@@ -39,7 +39,7 @@ class Strategy
     #clone_repo
     puts @@start_code_file_location
     FileUtils.cp @@start_code_file_location, start_code_file_destination
-    cmd = "cd #{path} && bundle && ruby #{@@start_code_file_name} #{username}"
+    cmd = "cd #{path} && git pull && bundle && ruby #{@@start_code_file_name} #{username}"
     puts cmd
     @pid = Process.spawn(cmd)
     puts "Launched #{username}"
