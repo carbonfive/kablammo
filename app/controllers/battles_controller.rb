@@ -26,8 +26,8 @@ class BattlesController
       walls: [ [2,3], [2,5], [6,3], [6,5] ].map {|w| Wall.new.at(*w) },
       starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
     })
-    player_names = player_ids.map{|player| activate_player(player)}
-    robots = player_names.map { |n| Robot.new username: n }
+    strategies = player_ids.map { |id| activate_player id }
+    robots = strategies.map { |s| Robot.new username: s.username }
     battle = Battle.wage name, map, robots
 
     ready = battle.prepare_for_battle! # wait for player processes to spawn up
@@ -40,6 +40,8 @@ class BattlesController
       battle.turn!
     end
     battle.save!
+
+    strategies.each { |s| s.kill }
 
     @app.redirect "/battles/#{battle.id}"
   end
@@ -77,12 +79,8 @@ class BattlesController
 
   def activate_player(id)
     s = Strategy.find(id)
-    if s
-      s.launch
-      s.username
-    else
-      # this is to handle dhendee/mwynholds manual launch
-      id
-    end
+    raise "Missing strategy: #{id}" unless s
+    s.launch
+    s
   end
 end
