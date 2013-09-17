@@ -70,16 +70,10 @@ footer {
 
 footer a, footer small {
   color: #fff;
-  opacity: .2;
 }
 
 footer a:hover, footer a:hover small {
-  opacity: 1;
   text-decoration: none;
-}
-
-footer small {
-  display: block;
 }
 
 .robot {
