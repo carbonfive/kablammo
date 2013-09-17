@@ -84,7 +84,7 @@ class Battle
           json.(turn.board, :width, :height)
           visible_robots = turn.board.robots.select { |robot| the_robot.can_see? robot }
           json.robots visible_robots do |robot|
-            json.(robot, :last_turn, :username, :x, :y, :rotation, :direction, :ammo, :armor, :abilities)
+            json.(robot, :last_turn, :username, :x, :y, :rotation, :ammo, :armor, :abilities)
             json.fire do
               json.(robot.fire, :x, :y, :hit)
             end if robot.fire

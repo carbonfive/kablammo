@@ -24,7 +24,7 @@ class BattlesController
       width: 9,
       height: 9,
       walls: [ [2,3], [2,5], [6,3], [6,5] ].map {|w| Wall.new.at(*w) },
-      starts: [ [0,4,0,3], [8,4,180,1] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
     })
     player_names = player_ids.map{|player| activate_player(player)}
     robots = player_names.map { |n| Robot.new username: n }

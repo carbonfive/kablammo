@@ -11,7 +11,6 @@ class Robot
   key :x,         Integer, required: true
   key :y,         Integer, required: true
   key :rotation,  Integer, required: true
-  key :direction, Integer, required: true
   key :ammo,      Integer, required: true
   key :armor,     Integer, required: true
   key :abilities, Array,   required: true
@@ -24,7 +23,6 @@ class Robot
   def initialize(*args)
     self.last_turn = '*'
     self.rotation = 0
-    self.direction = -1
     self.ammo = MAX_AMMO
     self.armor = MAX_ARMOR
     self.abilities = []
@@ -122,6 +120,6 @@ class Robot
   def doppel
     power_ups = self.power_ups.map {|p| p.doppel}
     Robot.new last_turn: last_turn, username: username, x: x, y: y, ammo: ammo, armor: armor,
-              rotation: rotation, direction: direction, abilities: abilities, power_ups: power_ups
+              rotation: rotation, abilities: abilities, power_ups: power_ups
   end
 end

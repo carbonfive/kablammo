@@ -1,9 +1,8 @@
 class Start
-  attr_accessor :position, :rotation, :direction
+  attr_accessor :position, :rotation
 
-  def initialize(x, y, rotation, direction)
+  def initialize(x, y, rotation)
     @position = Pixel.new x, y
     @rotation = rotation
-    @direction = direction
   end
 end

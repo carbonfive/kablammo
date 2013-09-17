@@ -42,7 +42,6 @@ class Board
 
   def add_robot(robot, start)
     r = robot.at start.position.x, start.position.y
-    r.direction = start.direction
     r.rotation = start.rotation
     self.robots << r
   end
