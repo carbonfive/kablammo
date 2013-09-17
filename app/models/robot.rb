@@ -41,7 +41,7 @@ class Robot
   end
 
   def strategy
-    Strategy::Base.lookup @username
+    Strategy.lookup @username
   end
 
   def rest!

@@ -27,6 +27,10 @@ class Strategy
     self
   end
 
+  def self.lookup(username)
+    Strategy.where(username: username).first
+  end
+
   def launch
     puts "Lauching #{username}"
     start_code_file_destination = File.join(path, @@start_code_file_name)
@@ -93,6 +97,11 @@ class Strategy
 
   def sha
     Kablammo::Git.sha(path)
+  end
+
+  def score
+    scores = Battle.for_strategy(self).map(&:score).reject(&:empty?)
+    scores.reduce(0) { |total, score| total += ( score[username] || 0 ) } || 0
   end
 
   private
