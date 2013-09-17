@@ -5,12 +5,13 @@ class Battle
 
   include MongoMapper::Document
 
-  key :name, String, required: true
+  key :name,      String, required: true
+  key :usernames, Array,  required: true
 
   many :turns
 
   def self.wage(name, map, robots)
-    battle = Battle.new name: name
+    battle = Battle.new name: name, usernames: robots.map(&:username)
     turn = Turn.new
     turn.board = Board.draw map, robots
     turn.save!
@@ -19,13 +20,13 @@ class Battle
     battle
   end
 
+  def self.for_strategy(strategy)
+    Battle.where(usernames: strategy.username).all
+  end
+
   def prepare_for_battle!
     engine.prepare_for_battle!
     self
-  end
-
-  def find_by_id(id)
-    self.find id
   end
 
   def engine
@@ -69,7 +70,7 @@ class Battle
 
     # if more than one survivor, survivors get a :tie score
     survivors_booty = (survivors.count > 1) ? SCORING[:tie] : SCORING[:win]
-    Hash[ survivors.map(&:username).zip ([survivors_booty] * survivors.length) +
+    Hash[ survivors.map(&:username).zip([survivors_booty] * survivors.length) +
           losers.map(&:username).zip([SCORING[:loss]] * losers.length) ]
   end
 

@@ -5,16 +5,12 @@ class StrategiesController
   end
 
   def index
-    def tally inp; h = Hash.new(0); inp.each {|score| score.each{|k,v| h[k] += v.to_i}}; h; end
-
     strategies = Strategy.all
 
     # compute wins/losses
     t = Time.now.to_f
-    scores = Battle.all.map(&:score).reject(&:empty?)
-    scoreboard = tally scores
+    scoreboard = Hash[ strategies.map {|s| [s.username, s.score]} ]
     puts "StrategiesController spent %0.3f ms to compute scoreboard" % (Time.now - t.to_f)
-
 
     # sort strategies by score
     strategies.sort_by!{ |s| -scoreboard[s.username] || 1000000 } # put nil last
