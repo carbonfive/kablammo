@@ -1,4 +1,8 @@
-<h1>Leaderboard</h1>
+<h1>
+  Leaderboard
+  <a href="<%= url('/strategies/new') %>" class="btn btn-primary pull-right">Enter Your Robot</a>
+</h1>
+
 
 <table class="table leaderboard">
   <tbody>
@@ -6,9 +10,8 @@
       <tr>
         <td>
           <%= i + 1 %>.
-        </td>
-        <td>
           <a href="/strategies/<%= strategy.id %>">
+            <img class="gravatar" src="<%= strategy.gravatar %>">
             <%= strategy.username %>
           </a>
         </td>
@@ -19,7 +22,3 @@
     <% end %>
   </tbody>
 </table>
-
-<p>
-  <a href="<%= url('/strategies/new') %>" class="btn btn-primary">Enter Your Robot</a>
-</p>
