@@ -6,9 +6,11 @@
 
 <canvas id="robot" class="robot"></canvas>
 <h3><%= strategy.github_url %></h3>
+<h4><%= strategy.sha %></h4>
 
 <form action="/strategies/<%= strategy.id %>/pull">
-  <input type="submit" class="btn btn-primary" value="Fetch Latest Code">
+  <input type="submit" class="btn btn-default" value="Fetch Latest Code">
+  <a href="<%= url('/battles/new') %>" class="btn btn-primary">Go to the Arena</a>
 </form>
 
 <script type="text/javascript">
