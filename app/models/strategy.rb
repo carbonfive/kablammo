@@ -27,17 +27,27 @@ class Strategy
     self
   end
 
+  def self.lookup(username)
+    Strategy.where(username: username).first
+  end
+
   def launch
     puts "Lauching #{username}"
     start_code_file_destination = File.join(path, @@start_code_file_name)
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
+    #clone_repo
     puts @@start_code_file_location
     FileUtils.cp @@start_code_file_location, start_code_file_destination
-    cmd = "cd #{path} && bundle && ruby #{@@start_code_file_name} #{username}"
+    cmd = "cd #{path} && git pull && bundle && ruby #{@@start_code_file_name} #{username}"
     puts cmd
-    Process.spawn(cmd)
+    @pid = Process.spawn(cmd)
     puts "Launched #{username}"
+  end
+
+  def kill
+    puts "Killing #{username}"
+    Process.kill 'HUP', @pid
   end
 
   def url= url
@@ -93,6 +103,11 @@ class Strategy
 
   def sha
     Kablammo::Git.sha(path)
+  end
+
+  def score
+    scores = Battle.for_strategy(self).map(&:score).reject(&:empty?)
+    scores.reduce(0) { |total, score| total += ( score[username] || 0 ) } || 0
   end
 
   private
