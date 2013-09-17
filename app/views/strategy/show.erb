@@ -1,5 +1,8 @@
 <h1>Examine Robot</h1>
-<h2><%= strategy.username %></h2>
+<h2>
+  <img class="gravatar" src="<%= strategy.gravatar %>">
+  <%= strategy.username %>
+</h2>
 
 <canvas id="robot" class="robot"></canvas>
 <h3><%= strategy.github_url %></h3>

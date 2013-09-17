@@ -96,3 +96,15 @@ code {
   color: #ef5a28;
   background-color: #333;
 }
+
+.gravatar {
+  width: 48px;
+  height: 48px;
+  margin: 0 10px 0 0;
+  border: 1px solid #444;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.leaderboard .gravatar {
+  margin: 0 10px;
+}
