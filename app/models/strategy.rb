@@ -36,8 +36,6 @@ class Strategy
     start_code_file_destination = File.join(path, @@start_code_file_name)
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
-    #clone_repo
-    puts @@start_code_file_location
     FileUtils.cp @@start_code_file_location, start_code_file_destination
     cmd = "cd #{path} && git pull && bundle && ruby #{@@start_code_file_name} #{username}"
     puts cmd
@@ -84,8 +82,12 @@ class Strategy
     end
   end
 
+  def repo_exists?
+    File.exists? path
+  end
+
   def delete_repo
-    if File.exists?(path)
+    if repo_exists?
       FileUtils.rm_rf(path)
     end
   end

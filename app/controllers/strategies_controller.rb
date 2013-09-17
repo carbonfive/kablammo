@@ -38,6 +38,7 @@ class StrategiesController
 
   def show(id)
     strategy = Strategy.find(id)
+    strategy.clone_repo unless strategy.repo_exists?
     erb :'strategy/show', locals: { strategy: strategy, active_nav: 'robots' }
   end
 

@@ -12,7 +12,7 @@
           <%= i + 1 %>.
         </td>
         <td>
-          <a href="/strategies/<%= strategy.id %>"><img class="gravatar" src="<%= strategy.gravatar %>"></a>
+          <a href="/strategies/<%= strategy.id %>"><img class="gravatar" src="<%= strategy.gravatar rescue nil %>"></a>
           <a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a>
         </td>
         <td>
