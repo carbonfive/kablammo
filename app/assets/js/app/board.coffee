@@ -2,6 +2,7 @@ class kablammo.Board
   constructor: (@parent, @args) ->
     @el = '.board'
     @viz = @createVisualization()
+    @viz.addEventListener 'hit', ((data) -> console.log('hit',data))
 
   $el: ->
     @parent.$el().find @el

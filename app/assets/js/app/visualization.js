@@ -5,6 +5,21 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   var ch = canvas.height = canvas.offsetHeight;
   var ctx = canvas.getContext('2d');
 
+  var eventDispatcher = (function() {
+    var events = {}, out = {};
+    out.addEventListener = function addEventListener( type, listener ) {
+      (events[type] = (events[type] || [])).push(listener);
+    }
+    out.trigger = function trigger( type ) {
+      var listeners = events[type], 
+          payload = Array.prototype.slice.call(arguments,1);
+      if (listeners)
+        for ( var i=0,listener; listener = listeners[i]; i++ )
+          listener.apply(null, payload);
+    }
+    return out;
+  })();
+
   var GRID_WIDTH = gridWidth;
   var GRID_HEIGHT = gridHeight;
   var SHADOW_OFFSET = .07*ch/GRID_HEIGHT;
@@ -19,7 +34,11 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		tw: .65 * ROBOT_WIDTH,
 		tc: .25 * ROBOT_WIDTH,
 		inx: .15 * ROBOT_WIDTH,
-		iny: .6 * ROBOT_WIDTH
+		iny: .6 * ROBOT_WIDTH,
+    turretY: .2*ROBOT_WIDTH,
+    gunStart: .6*ROBOT_WIDTH,
+    gunEnd: .7*ROBOT_WIDTH,
+    gunWidth: .2*ROBOT_WIDTH
   }
 
   var COLORS = [
@@ -28,6 +47,19 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	{r:25,g:222,b:18},
   	{r:255,g:175,b:36}
   ]
+
+  var hitGradientColors = [
+    [{r:255, g:200, b:100}, 1],
+    [{r:255, g:200, b:100}, 10],
+    [{r:255, g:255, b:255}, 20]
+  ]
+
+  // COLOR MATH
+  function colorString(c,alpha) { return 'rgba('+(c.r|0)+','+(c.g|0)+','+(c.b|0)+','+alpha+')' }
+  function interp( a, b, x ) { return parseInt(a + (b-a) * x); }
+  function interpColor( c1, c2, x ) {
+    return {r:interp(c1.r,c2.r,x), g:interp(c1.g,c2.g,x), b:interp(c1.b,c2.b,x)}
+  }
 
 	var GRID_POINTS = [
 		{left:{x:-TANK_DIMENSIONS.tw, y:-.98*ROBOT_WIDTH},
@@ -138,7 +170,8 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		ctx.beginPath();
 		ctx.arc(0,0, ROBOT_WIDTH/2, 0, 2*Math.PI, true);
 		ctx.fill();
-		ctx.fillRect(-gunWidth/2,-.6*ROBOT_WIDTH,gunWidth,-.7*ROBOT_WIDTH);
+    ctx.fillRect(-TANK_DIMENSIONS.gunWidth/2, -TANK_DIMENSIONS.gunStart,
+                  TANK_DIMENSIONS.gunWidth,-TANK_DIMENSIONS.gunEnd);
   }
 
   function offStyle() {
@@ -170,6 +203,18 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   	(( tank.id & (1<<15) ) ? decorateStyle : offStyle)( tank );
 		ctx.fillRect(-.6*gunWidth/2,-1.05*ROBOT_WIDTH,.6*gunWidth,-.2*ROBOT_WIDTH);
+  }
+
+  // finds end of gun in canvas coordinates
+  function gunEnd( tank ) {
+    return {
+      x: (tank.x+.5)*cw/GRID_WIDTH + ROBOT_SCALE*
+          (-Math.sin(tank.bodyRotation)*TANK_DIMENSIONS.turretY + 
+            (TANK_DIMENSIONS.gunStart+TANK_DIMENSIONS.gunEnd)*Math.sin(tank.turretAngle)),
+      y: (tank.y+.5)*ch/GRID_HEIGHT +  ROBOT_SCALE*
+          (Math.cos(tank.bodyRotation)*TANK_DIMENSIONS.turretY - 
+            (TANK_DIMENSIONS.gunStart+TANK_DIMENSIONS.gunEnd)*Math.cos(tank.turretAngle))
+    }
   }
 
   function renderTank( tank, time ) {
@@ -240,13 +285,11 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		  tankBase(tank);
 
 
-			var turretY = .2*ROBOT_WIDTH;
-
   		ctx.save();
   			// turret shadow
 				ctx.save();
 		  		ctx.rotate(tank.bodyRotation)
-					ctx.translate(0,turretY);
+					ctx.translate(0,TANK_DIMENSIONS.turretY);
 		  		ctx.rotate(-tank.bodyRotation)
 					ctx.translate(shadowOffset,-shadowOffset);
 					ctx.rotate(tank.turretAngle);
@@ -260,7 +303,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 	  		// turret
 				ctx.save();
 		  		ctx.rotate(tank.bodyRotation)
-					ctx.translate(0,turretY);
+					ctx.translate(0,TANK_DIMENSIONS.turretY);
 		  		ctx.rotate(-tank.bodyRotation)
 					ctx.rotate(tank.turretAngle);
 				  ctx.fillStyle = 'rgba(235,235,235,.7)';
@@ -269,12 +312,24 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 				  decorateTurret( tank );
 
 			  	if (turn.fire && subStep >= .75) {
+            if (turn.fire.hit) {
+              var gunPos = gunEnd(tank);
+              var dx = (turn.fire.x+1)*cw/GRID_WIDTH - gunPos.x;
+              var dy = (turn.fire.y+1)*ch/GRID_HEIGHT - gunPos.y;
+              var distance = Math.sqrt(dx*dx + dy*dy);
+              if (! distance) distance = 10000;
+            } else {
+              var distance = 10000;
+            }
+
+            ctx.globalAlpha = 1;
+
 			  		decorateStyle(tank);
 			  		ctx.shadowColor = '#fff';
 			  		ctx.lineWidth = 16;
 			  		ctx.beginPath();
 			  		ctx.moveTo(0, -1.4*ROBOT_WIDTH);
-			  		ctx.lineTo(0, -10000 )
+			  		ctx.lineTo(0, -distance/ROBOT_SCALE )
 			  		ctx.stroke();
 			  	}
 
@@ -285,18 +340,81 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	ctx.restore();
   }
 
+  function renderTankDamage(tank, time) {
+    ctx.save();
+      ctx.translate((tank.x+.5)*cw/GRID_WIDTH, (tank.y+.5)*ch/GRID_HEIGHT);
+      ctx.scale(ROBOT_SCALE, ROBOT_SCALE);
+
+      ctx.globalAlpha = 1;
+      var scaledTime=(time%1-.75)*80;
+
+      var startTime=0, endTime=hitGradientColors[0][1], 
+        startColor = hitGradientColors[0][0], endColor = hitGradientColors[1][0];
+      for (var i=1,color; color=hitGradientColors[i]; i++) {
+        if (scaledTime < endTime) {
+          startColor = hitGradientColors[i-1][0];
+          endColor = color[0];
+          break;
+        }
+        startTime = endTime;
+        endTime += color[1];
+      }
+      var color = interpColor(startColor, endColor, (scaledTime-startTime)/(endTime-startTime) )
+      ctx.fillStyle = colorString(color,.5+2*(time%1-.75));
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#fff';
+      tankBase(tank);
+    ctx.restore();    
+  }
+
   var startTime = 0;
   var gameTime = 0;
   var currentTurn = -1;
+  var visibility = 1;
+  var eventsSent = {};
   function render( time ) {
+    var firing = false;
+
   	if ( startTime == 0 ) startTime = time;
   	gameTime = (time - startTime) / 1000;
 		for (var i=0,tank; tank = tanks[i]; i++)
       if (gameTime >= tank.turns.length)
         return false;
 
-  	ctx.fillStyle = '#383838';
+    var hits = {}, tankHit=false;
+    if (gameTime%1 > .75) {
+      for (var i=0,tank; tank=tanks[i]; i++) {
+        var turn = tank.turns[gameTime|0];
+        if (turn.fire) {
+          firing = true;
+          if (turn.fire.hit) hits[turn.fire.x + ':' + turn.fire.y] = turn.username;
+        }
+      }
+    }
+    if (firing) {
+      for (var i=0,tank; tank=tanks[i]; i++) {
+        var turnIndex = gameTime|0;
+        var turn = tank.turns[turnIndex];
+        var shooter = hits[turn.x+':'+turn.y];
+        if (shooter) {
+          tankHit = true;
+          if (!eventsSent[shooter+':'+(gameTime|0)]) {
+            eventsSent[shooter+':'+(gameTime|0)] = true;
+            eventDispatcher.trigger('hit', {shooter:shooter, target:tank.turns[0].username, turn:gameTime|0})
+          }
+        }
+      }
+    }
+
+    visibility = tankHit ? .5 : 1 - (1-visibility)*.9;
+
+    var grey = (56*visibility)|0;
+  	ctx.fillStyle = 'rgb('+grey+','+grey+','+grey+')';
   	ctx.fillRect(0,0,cw,ch);
+
+    ctx.globalAlpha = .25 + .75*visibility;
 
   	for (var i=0; i<GRID_WIDTH; i++) {
   		for (var j=GRID_HEIGHT-1; j>=0; j--) {
@@ -336,6 +454,15 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
       }
     }
 
+    if (firing) {
+      for (var i=0,tank; tank=tanks[i]; i++) {
+        var turn = tank.turns[gameTime|0];
+        if (hits[turn.x+':'+turn.y]) {
+          renderTankDamage(tank, gameTime);
+        }
+      }
+    }
+
     return true;
   }
 
@@ -356,5 +483,5 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   function stop() {
   }
 
-  return { draw:draw, turn:turn, play:play, stop:stop };
+  return { draw:draw, turn:turn, play:play, stop:stop, addEventListener:eventDispatcher.addEventListener };
 }
