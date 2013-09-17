@@ -45,7 +45,7 @@
 # used by “pumactl” to query and control the server.
 #
 # state_path '/u/apps/lolcat/tmp/pids/puma.state'
-state_path '/home/kablammo/apps/kablammo/shared/sockets/puma.state'
+state_path '/home/deploy/apps/kablammo/shared/sockets/puma.state'
 
 # Redirect STDOUT and STDERR to files specified. The 3rd parameter
 # (“append”) specifies whether the output is appended, the default is
@@ -65,15 +65,15 @@ state_path '/home/kablammo/apps/kablammo/shared/sockets/puma.state'
 #
 # The default is “0, 16”.
 #
-# threads 0, 16
+threads 4, 16
 
 # Bind the server to “url”. “tcp://”, “unix://” and “ssl://” are the only
 # accepted protocols.
 #
 # The default is “tcp://0.0.0.0:9292”.
 #
-# bind 'tcp://0.0.0.0:9292'
-# bind 'unix:///var/run/puma.sock'
+bind 'tcp://0.0.0.0:9292'
+bind 'unix:///home/deploy/apps/kablammo/shared/sockets/puma.sock'
 # bind 'unix:///var/run/puma.sock?umask=0777'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
 
@@ -87,15 +87,17 @@ state_path '/home/kablammo/apps/kablammo/shared/sockets/puma.state'
 #
 # This can be called multiple times to add code each time.
 #
-# on_restart do
-#   puts 'On restart...'
-# end
+
+on_restart do
+  # TODO redis
+  # TODO mongodb
+end
 
 # Command to use to restart puma. This should be just how to
 # load puma itself (ie. 'ruby -Ilib bin/puma'), not the arguments
 # to puma, as those are the same as the original process.
 #
-# restart_command '/u/app/lolcat/bin/restart_puma'
+restart_command '/home/deploy/apps/kablammo/current/bin/puma'
 
 # === Cluster mode ===
 
