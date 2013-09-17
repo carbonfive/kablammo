@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'thin'
+gem 'puma'
 gem 'mongo_mapper'
 gem 'bson_ext'
 gem 'sinatra-assetpack', require: 'sinatra/assetpack'
