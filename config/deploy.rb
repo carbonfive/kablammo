@@ -20,7 +20,6 @@ set :default_environment, {
 
 server 'kablammo.io', :app, :web, :db, primary: true
 
-
 namespace :deploy do
   task :finalize_update do
   end
