@@ -1,36 +1,42 @@
 $(document).ready(function() {
-  $('.markdown').each(function() {
-    var markedDown = $(this);
-    markedDown.html(markdown.toHTML(markedDown.html()));
-  });
-
   if ($('#create-battle').length > 0) {
     $('#create-battle .random').on('click', function() {
-      var selects = $('#create-battle select');
-      selects.each(function(i) {
+      var selects = $('#create-battle select:visible');
+      var indexesToSelectFrom = [];
+      for (var i = 0; i < selects.eq(0).find('option').length; i++) {
+        indexesToSelectFrom[i] = i;
+      }
+      indexesToSelectFrom.splice(0, 1); // remove the blank option
+      selects.each(function() {
         var select = $(this);
-        var options = select.find('option');
-        if (i > 0) {
-          var previousSelection = selects.eq(i - 1).find(':selected').val();
-          randomizeOptions(options, previousSelection);
-        } else {
-          randomizeOptions(options, null);
-        }
+        var indexToSelect = Math.floor(Math.random() * indexesToSelectFrom.length);
+        var selectedIndex = indexesToSelectFrom[indexToSelect];
+        select.find('option').eq(selectedIndex).attr('selected', 'selected');
+        indexesToSelectFrom.splice(indexToSelect, 1);
       });
       return true;
     });
 
-    function randomizeOptions(options, forbiddenValue) {
-      if (options.length > 1) {
-        options.removeAttr('selected');
-        options.eq(Math.floor(Math.random() *  options.length)).attr('selected', 'selected');
-        if (forbiddenValue && options.parent().find(':selected').val() == forbiddenValue) {
-          randomizeOptions(options, forbiddenValue);
+    $('.add-robot').on('click', function() {
+      var button = $(this);
+      var hidden = $('.form-group:hidden');
+      if (hidden.length > 0) {
+        hidden.eq(0).removeClass('hidden');
+        if (hidden.length == 1) {
+          button.hide();
         }
       }
-    }
+      return false;
+    });
 
     if ($('body').hasClass('autoplay')) {
+      var hidden = $('.form-group:hidden');
+      hidden.each(function() {
+        var field = $(this);
+        if (Math.random() > .5) {
+          field.removeClass('hidden');
+        }
+      });
       $('#create-battle .random').trigger('click');
     }
   }

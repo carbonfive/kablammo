@@ -9,6 +9,7 @@
   <div class="form-group">
     <label for="player1">Robot 1</label>
     <select name="player1" id="player1" class="form-control">
+      <option value="">Select Robot&hellip;</option>
       <% strategies.each do |s| %>
         <option value="<%= s.id %>"><%= s.visible_name %></option>
       <% end %>
@@ -17,13 +18,28 @@
   <div class="form-group">
     <label for="player2">Robot 2</label>
     <select name="player2" id="player2" class="form-control">
+      <option value="">Select Robot&hellip;</option>
       <% strategies.each_with_index do |s, i| %>
         <option value="<%= s.id %>"><%= s.visible_name %></option>
       <% end %>
     </select>
   </div>
+  <% (3..4).each do |c| %>
+    <% if (c <= strategies.length) %>
+      <div class="form-group hidden">
+        <label for="player<%= c %>">Robot <%= c %></label>
+        <select name="player<%= c %>" id="player<%= c %>" class="form-control">
+          <option value="">(None)</option>
+          <% strategies.each_with_index do |s, i| %>
+            <option value="<%= s.id %>"><%= s.username %></option>
+          <% end %>
+        </select>
+      </div>
+    <% end %>
+  <% end %>
   <p>
     <button type="submit" class="btn btn-primary">Fight!</button>
-    <button type="submit" class="btn random">Random</button>
+    <button type="submit" class="btn random">Random Robots</button>
+    <button class="btn add-robot pull-right">Add Another Robot to Arena</button>
   </p>
 </form>
