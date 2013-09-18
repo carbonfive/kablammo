@@ -13,10 +13,10 @@
         </td>
         <td>
           <a href="/strategies/<%= strategy.id %>"><img class="gravatar" src="<%= strategy.gravatar rescue nil %>"></a>
-          <a href="/strategies/<%= strategy.id %>"><%= strategy.username %></a>
+          <a href="/strategies/<%= strategy.id %>"><%= strategy.visible_name %></a>
         </td>
         <td>
-          <%= scoreboard[strategy.username].nil? ? 'N/A' : scoreboard[strategy.username] %>
+          <%= scoreboard[strategy.id].nil? ? 'N/A' : scoreboard[strategy.id] %>
         </td>
       </tr>
     <% end %>

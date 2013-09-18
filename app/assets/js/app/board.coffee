@@ -33,7 +33,7 @@ class kablammo.Board
       turnsLogContainer = $('.turns-log-container')
       turnsLog.append("<tr><td>#{turn.index}</td><td>#{robot.username}</td><td>#{turn.turns[i].last_turn}</td></tr>")
       turnsLogContainer.scrollTop(turnsLogContainer[0].scrollHeight)
-      stats = $("#stats-#{robot.username}")
+      stats = $("#stats-#{robot.identifier}")
       stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
       ammos = stats.find('.ammo')
       ammos.find("li:lt(#{robot.ammo})").removeClass('ammo-empty').addClass('ammo-full')

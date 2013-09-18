@@ -77,7 +77,7 @@ class BattlesController
     map = maps[rand(maps.length)]
 
     strategies = activate_strategies ids
-    robots = strategies.map { |s| Robot.new username: s.username }
+    robots = strategies.map { |s| Robot.new username: s.name }
     battle = Battle.wage map, robots
 
     ready = battle.prepare_for_battle! # wait for player processes to spawn up

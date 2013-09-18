@@ -3,7 +3,7 @@ json.turns battle.turns do |turn|
   json.board do
     json.(turn.board, :height, :width)
     json.robots turn.board.robots do |robot|
-      json.(robot, :last_turn, :username, :x, :y, :rotation, :ammo, :armor, :abilities)
+      json.(robot, :identifier, :last_turn, :username, :x, :y, :rotation, :ammo, :armor, :abilities)
       json.fire do
         json.(robot.fire, :x, :y, :hit)
       end if robot.fire

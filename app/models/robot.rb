@@ -30,6 +30,10 @@ class Robot
     super
   end
 
+  def identifier
+    username.hash.abs.to_s
+  end
+
   def assign_abilities(abilities)
     new_abilities = self.abilities + abilities
     self.abilities = new_abilities.uniq

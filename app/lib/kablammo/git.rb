@@ -25,10 +25,8 @@ module Kablammo
           g = ::Git.open(path)
           g.object('HEAD')
         rescue ::Git::GitExecuteError => ex
-          puts "[repo_exists] Caught", ex
           r = false
         rescue ArgumentError => ex
-          puts "[repo_exists] Caught", ex
           r = false
         end
         r

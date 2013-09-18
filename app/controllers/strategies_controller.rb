@@ -9,11 +9,11 @@ class StrategiesController
 
     # compute wins/losses
     t = Time.now.to_f
-    scoreboard = Hash[ strategies.map {|s| [s.username, s.score]} ]
+    scoreboard = Hash[ strategies.map {|s| [s.id, s.score]} ]
     puts "StrategiesController spent %0.3f ms to compute scoreboard" % (Time.now - t.to_f)
 
     # sort strategies by score
-    strategies.sort_by!{ |s| -scoreboard[s.username] || 1000000 } # put nil last
+    strategies.sort_by!{ |s| -scoreboard[s.id] || 1000000 } # put nil last
     erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard, active_nav: 'robots' }
   end
 
@@ -26,8 +26,15 @@ class StrategiesController
 
   def create
     url = @app.request['github_url']
-    # given a github repo, clone it locally
-    strategy = Strategy.find_or_create_by_url(url)
+    name = @app.request['name']
+    email = @app.request['email']
+
+    if Strategy.count(name: name) > 0
+      @app.flash[:error] = 'Your name must be unique.  Is your robot here?'
+      @app.redirect '/strategies' and return
+    end
+
+    strategy = Strategy.create github_url: url, name: name, email: email
     if strategy.errors.any?
       puts "Found errors", strategy.errors.full_messages
       erb :"strategy/new", locals: { strategy: strategy, active_nav: 'robots' }

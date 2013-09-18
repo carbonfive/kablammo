@@ -10,7 +10,7 @@
     <label for="player1">Robot 1</label>
     <select name="player1" id="player1" class="form-control">
       <% strategies.each do |s| %>
-        <option value="<%= s.id %>"><%= s.username %></option>
+        <option value="<%= s.id %>"><%= s.visible_name %></option>
       <% end %>
     </select>
   </div>
@@ -18,7 +18,7 @@
     <label for="player2">Robot 2</label>
     <select name="player2" id="player2" class="form-control">
       <% strategies.each_with_index do |s, i| %>
-        <option value="<%= s.id %>"><%= s.username %></option>
+        <option value="<%= s.id %>"><%= s.visible_name %></option>
       <% end %>
     </select>
   </div>

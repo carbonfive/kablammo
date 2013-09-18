@@ -20,7 +20,7 @@ class Battle
   end
 
   def self.for_strategy(strategy)
-    Battle.where(usernames: strategy.username).all
+    Battle.where(usernames: strategy.name).all
   end
 
   def prepare_for_battle!

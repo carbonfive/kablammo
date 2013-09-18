@@ -10,56 +10,51 @@ class Strategy
   cattr_accessor :start_code_file_name
   cattr_accessor :start_code_file_location
 
-  key :username, String, required: true, unique: true
-  key :github_url, String, required: true, unique: true
+  key :github_url, String, required: true
+  key :name,       String, required: true, unique: true
+  key :email,      String, required: true
+
+  key :username,   String, required: true
+  key :path,       String, required: true   # local path where we've cloned this
+
   validates_format_of :github_url, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
 
-  # local path where we've cloned this
-  key :path, String, required: true
-
+  before_validation :update_repo_properties
   before_save :fetch_repo
   after_destroy :delete_repo
 
-  def initialize(url = nil)
-    if url
-      self.url = url
-    end
-    self
+  def self.lookup(username)
+    Strategy.where(name: username).first
   end
 
-  def self.lookup(username)
-    Strategy.where(username: username).first
+  def visible_name
+    "#{name} - #{username}"
   end
 
   def launch
-    print "Lauching #{username}... "
+    print "Lauching #{name} by #{username}... "
     start_code_file_destination = File.join(path, @@start_code_file_name)
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
     FileUtils.cp @@start_code_file_location, start_code_file_destination
     Bundler.with_clean_env do
-      cmd = "cd #{path} && bundle exec ruby #{@@start_code_file_name} #{username}"
+      cmd = "cd '#{path}' && bundle exec ruby '#{@@start_code_file_name}' '#{name}'"
       @pid = Process.spawn(cmd)
       Process.detach(@pid)
     end
     puts "done (pid #{@pid})"
   end
 
-  def url= url
-    username = get_github_username(url)
+  def update_repo_properties
+    username = get_github_username(github_url)
     if username
-      path = File.join( @@strategies_location, username )
+      path = File.join( @@strategies_location, username, name )
       FileUtils.mkdir_p path
-
       self.username = username
-      self.github_url = url
-      self.path = File.join path, get_github_repo_name(url)
+      self.path = File.join path, get_github_repo_name(github_url)
+    else
+      puts "ERROR: Cannot get github username for repo: #{github_url}"
     end
-  end
-
-  def self.find_or_create_by_url(url)
-    s = where(github_url: url).first
-    s ||= Strategy.create(url)
   end
 
   def github_url_valid?
@@ -91,7 +86,7 @@ class Strategy
 
   def fetch_repo(opts = {})
     # may want some error protection around this system command
-    print "Getting latest code for #{username}... "
+    print "Getting latest code for #{visible_name}... "
     begin
       Kablammo::Git.pull_or_clone github_url, path
     rescue Git::GitExecuteError => ex
