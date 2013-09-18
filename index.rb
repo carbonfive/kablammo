@@ -15,7 +15,8 @@ class KablammoServer < Sinatra::Base
     serve '/img',    from: 'app/assets/img'
 
     js :application, '/js/application.js', [
-      '/js/vendor/**/*.js',
+      '/js/vendor/jquery-2.0.3.js',
+      '/js/vendor/*.js',
       '/js/app/ext.js',
       '/js/app/battle.js',
       '/js/app/board.js',
@@ -25,7 +26,7 @@ class KablammoServer < Sinatra::Base
 
     css :application, '/css/application.css', [
       '/css/bootstrap.min.css',
-      '/css/**/*.css'
+      '/css/*.css'
     ]
   }
 end

@@ -14,6 +14,7 @@
               avatar.draw();
             })
           </script>
+          <img class="gravatar" src="<%= robot.strategy.gravatar %>?s=170">
           <%= robot.username %> 
           <small>
             <%= robot.strategy.score %>pts
@@ -31,10 +32,21 @@
         </ul>
       </div>
     <% end %>
-    <div class="turns">
+    <div class="table turns-log-container">
+      <table class="turns-log">
+      </table>
     </div>
   </div>
 </div> 
+
+<div id="results" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
   $(function() {
