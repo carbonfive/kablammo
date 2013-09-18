@@ -1,4 +1,3 @@
-
 def usage
   puts "Usage: ruby index.rb <channel> <strategy>"
   exit 1
@@ -11,9 +10,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.require 'default'
 
-require './lib/index'
-
-require './player.rb'
+require 'redis_message_capsule'
 
 strategy = Player.load_strategy username
 
