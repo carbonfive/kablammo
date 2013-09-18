@@ -29,6 +29,10 @@ class Battle
     self
   end
 
+  def finish!
+    engine.finish!
+  end
+
   def engine
     @engine ||= Engine::Engine.instance(self)
   end

@@ -41,13 +41,10 @@ class Strategy
       cmd = "cd #{path} && git pull && bundle && bundle exec ruby #{@@start_code_file_name} #{username}"
       puts cmd
       @pid = Process.spawn(cmd)
+      Process.detach(@pid)
+      puts "#{@pid} process started"
     end
     puts "Launched #{username}"
-  end
-
-  def kill
-    puts "Killing #{username}"
-    Process.kill 'HUP', @pid
   end
 
   def url= url

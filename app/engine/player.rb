@@ -77,6 +77,8 @@ module Engine
     end
 
     def sign_off
+      return if @signed_off
+      @signed_off = true
       if robot.alive?
         puts "Winner - #{robot.username}!"
         send :winner
