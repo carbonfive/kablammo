@@ -72,7 +72,7 @@ class Robot
   end
 
   def alive?
-    armor >= 0
+    armor > 0
   end
 
   def dead?

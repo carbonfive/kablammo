@@ -47,7 +47,7 @@ class kablammo.Board
     dead = []
     alive = []
     _(robots).each (robot) ->
-      if robot.armor < 0
+      if robot.armor <= 0
         dead.push robot
       else
         alive.push robot
