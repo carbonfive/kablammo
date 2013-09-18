@@ -15,7 +15,8 @@ class BattlesController
   def create()
     player_ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
     if player_ids.length < 2
-      @app.redirect '/battles/new' and return # flash an error?
+      @app.flash[:error] = 'You cannot battle yourself. Please select a different robot.'
+      @app.redirect '/battles/new' and return
     end
 
     # get_players_from_request

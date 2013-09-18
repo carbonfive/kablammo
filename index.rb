@@ -3,12 +3,17 @@ require 'bundler'
 Bundler.require :default
 
 require 'sinatra/base'
+require 'sinatra/flash'
 require 'json'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)
 
+  enable :sessions
+
   register Sinatra::AssetPack
+  register Sinatra::Flash
+
   assets {
     serve '/js',     from: 'app/assets/js'
     serve '/css',    from: 'app/assets/css'

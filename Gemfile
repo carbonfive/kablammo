@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
+gem 'sinatra-flash'
 gem 'puma'
 gem 'mongo_mapper'
 gem 'bson_ext'
