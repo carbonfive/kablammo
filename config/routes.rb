@@ -17,6 +17,10 @@ class KablammoServer < Sinatra::Base
     BattlesController.new(self).new
   end
 
+  get '/battles/autoplay/:toggle' do |toggle|
+    BattlesController.new(self).autoplay toggle
+  end
+
   post '/battles' do
     BattlesController.new(self).create
   end

@@ -15,7 +15,7 @@ class BattlesController
   def create()
     player_ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
     if player_ids.length < 2
-      @app.flash[:error] = 'You cannot battle yourself. Please select a different robot.'
+      @app.flash[:error] = 'Robots can\'t fight themselves. Please select two different robots to battle.'
       @app.redirect '/battles/new' and return
     end
 
@@ -58,6 +58,11 @@ class BattlesController
     battle = Battle.find_by_id id
     1.upto(count) { battle.turn } if battle
     jbuilder :"battle/turn", locals: { battle: battle }
+  end
+
+  def autoplay(toggle)
+    @app.session[:autoplay] = toggle
+    @app.redirect "/battles/new"
   end
 
   private
