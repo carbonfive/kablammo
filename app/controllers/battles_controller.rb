@@ -43,6 +43,9 @@ class BattlesController
     end
     battle.save!
     battle.finish!
+    sleep 2
+
+    strategies.each { |s| s.kill }
 
     scores = battle.score.map { |username, score| "#{username}: #{score}pts" }.join(', ')
     puts "Battle complete - #{scores}"

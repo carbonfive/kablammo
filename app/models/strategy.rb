@@ -45,6 +45,20 @@ class Strategy
     puts "done (pid #{@pid})"
   end
 
+  def kill
+    if process_exists?
+      puts "Killing #{name} (#{@pid})"
+      Process.kill 'KILL', @pid
+    end
+  end
+
+  def process_exists?
+    Process.getpgid @pid
+    true
+  rescue Errno::ESRCH
+    false
+  end
+
   def update_repo_properties
     username = get_github_username(github_url)
     if username
