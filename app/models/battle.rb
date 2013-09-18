@@ -1,7 +1,6 @@
 class Battle
 
-  SCORING = { tie: 1, win: 2, loss: -2 }
-
+  SCORING = { tie: 1, win: 3, loss: 0 }
 
   include MongoMapper::Document
 
