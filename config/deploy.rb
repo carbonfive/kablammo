@@ -6,7 +6,7 @@ set :application, 'Kablammo'
 set :scm,        :git
 set :deploy_via, :copy
 set :repository, 'git@github.com:carbonfive/kablammo.git'
-set :branch,     'chores/deploy-to-production-56979742'
+set :branch,     'master'
 
 set :user,       'deploy'
 set :deploy_to,  '/home/deploy/apps/kablammo/'
