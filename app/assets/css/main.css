@@ -107,6 +107,16 @@ code {
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
 }
 
+.stats .gravatar {
+  display: none;
+}
+
+#results .gravatar {
+  width: 83px;
+  height: 83px;
+  display: inline-block;
+}
+
 .leaderboard .gravatar {
   margin: 0 10px;
 }
@@ -119,10 +129,29 @@ code {
   text-align: right;
 }
 
-.turns {
-  font-size: 85%;
+.turns-log-container {
+  font-size: 75%;
   height: 380px;
   overflow-y: scroll;
   color: #444;
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+.turns-log {
+  width: 100%;
+}
+
+.modal-content {
+  background: #222;
+  color: #fff;
+  border: 1px solid #080808;
+  border-radius: 0;
+}
+
+.modal-content h1, .modal-content h2 {
+  font-size: 63px;
+}
+
+.modal-content h2 {
+  display: inline-block;
 }

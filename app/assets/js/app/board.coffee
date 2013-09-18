@@ -4,7 +4,7 @@ class kablammo.Board
     @viz = @createVisualization()
     @viz.addEventListener 'hit', ((data) -> console.log('hit',data))
     @viz.addEventListener 'turn', (turn) => @updateStats(turn)
-    @viz.addEventListener 'gameOver', (index) => console.log('gameOver',index)
+    @viz.addEventListener 'gameOver', (turnIndex) => @gameOver(turnIndex)
 
   $el: ->
     @parent.$el().find @el
@@ -29,9 +29,10 @@ class kablammo.Board
   updateStats: (turn) =>
     board = @args[turn.index].board
     _(board.robots).each (robot, i) ->
-      $turns = $('.turns')
-      console.log(turn)
-      $turns.append("<div>Turn #{turn.index} [#{robot.username}] #{turn.turns[i].last_turn}</div>").scrollTop($turns[0].scrollHeight)
+      turnsLog = $('.turns-log')
+      turnsLogContainer = $('.turns-log-container')
+      turnsLog.append("<tr><td>#{turn.index}</td><td>#{robot.username}</td><td>#{turn.turns[i].last_turn}</td></tr>")
+      turnsLogContainer.scrollTop(turnsLogContainer[0].scrollHeight)
       stats = $("#stats-#{robot.username}")
       stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
       ammos = stats.find('.ammo')
@@ -40,6 +41,30 @@ class kablammo.Board
         ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
       else
         ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
+
+  gameOver: (turnIndex) =>
+    robots = @args[turnIndex].board.robots
+    dead = []
+    alive = []
+    _(robots).each (robot) ->
+      if robot.armor < 0
+        dead.push robot
+      else
+        alive.push robot
+    resultsBody = $('#results.modal .modal-body')
+    if alive.length == 1
+      resultsBody.append('<h1>Winner!</h1>')
+    else
+      resultsBody.append('<h1>Tie!</h1>')
+    _(alive).each (robot, i) ->
+      gravatar = $('#stats-' + robot.username + ' .gravatar')
+      resultsBody.append('<h2><img class="gravatar" src="' + gravatar.attr('src') + '"> ' + robot.username + '</h2>')
+      if i > 0
+        resultsBody.append('<hr>')
+    $('#results').modal('show')
+    setTimeout ( ->
+      window.location = '/battles/new'
+    ), 5000
 
   createWalls: ->
     walls = []
