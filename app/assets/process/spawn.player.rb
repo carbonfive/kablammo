@@ -21,8 +21,7 @@ def next_turn(strategy, args)
   strategy.execute_turn battle
 end
 
-def shutdown(process, msg=nil)
-  puts "\n\n#{msg}" if msg
+def shutdown(process)
   exit 0
 end
 
@@ -37,12 +36,11 @@ process = Thread.current
 
 receive_channel.register do |msg|
   if 'ready?'.eql? msg
-    puts 'Battle is on!'
     send_channel.send :ready
   elsif 'loser'.eql? msg
-    shutdown process, "#{username} you lost."
+    shutdown process
   elsif 'winner'.eql? msg
-    shutdown process, "#{username} you won! Of Course."
+    shutdown process
   elsif 'shutdown'.eql? msg
     shutdown process
   else
@@ -52,12 +50,7 @@ receive_channel.register do |msg|
   end
 end
 
-puts "Welcome to Kablammo, #{username}!"
-
 begin
   sleep
 rescue SignalException => e
-  puts
-  puts 'You Quit'
 end
-puts "Game Over"

@@ -19,9 +19,9 @@ module Engine
         return false
       end
 
+      puts "Players ready?"
       @underway = true
       @count = 0
-      puts "Preparing for battle!"
       @players.each do |player|
         player.send :ready?
       end

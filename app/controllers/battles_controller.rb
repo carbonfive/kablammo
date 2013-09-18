@@ -38,11 +38,15 @@ class BattlesController
       return [500, "Players not prepared"]
     end
 
+    puts "Let the battle begin!"
     100.times do
       battle.turn!
     end
     battle.save!
     battle.finish!
+
+    scores = battle.score.map { |username, score| "#{username}: #{score}pts" }.join(', ')
+    puts "Battle complete - #{scores}"
 
     @app.redirect "/battles/#{battle.id}"
   end
