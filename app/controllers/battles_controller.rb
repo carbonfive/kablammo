@@ -13,9 +13,15 @@ class BattlesController
   end
 
   def create()
-    ids = [@app.request['player1'], @app.request['player2'], @app.request['player3']].flatten.compact.uniq
+    ids = Array.new
+    (1..4).each do |i|
+      unless (@app.request["player#{i}"].nil? || @app.request["player#{i}"].empty?)
+        ids << @app.request["player#{i}"]
+      end
+    end
+    ids = ids.flatten.compact.uniq
     if ids.length < 2
-      @app.flash[:error] = 'Robots can\'t fight themselves (yet). Please select two different robots to battle.'
+      @app.flash[:error] = 'You must select at least two robots to battle.'
       @app.redirect '/battles/new' and return
     end
 
@@ -23,28 +29,28 @@ class BattlesController
     maps << Map.new({
       width: 9,
       height: 9,
-      starts: [ [0,4,0], [8,4,180], [4,4,90] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map {|s| Start.new(*s) },
       name: 'Battle Royale'
     })    
     maps << Map.new({
       width: 9,
       height: 9,
       walls: [ [2,3], [2,4], [2,5], [6,3], [6,4], [6,5] ].map {|w| Wall.new.at(*w) },
-      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map {|s| Start.new(*s) },
       name: 'Balanced Team'
     })    
     maps << Map.new({
       width: 9,
       height: 9,
       walls: [ [0,0], [8,0], [2,2], [2,6], [4,4], [6,2], [6,6], [0,8], [8,8] ].map {|w| Wall.new.at(*w) },
-      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map {|s| Start.new(*s) },
       name: 'Decoupled Objects'
     })    
     maps << Map.new({
       width: 9,
       height: 9,
       walls: [ [4,4] ].map {|w| Wall.new.at(*w) },
-      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map {|s| Start.new(*s) },
       name: 'KISS'
     })    
     maps << Map.new({
@@ -59,7 +65,7 @@ class BattlesController
                [4,6],
                [0,7], [8,7],
                [0,8], [1,8], [7,8], [8,8] ].map {|w| Wall.new.at(*w) },
-      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map {|s| Start.new(*s) },
       name: 'NASCAR'
     })    
     maps << Map.new({
@@ -74,8 +80,8 @@ class BattlesController
       name: 'Gladiator Pit'
     })    
 
-    # map = maps[rand(maps.length)]
-    map = maps[0]
+    map = maps[rand(maps.length)]
+    # map = maps[0]
 
     strategies = activate_strategies ids
     robots = strategies.map { |s| Robot.new username: s.name }
