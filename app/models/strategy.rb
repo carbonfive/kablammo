@@ -37,9 +37,11 @@ class Strategy
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
     FileUtils.cp @@start_code_file_location, start_code_file_destination
-    cmd = "cd #{path} && git pull && bundle && ruby #{@@start_code_file_name} #{username}"
-    puts cmd
-    @pid = Process.spawn(cmd)
+    Bundler.with_clean_env do
+      cmd = "cd #{path} && git pull && bundle && bundle exec ruby #{@@start_code_file_name} #{username}"
+      puts cmd
+      @pid = Process.spawn(cmd)
+    end
     puts "Launched #{username}"
   end
 
