@@ -20,7 +20,7 @@ class StrategiesController
   def pull(id)
     # make sure the repo is up to date
     strategy = Strategy.find(id)
-    strategy.clone_repo
+    strategy.fetch_repo bundle_update: true
     @app.redirect "/strategies/#{strategy.id}"
   end
 
@@ -38,7 +38,7 @@ class StrategiesController
 
   def show(id)
     strategy = Strategy.find(id)
-    strategy.clone_repo unless strategy.repo_exists?
+    strategy.fetch_repo unless strategy.repo_exists?
     erb :'strategy/show', locals: { strategy: strategy, active_nav: 'robots' }
   end
 

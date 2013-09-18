@@ -17,7 +17,7 @@ class Strategy
   # local path where we've cloned this
   key :path, String, required: true
 
-  before_save :clone_repo
+  before_save :fetch_repo
   after_destroy :delete_repo
 
   def initialize(url = nil)
@@ -32,19 +32,17 @@ class Strategy
   end
 
   def launch
-    puts "Lauching #{username}"
+    print "Lauching #{username}... "
     start_code_file_destination = File.join(path, @@start_code_file_name)
     forced = true
     FileUtils.remove_file(start_code_file_destination, forced)
     FileUtils.cp @@start_code_file_location, start_code_file_destination
     Bundler.with_clean_env do
-      cmd = "cd #{path} && git pull && bundle && bundle exec ruby #{@@start_code_file_name} #{username}"
-      puts cmd
+      cmd = "cd #{path} && bundle exec ruby #{@@start_code_file_name} #{username}"
       @pid = Process.spawn(cmd)
       Process.detach(@pid)
-      puts "#{@pid} process started"
     end
-    puts "Launched #{username}"
+    puts "done (pid #{@pid})"
   end
 
   def url= url
@@ -91,15 +89,38 @@ class Strategy
     end
   end
 
-  def clone_repo
+  def fetch_repo(opts = {})
     # may want some error protection around this system command
+    print "Getting latest code for #{username}... "
     begin
-      Kablammo::Git.pull_or_clone(github_url,path)
+      Kablammo::Git.pull_or_clone github_url, path
     rescue Git::GitExecuteError => ex
-      puts "GIT ERROR: ", ex
-      self.errors.add :github_url, "Unable to clone url.  Check your Url and permissions"
-      false
+      begin
+        puts
+        print "Error getting code, trying harder (#{ex.message})... "
+        delete_repo
+        Kablammo::Git.pull_or_clone github_url, path
+      rescue Git::GitExecuteError => ex2
+        puts
+        puts "Error: ", ex2
+        self.errors.add :github_url, "Unable to clone url.  Check your Url and permissions"
+        return false
+      end
     end
+    cmd = opts[:bundle_update] ? 'bundle update' : 'bundle'
+    print "#{cmd.sub(/e$/, '')}ing... "
+    Bundler.with_clean_env do
+      bundle_output = `#{cmd} 2>&1`
+      status = $?
+      if status.to_i != 0
+        puts
+        puts "Error running #{cmd}: #{status.to_s}"
+        puts bundle_output
+        return false
+      end
+    end
+    puts 'done'
+    true
   end
 
   def sha

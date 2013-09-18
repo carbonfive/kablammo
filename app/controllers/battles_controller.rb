@@ -13,9 +13,9 @@ class BattlesController
   end
 
   def create()
-    player_ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
-    if player_ids.length < 2
-      @app.flash[:error] = 'Robots can\'t fight themselves. Please select two different robots to battle.'
+    ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
+    if ids.length < 2
+      @app.flash[:error] = 'Robots can\'t fight themselves (yet). Please select two different robots to battle.'
       @app.redirect '/battles/new' and return
     end
 
@@ -27,7 +27,8 @@ class BattlesController
       walls: [ [2,3], [2,5], [6,3], [6,5] ].map {|w| Wall.new.at(*w) },
       starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
     })
-    strategies = player_ids.map { |id| activate_player id }
+
+    strategies = activate_strategies ids
     robots = strategies.map { |s| Robot.new username: s.username }
     battle = Battle.wage name, map, robots
 
@@ -41,7 +42,6 @@ class BattlesController
       battle.turn!
     end
     battle.save!
-    
     battle.finish!
 
     @app.redirect "/battles/#{battle.id}"
@@ -83,10 +83,11 @@ class BattlesController
     @app.jbuilder(*args)
   end
 
-  def activate_player(id)
-    s = Strategy.find(id)
-    raise "Missing strategy: #{id}" unless s
-    s.launch
-    s
+  def activate_strategies(ids)
+    strategies = Hash[ ids.map { |id| [id, Strategy.find(id)] } ]
+    strategies.each { |id, s| raise "Missing strategy: #{id}" unless s }
+    strategies.each { |id, s| s.fetch_repo }
+    strategies.each { |id, s| s.launch }
+    strategies.values
   end
 end
