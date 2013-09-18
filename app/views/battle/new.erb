@@ -22,6 +22,19 @@
       <% end %>
     </select>
   </div>
+  <% (3..9).each do |c| %>
+    <% if (c <= strategies.length) %>
+      <div class="form-group">
+        <label for="player<%= c %>">Robot <%= c %></label>
+        <select name="player<%= c %>" id="player<%= c %>" class="form-control">
+          <option value="">(None)</option>
+          <% strategies.each_with_index do |s, i| %>
+            <option value="<%= s.id %>"><%= s.username %></option>
+          <% end %>
+        </select>
+      </div>
+    <% end %>
+  <% end %>
   <p>
     <button type="submit" class="btn btn-primary">Fight!</button>
     <button type="submit" class="btn random">Random</button>

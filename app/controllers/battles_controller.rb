@@ -13,7 +13,7 @@ class BattlesController
   end
 
   def create()
-    ids = [@app.request['player1'], @app.request['player2']].flatten.compact.uniq
+    ids = [@app.request['player1'], @app.request['player2'], @app.request['player3']].flatten.compact.uniq
     if ids.length < 2
       @app.flash[:error] = 'Robots can\'t fight themselves (yet). Please select two different robots to battle.'
       @app.redirect '/battles/new' and return
@@ -23,7 +23,7 @@ class BattlesController
     maps << Map.new({
       width: 9,
       height: 9,
-      starts: [ [0,4,0], [8,4,180] ].map {|s| Start.new(*s) },
+      starts: [ [0,4,0], [8,4,180], [4,4,90] ].map {|s| Start.new(*s) },
       name: 'Battle Royale'
     })    
     maps << Map.new({
@@ -74,7 +74,8 @@ class BattlesController
       name: 'Gladiator Pit'
     })    
 
-    map = maps[rand(maps.length)]
+    # map = maps[rand(maps.length)]
+    map = maps[0]
 
     strategies = activate_strategies ids
     robots = strategies.map { |s| Robot.new username: s.name }

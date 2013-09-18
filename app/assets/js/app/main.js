@@ -17,7 +17,7 @@ $(document).ready(function() {
           randomizeOptions(options, null);
         }
       });
-      return true;
+      return false;
     });
 
     function randomizeOptions(options, forbiddenValue) {
