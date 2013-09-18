@@ -1,6 +1,11 @@
 <h1>Enter the Arena</h1>
+<% if flash[:error] %>
+  <div class="alert alert-danger">
+    <p><%= flash[:error] %></p>
+  </div>
+<% end %>
 
-<form method="post" action="<%= url('/battles') %>">
+<form id="create-battle" method="post" action="<%= url('/battles') %>">
   <div class="form-group">
     <label for="player1">Robot 1</label>
     <select name="player1" id="player1" class="form-control">
@@ -12,12 +17,13 @@
   <div class="form-group">
     <label for="player2">Robot 2</label>
     <select name="player2" id="player2" class="form-control">
-      <% strategies.each do |s| %>
+      <% strategies.each_with_index do |s, i| %>
         <option value="<%= s.id %>"><%= s.username %></option>
       <% end %>
     </select>
   </div>
   <p>
     <button type="submit" class="btn btn-primary">Fight!</button>
+    <button type="submit" class="btn random">Random</button>
   </p>
 </form>
