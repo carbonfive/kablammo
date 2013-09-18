@@ -153,9 +153,11 @@ code {
 }
 
 .modal-content h2 {
+  padding-top: 15px;
   border-top: 1px solid #444;
 }
 
 .modal-content h2:first-child {
+  padding-top: 0;
   border-top: none;
 }
