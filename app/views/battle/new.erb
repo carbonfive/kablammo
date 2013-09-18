@@ -31,7 +31,7 @@
         <select name="player<%= c %>" id="player<%= c %>" class="form-control">
           <option value="">(None)</option>
           <% strategies.each_with_index do |s, i| %>
-            <option value="<%= s.id %>"><%= s.username %></option>
+            <option value="<%= s.id %>"><%= s.visible_name %></option>
           <% end %>
         </select>
       </div>
