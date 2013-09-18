@@ -1,5 +1,15 @@
 $(document).ready(function() {
   if ($('#create-battle').length > 0) {
+    $('#create-battle button').on('click', function() {
+      var loadingMessages = ['Compiling robot strategies', 'Reticulating splines', 'Checking for cheaters', 'Twiddling thumbs', 'Getting worried', 'Probably broken', 'Go ahead and reload', 'Why are you still here?'];
+      var messageIndex = 0;
+      $('#loading').modal('show');
+      setInterval(function() {
+        $('#loading .modal-body').html('<h3>' + loadingMessages[messageIndex] + '&hellip;</h3>');
+        messageIndex++;
+      }, 5000);
+    });
+
     $('#create-battle .random').on('click', function() {
       var selects = $('#create-battle select:visible');
       var indexesToSelectFrom = [];
