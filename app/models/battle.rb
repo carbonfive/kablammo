@@ -9,8 +9,8 @@ class Battle
 
   many :turns
 
-  def self.wage(name, map, robots)
-    battle = Battle.new name: name, usernames: robots.map(&:username)
+  def self.wage(map, robots)
+    battle = Battle.new name: map.name, usernames: robots.map(&:username)
     turn = Turn.new
     turn.board = Board.draw map, robots
     turn.save!
