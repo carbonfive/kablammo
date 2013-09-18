@@ -41,8 +41,8 @@ class BattlesController
       battle.turn!
     end
     battle.save!
-
-    strategies.each { |s| s.kill }
+    
+    battle.finish!
 
     @app.redirect "/battles/#{battle.id}"
   end

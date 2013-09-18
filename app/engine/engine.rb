@@ -31,6 +31,12 @@ module Engine
       ready? ? true : false
     end
 
+    def finish!
+      @players.each do |player|
+        player.sign_off
+      end
+    end
+
     def turn!
       #puts "======= TURN! ========="
       @count += 1
