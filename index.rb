@@ -36,6 +36,8 @@ class KablammoServer < Sinatra::Base
   }
 end
 
+Dir['./ext/**/*.rb'].each { |file| require file }
+
 require './config/mongo'
 
 require './app/models/target'
