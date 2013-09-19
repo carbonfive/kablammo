@@ -2,8 +2,8 @@ class kablammo.Board
   constructor: (@parent, @args) ->
     @el = '.board'
     @viz = @createVisualization()
-    @viz.addEventListener 'hit', ((data) -> console.log('hit',data))
-    @viz.addEventListener 'turn', @updateStats
+    @viz.addEventListener 'fire', @updateStats
+    @viz.addEventListener 'turn', @updateTurns
     @viz.addEventListener 'gameOver', @gameOver
 
   $el: ->
@@ -26,14 +26,9 @@ class kablammo.Board
     $('#board').css { height: "#{board.height * 83}px", width: "#{board.width * 83}px" }
     kablammo.Visualization 'board', board.width, board.height, walls, robots
 
-  updateStats: (turn) =>
-    #console.log turn
-    board = @args[turn.index].board
+  updateStats: (turnIndex) =>
+    board = @args[turnIndex].board
     _(board.robots).each (robot, i) ->
-      turnsLog = $('.turns-log')
-      turnsLogContainer = $('.turns-log-container')
-      turnsLog.append("<tr><td>#{turn.index}</td><td>#{robot.username}</td><td>#{turn.turns[i].last_turn}</td></tr>")
-      turnsLogContainer.scrollTop(turnsLogContainer[0].scrollHeight)
       stats = $("#stats-#{robot.identifier}")
       stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
       ammos = stats.find('.ammo')
@@ -42,6 +37,14 @@ class kablammo.Board
         ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
       else
         ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
+
+  updateTurns: (turn) =>
+    board = @args[turn.index].board
+    _(board.robots).each (robot, i) ->
+      turnsLog = $('.turns-log')
+      turnsLogContainer = $('.turns-log-container')
+      turnsLog.append("<tr><td>#{turn.index}</td><td>#{robot.username}</td><td>#{turn.turns[i].last_turn}</td></tr>")
+      turnsLogContainer.scrollTop(turnsLogContainer[0].scrollHeight)
 
   gameOver: (turnIndex) =>
     robots = @args[turnIndex].board.robots

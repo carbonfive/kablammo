@@ -398,19 +398,9 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
         }
       }
     }
-    if (firing) {
-      for (var i=0,tank; tank=tanks[i]; i++) {
-        var turnIndex = gameTime|0;
-        var turn = tank.turns[turnIndex];
-        var shooter = hits[turn.x+':'+turn.y];
-        if (shooter) {
-          tankHit = true;
-          if (!eventsSent[shooter+':'+(gameTime|0)]) {
-            eventsSent[shooter+':'+(gameTime|0)] = true;
-            eventDispatcher.trigger('hit', {shooter:shooter, target:tank.turns[0].username, turn:gameTime|0})
-          }
-        }
-      }
+    if (firing && !eventsSent['fire:'+(gameTime|0)]) {
+      eventsSent['fire:'+(gameTime|0)] = true;
+      eventDispatcher.trigger('fire', (gameTime|0));
     }
 
     visibility = tankHit ? .5 : 1 - (1-visibility)*.9;
