@@ -6,4 +6,4 @@ deployment:
   production:
     branch: chores/continuous-deployment
     commands:
-      - cap deploy
+      - bundle exec cap deploy
