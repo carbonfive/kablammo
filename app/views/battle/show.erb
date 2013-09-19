@@ -10,7 +10,7 @@
           <script type="text/javascript">
             $(function() {
               var hash = ('<%= robot.username %>').hashCode();
-              var avatar = kablammo.Visualization('robot-<%= robot.identifier %>', 1, 1, [], [{id: hash, color: Math.abs(hash % 4), 'turns': [{'x': 0, 'y': 0}]}]);
+              var avatar = kablammo.Visualization('robot-<%= robot.identifier %>', 1, 1, [], [{id: hash, color: Math.abs(hash % 10), 'turns': [{'x': 0, 'y': 0}]}]);
               avatar.draw();
             })
           </script>
