@@ -25,9 +25,14 @@ class StrategiesController
   end
 
   def create
-    url = @app.request['github_url']
-    name = @app.request['name']
+    url = @app.request['github_url'].squish if @app.request['github_url']
+    name = @app.request['name'].squish if @app.request['name']
     email = @app.request['email']
+
+    if url.blank?
+      @app.flash[:error] = "Your robot's program is loaded from GitHub. Where is your code?"
+      @app.redirect '/strategies' and return
+    end
 
     if Strategy.count(name: name) > 0
       @app.flash[:error] = 'Your name must be unique.  Is your robot here?'

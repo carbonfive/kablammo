@@ -42,6 +42,9 @@ require './config/mongo'
 
 require './app/models/target'
 require './app/models/board' # need this before Battle
+
+Dir['./app/ext/**/*.rb'].each { |file| require file }
+
 Dir['./app/models/**/*.rb'].each { |file| require file }
 
 Dir['./app/controllers/*.rb'].each { |file| require file }
