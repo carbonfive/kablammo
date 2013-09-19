@@ -10,14 +10,14 @@ class Strategy
   cattr_accessor :start_code_file_name
   cattr_accessor :start_code_file_location
 
-  key :github_url, String, required: true
+  key :github_url, String
   key :name,       String, required: true, unique: true
   key :email,      String, required: true
 
   key :username,   String, required: true
   key :path,       String, required: true   # local path where we've cloned this
 
-  validates_format_of :github_url, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
+  validates_format_of :github_url, :allow_blank => true, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
 
   before_validation :update_repo_properties
   before_save :fetch_repo
@@ -58,7 +58,19 @@ class Strategy
     false
   end
 
+  def repo_is_local?
+    github_url.nil? and path.is_local_dir? and 'local'.eql? username
+  end
+
+  def setup_as_local_repo
+    self.username = 'local'
+    self.path = github_url
+    self.github_url = nil
+    self.path
+  end
+
   def update_repo_properties
+    return setup_as_local_repo if github_url.is_local_dir?
     username = get_github_username(github_url)
     if username
       path = File.join( @@strategies_location, username, name )
@@ -70,11 +82,11 @@ class Strategy
     end
   end
 
-  def github_url_valid?
-    matches = github_url.to_s.match(REPO_REGEX)
-    puts "Validating url #{github_url} #{matches}"
-    !!(matches && matches[1])
-  end
+  #def github_url_valid?
+  #  matches = github_url.to_s.match(REPO_REGEX)
+  #  puts "Validating url #{github_url} #{matches}"
+  #  !!(matches && matches[1])
+  #end
 
   def gravatar
     author = Kablammo::Git::latest_author path
@@ -98,6 +110,7 @@ class Strategy
   end
 
   def fetch_repo(opts = {})
+    return true if repo_is_local?
     # may want some error protection around this system command
     print "Getting latest code for #{visible_name}... "
     begin
