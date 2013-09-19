@@ -7,7 +7,7 @@ class StrategiesController
   def index
     strategies = Strategy.all
     scoreboard = Battle.scoreboard
-    strategies.sort_by!{ |s| -scoreboard[s.name] || 1000000 } # sort strategies, put nil last
+    strategies.sort_by!{ |s| (scoreboard[s.name] || -1000000) * -1 } # sort strategies, put nil last
     erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard, active_nav: 'robots' }
   end
 
