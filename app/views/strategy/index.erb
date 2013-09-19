@@ -27,7 +27,7 @@
           <a href="/strategies/<%= strategy.id %>"><%= strategy.name %></a>
         </td>
         <td>
-          <%= scoreboard[strategy.id].nil? ? 'N/A' : scoreboard[strategy.id] %>
+          <%= scoreboard[strategy.name] || 'N/A' %>
         </td>
       </tr>
     <% end %>

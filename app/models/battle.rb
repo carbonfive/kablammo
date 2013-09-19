@@ -1,7 +1,5 @@
 class Battle
 
-  SCORING = { tie: 1, win: 3, loss: 0 }
-
   include MongoMapper::Document
 
   key :name,      String, required: true
@@ -21,6 +19,29 @@ class Battle
 
   def self.for_strategy(strategy)
     Battle.where(usernames: strategy.name).all
+  end
+
+  def self.scoreboard
+    query = [
+      { '$group' => { '_id' => '$battle_id', 'board' => { '$last' => '$board' } } },
+      { '$project' => { 'robots' => '$board.robots' } },
+      { '$unwind' => '$robots' },
+      { '$project' => { 'username' => '$robots.username', 'armor' => '$robots.armor' } },
+      { '$group' => { '_id' => '$_id', 'usernames' => { '$push' => '$username' }, 'armors' => { '$push' => '$armor' } } }
+    ]
+    scores = Turn.collection.aggregate query
+    scoreboard = {}
+    scores.each do |score|
+      armors = score['armors']
+      # 1pt for TIE, 3pts for WIN
+      pts = ( armors.count { |a| a > 0 } ) > 1 ? 1 : 3
+      armors.each_with_index do |a, i|
+        username = score['usernames'][i]
+        scoreboard[username] ||= 0
+        scoreboard[username] += pts if a > 0
+      end
+    end
+    scoreboard
   end
 
   def prepare_for_battle!
@@ -66,15 +87,6 @@ class Battle
 
   def as_seen_by(robot)
     JsonValue.new jbuild(robot)
-  end
-
-  def score
-    survivors, losers = robots.partition(&:alive?)
-
-    # if more than one survivor, survivors get a :tie score
-    survivors_booty = (survivors.count > 1) ? SCORING[:tie] : SCORING[:win]
-    Hash[ survivors.map(&:username).zip([survivors_booty] * survivors.length) +
-          losers.map(&:username).zip([SCORING[:loss]] * losers.length) ]
   end
 
   private

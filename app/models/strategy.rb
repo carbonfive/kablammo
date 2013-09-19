@@ -145,11 +145,6 @@ class Strategy
     Kablammo::Git.sha(path)
   end
 
-  def score
-    scores = Battle.for_strategy(self).map(&:score).reject(&:empty?)
-    scores.reduce(0) { |total, score| total += ( score[name] || 0 ) } || 0
-  end
-
   private
   def get_github_repo_name(url)
     matches = url.match(REPO_REGEX)

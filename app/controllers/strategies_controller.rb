@@ -6,14 +6,8 @@ class StrategiesController
 
   def index
     strategies = Strategy.all
-
-    # compute wins/losses
-    t = Time.now.to_f
-    scoreboard = Hash[ strategies.map {|s| [s.id, s.score]} ]
-    puts "StrategiesController spent %0.3f ms to compute scoreboard" % (Time.now - t.to_f)
-
-    # sort strategies by score
-    strategies.sort_by!{ |s| -scoreboard[s.id] || 1000000 } # put nil last
+    scoreboard = Battle.scoreboard
+    strategies.sort_by!{ |s| -scoreboard[s.name] || 1000000 } # sort strategies, put nil last
     erb :'strategy/index', locals: { strategies: strategies, scoreboard: scoreboard, active_nav: 'robots' }
   end
 

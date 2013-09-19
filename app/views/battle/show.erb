@@ -17,7 +17,7 @@
           <img class="gravatar" src="<%= robot.strategy.gravatar %>?s=170">
           <%= robot.username %> 
           <small>
-            <%= robot.strategy.score %>pts
+            <%= scoreboard[robot.username] || 'N/A' %>
           </small> 
         </h2>
         <div class="progress health">
