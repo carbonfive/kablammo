@@ -52,6 +52,15 @@ hr,
   border-color: #444;
 }
 
+.btn {
+  margin-right: 12px;
+}
+
+.btn.pull-right {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
 .btn-primary {
   background-color: #ef5a28;
   border-color: #df5425;
@@ -60,6 +69,18 @@ hr,
 .btn-primary:hover {
   background-color: #df5425;
   border-color: #cf4e22;
+}
+
+.btn-default {
+  background-color: #2a2a2a;
+  border-color: #666;
+  color: #aaa;
+}
+
+.btn-default:hover {
+  background-color: #3a3a3a;
+  border-color: #777;
+  color: #bbb;
 }
 
 footer {
@@ -125,7 +146,8 @@ code {
   width: 60px;
 }
 
-.leaderboard td:last-child {
+.leaderboard td:last-child,
+.leaderboard th:last-child {
   text-align: right;
 }
 

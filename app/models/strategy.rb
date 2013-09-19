@@ -28,7 +28,7 @@ class Strategy
   end
 
   def visible_name
-    "#{name} - #{username}"
+    "#{name} by #{username}"
   end
 
   def launch
