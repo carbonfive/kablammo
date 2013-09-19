@@ -207,6 +207,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   // finds end of gun in canvas coordinates
   function gunEnd( tank ) {
+    tank.bodyRotation = tank.bodyRotation||0;
     return {
       x: (tank.x+.5)*cw/GRID_WIDTH + ROBOT_SCALE*
           (-Math.sin(tank.bodyRotation)*TANK_DIMENSIONS.turretY + 
@@ -314,8 +315,8 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 			  	if (turn.fire && subStep >= .75) {
             if (turn.fire.hit) {
               var gunPos = gunEnd(tank);
-              var dx = (turn.fire.x+1)*cw/GRID_WIDTH - gunPos.x;
-              var dy = (turn.fire.y+1)*ch/GRID_HEIGHT - gunPos.y;
+              var dx = (turn.fire.x+.5)*cw/GRID_WIDTH - gunPos.x;
+              var dy = (turn.fire.y+.5)*ch/GRID_HEIGHT - gunPos.y;
               var distance = Math.sqrt(dx*dx + dy*dy);
               if (! distance) distance = 10000;
             } else {
@@ -392,7 +393,8 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
         var turn = tank.turns[gameTime|0];
         if (turn.fire) {
           firing = true;
-          if (turn.fire.hit) hits[turn.fire.x + ':' + turn.fire.y] = turn.username;
+          if (turn.fire.hit) 
+            hits[turn.fire.x + ':' + turn.fire.y] = turn.username;
         }
       }
     }
@@ -425,7 +427,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   				ctx.fillStyle = 'rgba(0,0,0,.75)';
   				ctx.fillRect(cw*i/GRID_WIDTH + SHADOW_OFFSET, ch*j/GRID_HEIGHT - SHADOW_OFFSET, 
   					cw/GRID_WIDTH, ch/GRID_HEIGHT)
-  				ctx.fillStyle = 'rgba(235,235,235,.7)';
+  				ctx.fillStyle = hits[i+':'+j] ? '#fff' : 'rgba(235,235,235,.7)';
   				ctx.fillRect(cw*i/GRID_WIDTH, ch*j/GRID_HEIGHT, 
   					cw/GRID_WIDTH, ch/GRID_HEIGHT)
   			}
