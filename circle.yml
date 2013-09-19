@@ -4,6 +4,6 @@ test:
 
 deployment:
   production:
-    branch: master
+    branch: chores/continuous-deployment
     commands:
       - cap deploy
