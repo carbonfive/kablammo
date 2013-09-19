@@ -11,7 +11,7 @@ class Map
 
   def self.random
     @maps = create_maps unless @maps
-    @maps[0]
+    @maps[rand(@maps.length)]
   end
 
   def self.create_maps
