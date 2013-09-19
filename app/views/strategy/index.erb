@@ -5,6 +5,14 @@
 
 
 <table class="table leaderboard">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Player</th>
+      <th>Robot</th>
+      <th>Score</th>
+    </tr>
+  </thead>
   <tbody>
     <% strategies.each_with_index do |strategy, i| %>
       <tr>
@@ -12,8 +20,11 @@
           <%= i + 1 %>.
         </td>
         <td>
-          <a href="/strategies/<%= strategy.id %>"><img class="gravatar" src="<%= strategy.gravatar rescue nil %>"></a>
-          <a href="/strategies/<%= strategy.id %>"><%= strategy.visible_name %></a>
+          <img class="gravatar" src="<%= strategy.gravatar rescue nil %>">
+          <%= strategy.username %>
+        </td>
+        <td>
+          <a href="/strategies/<%= strategy.id %>"><%= strategy.name %></a>
         </td>
         <td>
           <%= scoreboard[strategy.id].nil? ? 'N/A' : scoreboard[strategy.id] %>
