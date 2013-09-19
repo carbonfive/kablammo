@@ -33,10 +33,8 @@ class Strategy
 
   def launch
     print "Lauching #{name} by #{username}... "
-    start_code_file_destination = File.join(path, @@start_code_file_name)
-    forced = true
-    FileUtils.remove_file(start_code_file_destination, forced)
-    FileUtils.cp @@start_code_file_location, start_code_file_destination
+    remove_spawn_file
+    FileUtils.cp @@start_code_file_location, spawn_file
     Bundler.with_clean_env do
       cmd = "cd '#{path}' && bundle exec ruby '#{@@start_code_file_name}' '#{name}'"
       @pid = Process.spawn(cmd)
@@ -46,6 +44,7 @@ class Strategy
   end
 
   def kill
+    remove_spawn_file
     if process_exists?
       puts "Killing #{name} (#{@pid})"
       Process.kill 'KILL', @pid
@@ -160,4 +159,12 @@ class Strategy
     end
   end
 
+  def spawn_file
+    File.join(path, @@start_code_file_name)
+  end
+
+  def remove_spawn_file
+    start_code_file_destination = File.join(path, @@start_code_file_name)
+    FileUtils.remove_file(start_code_file_destination, true)
+  end
 end
