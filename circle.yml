@@ -1,0 +1,9 @@
+test:
+  override:
+    - echo "Write some tests."
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - cap deploy
