@@ -305,7 +305,8 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 		  	ctx.restore();
 
 		  	// body decoration
-	  		decorateTankBody( tank );
+        if (turn.armor > 0)
+	  		  decorateTankBody( tank );
 
 	  		// turret
 				ctx.save();
@@ -316,7 +317,8 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 				  ctx.fillStyle = 'rgba(235,235,235,.7)';
 				  turretPath();
 
-				  decorateTurret( tank );
+          if (turn.armor > 0)
+				    decorateTurret( tank );
 
 			  	if (turn.fire && subStep >= .75) {
             if (turn.fire.hit) {
