@@ -10,6 +10,7 @@ module Engine
       @receive = channel "#{username}-send"
       @battle = battle
       @username = username
+      @timeouts = 0
       listen_for_messages
     end
 
@@ -31,9 +32,17 @@ module Engine
       channel
     end
 
+    def too_many_timeouts?
+      @timeouts >= 5
+    end
+
     def send(message)
-      #puts "Player.send to #{robot.username} -->"
-      #p message
+      if too_many_timeouts?
+        @ready = true
+        @handler = RestHandler.new robot
+        return
+      end
+
       @ready = false
       @handler = nil
       @send.send message
@@ -46,6 +55,7 @@ module Engine
         @handler = TurnHandler.parse robot, message
       end
       @ready = true
+      @timeouts = 0
     end
 
     def ready?
@@ -67,6 +77,8 @@ module Engine
     def timeout
       puts "Player #{robot.username} turn timed out"
       @handler = RestHandler.new robot
+      @timeouts += 1
+      puts "Too many timeouts - #{robot.username} is now disabled" if too_many_timeouts?
     end
 
     def handle_power_ups
