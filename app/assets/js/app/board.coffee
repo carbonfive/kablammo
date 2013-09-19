@@ -61,15 +61,13 @@ class kablammo.Board
     else
       resultsBody.append('<h1>Tie!</h1>')
     _(alive).each (robot, i) ->
-      gravatar = $('#stats-' + robot.username + ' .gravatar')
+      gravatar = $('#stats-' + robot.identifier + ' .gravatar')
       resultsBody.append('<h2><img class="gravatar" src="' + gravatar.attr('src') + '"> ' + robot.username + '</h2>')
     $('#results').modal('show')
-    setTimeout ( ->
-      if $('body').hasClass('autoplay')
+    if $('body').hasClass('autoplay')
+      setTimeout ( ->
         window.location = '/strategies'
-      else
-        window.location = '/battles/new'
-    ), 5000
+      ), 5000
 
   createWalls: ->
     walls = []

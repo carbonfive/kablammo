@@ -45,7 +45,13 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
   	{r:240,g:0,b:120},
   	{r:11,g:169,b:234},
   	{r:25,g:222,b:18},
-  	{r:255,g:175,b:36}
+    {r:101,g:12,b:232},
+    {r:232,g:144,b:12},
+    {r:236,g:255,b:13},
+    {r:0,g:255,b:72},
+    {r:0,g:178,b:51},
+    {r:254,g:25,b:255},
+    {r:255,g:255,b:255}
   ]
 
   var hitGradientColors = [
