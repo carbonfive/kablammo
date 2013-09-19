@@ -147,7 +147,7 @@ class Strategy
 
   def score
     scores = Battle.for_strategy(self).map(&:score).reject(&:empty?)
-    scores.reduce(0) { |total, score| total += ( score[username] || 0 ) } || 0
+    scores.reduce(0) { |total, score| total += ( score[name] || 0 ) } || 0
   end
 
   private
