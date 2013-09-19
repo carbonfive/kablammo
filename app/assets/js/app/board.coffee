@@ -3,8 +3,8 @@ class kablammo.Board
     @el = '.board'
     @viz = @createVisualization()
     @viz.addEventListener 'hit', ((data) -> console.log('hit',data))
-    @viz.addEventListener 'turn', (turn) => @updateStats(turn)
-    @viz.addEventListener 'gameOver', (turnIndex) => @gameOver(turnIndex)
+    @viz.addEventListener 'turn', @updateStats
+    @viz.addEventListener 'gameOver', @gameOver
 
   $el: ->
     @parent.$el().find @el
@@ -27,6 +27,7 @@ class kablammo.Board
     kablammo.Visualization 'board', board.width, board.height, walls, robots
 
   updateStats: (turn) =>
+    #console.log turn
     board = @args[turn.index].board
     _(board.robots).each (robot, i) ->
       turnsLog = $('.turns-log')
