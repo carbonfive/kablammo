@@ -50,7 +50,7 @@ module Engine
 
     def ready!(message)
       if message == 'ready'
-        puts "Player #{robot.username} is ready!"
+        puts "Player #{@username} is ready!"
       else
         @handler = TurnHandler.parse robot, message
       end
@@ -75,10 +75,10 @@ module Engine
     end
 
     def timeout
-      puts "Player #{robot.username} turn timed out"
+      puts "Player #{@username} turn timed out"
       @handler = RestHandler.new robot
       @timeouts += 1
-      puts "Too many timeouts - #{robot.username} is now disabled" if too_many_timeouts?
+      puts "Too many timeouts - #{@username} is now disabled" if too_many_timeouts?
     end
 
     def handle_power_ups

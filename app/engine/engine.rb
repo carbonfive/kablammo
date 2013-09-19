@@ -7,6 +7,10 @@ module Engine
       @instances[battle.id] = self.new battle
     end
 
+    def self.finalize(battle)
+      @instances.delete battle.id
+    end
+
     def initialize(battle)
       @battle = battle
       @players = battle.robots.map { |r| Player.new battle, r.username }
@@ -35,6 +39,7 @@ module Engine
       @players.each do |player|
         player.sign_off
       end
+      self.class.finalize @battle
     end
 
     def turn!
