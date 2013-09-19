@@ -60,4 +60,9 @@ $(document).ready(function() {
     }, 5000);
   }
 
+  $('.close-results').on('click', function() {
+    $('#results').modal('hide');
+    return true;
+  });
+
 });
