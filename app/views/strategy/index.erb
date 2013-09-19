@@ -3,6 +3,12 @@
   <a href="<%= url('/strategies/new') %>" class="btn btn-primary pull-right">Add Your Robot</a>
 </h1>
 
+<% if flash[:error] %>
+  <div class="alert alert-danger">
+    <p><%= flash[:error] %></p>
+  </div>
+<% end %>
+
 
 <table class="table leaderboard">
   <thead>

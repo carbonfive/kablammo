@@ -44,6 +44,11 @@ class StrategiesController
 
   def show(id)
     strategy = Strategy.find(id)
+    unless strategy
+      @app.flash[:error] = "Unknown robot strategy: #{id}"
+      @app.redirect '/strategies' and return
+    end
+
     strategy.fetch_repo unless strategy.repo_exists?
     erb :'strategy/show', locals: { strategy: strategy, active_nav: 'robots' }
   end
