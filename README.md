@@ -4,6 +4,12 @@ kablammo
 Kablammo!  the GoGaRuCo death match
 
 
+Dependencies
+------------
+* Ruby 1.9.3
+* MongoDB 2.2+
+* Redis
+
 Setup
 -----
 
