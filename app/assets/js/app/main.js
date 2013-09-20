@@ -1,7 +1,7 @@
 $(document).ready(function() {
   if ($('#create-battle').length > 0) {
     $('.start').on('click', function() {
-      var loadingMessages = ['Compiling robot strategies', 'Reticulating splines', 'Checking for cheaters', 'Twiddling thumbs', 'Getting worried', 'Probably broken', 'Go ahead and reload', 'Why are you still here?'];
+      var loadingMessages = ['Compiling robot strategies', 'Reticulating splines', 'Checking for cheaters', 'Twiddling thumbs', 'Baking cookies', 'Taking the dog for a walk', 'Reorienting vertices', 'Running tests', 'Solving Rubik\'s cube', 'Batting eyelashes', 'Avoiding chores', 'Washing hair', 'Taking nap'];
       var messageIndex = 0;
       $('#loading').modal('show');
       setInterval(function() {
