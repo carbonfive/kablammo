@@ -19,6 +19,7 @@ Setup
 - Run two or more strategy clients (see below)
 - Add your bot `http://localhost:4567/strategies/new`
   - NOTE: Instead of putting in a github url, you can just put the path
+  - NOTE2: Your local path must be a git repo
 to your repo locally
 - Add another bot (since you need two to fight!)
 - Go to the arena! `http://localhost:4567/battles/new`
