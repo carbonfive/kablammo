@@ -46,8 +46,8 @@ class BattlesController
 
     sleep 2
     strategies.each { |s| s.kill }
-    scores = battle.score.map { |username, score| "#{username}: #{score}pts" }.join(', ')
-    puts "Battle complete - #{scores}"
+    outcome = battle.robots.map { |r| "#{r.username}: #{r.armor} armor" }.join(', ')
+    puts "Battle complete - #{outcome}"
 
     @app.redirect "/battles/#{battle.id}"
   end
