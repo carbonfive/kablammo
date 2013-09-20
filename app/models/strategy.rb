@@ -125,14 +125,16 @@ class Strategy
         return false
       end
     end
-    cmd = opts[:bundle_update] ? 'bundle update' : 'bundle'
-    print "#{cmd.sub(/e$/, '')}ing... "
+    bundle = opts[:bundle_update] ? 'bundle update' : 'bundle'
+    cmd = "cd '#{path}' && #{bundle} 2>&1"
+    puts cmd
+    print "#{bundle.sub(/e$/, '')}ing... "
     Bundler.with_clean_env do
-      bundle_output = `#{cmd} 2>&1`
+      bundle_output = `#{cmd}`
       status = $?
       if status.to_i != 0
         puts
-        puts "Error running #{cmd}: #{status.to_s}"
+        puts "Error running #{bundle}: #{status.to_s}"
         puts bundle_output
         return false
       end

@@ -8,6 +8,7 @@ require 'json'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)
+  set :bind, '0.0.0.0'
 
   enable :sessions
 
