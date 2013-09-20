@@ -13,19 +13,37 @@ Dependencies
 Setup
 -----
 
-- Clone the repo
-- Install dependancies: run `bundle`
-- Start the server: run `ruby index.rb`
-- Run two or more strategy clients (see below)
-- Add your bot `http://localhost:4567/strategies/new`
-  - NOTE: Instead of putting in a github url, you can just put the path
-  - NOTE2: Your local path must be a git repo
-to your repo locally
-- Add another bot (since you need two to fight!)
-- Go to the arena! `http://localhost:4567/battles/new`
+### Verify your dependencies
+You must have ruby 1.9.3 installed.  Out of the box Kablammo assumes 1.9.3-p429, but you can alter the .ruby-version file to another patch version.
 
+You also must have Mongo and Redis installed and running, using the default settings.
 
-Strategy Clients
-----------------
+### Clone the repo
+```
+git clone https://github.com/carbonfive/kablammo.git
+cd kablammo
+```
 
-- See http://github.com/carbonfive/kablammo-strategy
+### Install dependencies
+```
+gem install bundler
+bundle
+```
+
+### Start the server
+```
+rackup
+```
+
+### Build your bot
+Check out the instructions at `http://github.com/carbonfive/kablammo-strategy`
+
+### Install your bot locally
+`http://localhost:9292/strategies/new`
+
+- HINT: Instead of putting in a github url, you can just put the path to your repo on your file system
+
+You should probably actually add your bot twice (with two different names), so that you have someone to fight against!
+
+### Go to the arena
+`http://localhost:9292/battles/new`

@@ -11,6 +11,7 @@ module Engine
       @battle = battle
       @username = username
       @timeouts = 0
+      @ready = false
       listen_for_messages
     end
 
@@ -50,7 +51,7 @@ module Engine
 
     def ready!(message)
       if message == 'ready'
-        puts "Player #{@username} is ready!"
+        puts "Player #{@username} is ready!" unless @ready
       else
         @handler = TurnHandler.parse robot, message
       end

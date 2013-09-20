@@ -44,7 +44,6 @@ class BattlesController
     battle.save!
     battle.finish!
 
-    sleep 2
     strategies.each { |s| s.kill }
     outcome = battle.robots.map { |r| "#{r.username}: #{r.armor} armor" }.join(', ')
     puts "Battle complete - #{outcome}"

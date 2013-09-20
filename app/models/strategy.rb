@@ -42,6 +42,7 @@ class Strategy
   end
 
   def kill
+    puts "Should I kill process #{@pid}? #{process_exists? ? 'yes' : 'no'}"
     if process_exists?
       puts "Killing #{name} (#{@pid})"
       Process.kill 'KILL', @pid
@@ -127,7 +128,6 @@ class Strategy
     end
     bundle = opts[:bundle_update] ? 'bundle update' : 'bundle'
     cmd = "cd '#{path}' && #{bundle} 2>&1"
-    puts cmd
     print "#{bundle.sub(/e$/, '')}ing... "
     Bundler.with_clean_env do
       bundle_output = `#{cmd}`
@@ -135,6 +135,7 @@ class Strategy
       if status.to_i != 0
         puts
         puts "Error running #{bundle}: #{status.to_s}"
+        puts "$> #{cmd}"
         puts bundle_output
         return false
       end
