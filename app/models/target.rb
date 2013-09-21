@@ -16,6 +16,7 @@ module Target
   end
 
   def located_at?(target)
+    return false unless target
     x == target.x && y == target.y
   end
 end

@@ -1,11 +1,12 @@
-unless $0 =~ /rackup$/
+if $0 =~ /^index.rb$/
   puts <<EOF
 Usage: rackup -p <port>
 
 Please run with rackup instead of 'ruby index.rb'.
 Port is options.  Default port is 9292.
+
 EOF
-  #exit 1
+  exit 1
 end
 
 require 'rubygems'

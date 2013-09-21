@@ -102,6 +102,7 @@ class Strategy
   end
 
   def delete_repo
+    return if repo_is_local?
     if repo_exists?
       FileUtils.rm_rf(path)
     end
