@@ -14,6 +14,11 @@ class Map
     @maps[rand(@maps.length)]
   end
 
+  def self.for_name(name)
+    @maps = create_maps unless @maps
+    @maps.detect { |m| m.name == name }
+  end
+
   def self.create_maps
     template = { width: 9, height: 9,
                  starts: [ [0,4,0], [8,4,180], [4,0,90], [4,8,270] ].map { |s| Start.new(*s) } }
