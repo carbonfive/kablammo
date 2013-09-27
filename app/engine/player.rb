@@ -53,6 +53,7 @@ module Engine
       if message == 'ready'
         puts "Player #{@username} is ready!" unless @ready
       else
+        print '.'
         @handler = TurnHandler.parse robot, message
       end
       @ready = true

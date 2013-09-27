@@ -1,6 +1,7 @@
 class Turn
   include MongoMapper::Document
 
+  timestamps!
   one :board
   belongs_to :battle
 

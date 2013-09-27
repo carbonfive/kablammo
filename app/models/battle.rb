@@ -4,8 +4,9 @@ class Battle
 
   key :name,      String, required: true
   key :usernames, Array,  required: true
+  timestamps!
 
-  many :turns
+  many :turns, order: :created_at
 
   def self.wage(map, robots)
     battle = Battle.new name: map.name, usernames: robots.map(&:username)

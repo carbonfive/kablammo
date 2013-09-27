@@ -16,8 +16,7 @@ module Engine
 
       str = str.downcase
       type = str[0]
-      #value = Float(str[1..-1]) if str.length > 1
-      value = Integer(str[1..-1]) if str.length > 1
+      value = Float(str[1..-1]) if str.length > 1
 
       return MoveHandler.new(robot, str, MOVES[type]) if MOVES[type]
       return FireHandler.new(robot, str, value) if type == 'f'

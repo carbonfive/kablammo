@@ -44,7 +44,6 @@ receive_channel.register do |msg|
   elsif 'shutdown'.eql? msg
     shutdown process
   else
-    print '.'
     turn = next_turn strategy, msg
     send_channel.send turn
   end

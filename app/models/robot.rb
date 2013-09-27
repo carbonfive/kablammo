@@ -10,7 +10,7 @@ class Robot
   key :turn,      String,  required: true
   key :x,         Integer, required: true
   key :y,         Integer, required: true
-  key :rotation,  Integer, required: true
+  key :rotation,  Float,   required: true
   key :ammo,      Integer, required: true
   key :armor,     Integer, required: true
   key :abilities, Array,   required: true
