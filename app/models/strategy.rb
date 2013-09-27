@@ -68,7 +68,7 @@ class Strategy
   end
 
   def update_repo_properties
-    return setup_as_local_repo if github_url.is_local_dir?
+    return setup_as_local_repo if github_url && github_url.is_local_dir?
     username = get_github_username(github_url)
     if username
       path = File.join( @@strategies_location, username, name )
