@@ -34,7 +34,7 @@ module Engine
     end
 
     def too_many_timeouts?
-      @timeouts >= 5
+      @timeouts >= 3
     end
 
     def send(message)
