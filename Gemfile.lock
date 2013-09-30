@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/arbind/redis_message_capsule-gem.git
-  revision: b0710b877273a1a102e1a92ebfa9ae8ab72a6329
+  revision: 728cc0cbe9f734fc3239111af92559314adf8160
   specs:
     redis_message_capsule (0.8.3)
       json
