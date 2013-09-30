@@ -1,5 +1,6 @@
 require File.expand_path('../../lib/kablammo/git', __FILE__)
 require 'digest/md5'
+require 'timeout'
 
 class Strategy
 
@@ -110,36 +111,21 @@ class Strategy
 
   def fetch_repo(opts = {})
     return true if repo_is_local?
-    # may want some error protection around this system command
+
     print "Getting latest code for #{visible_name}... "
-    begin
-      Kablammo::Git.pull_or_clone github_url, path
-    rescue Git::GitExecuteError => ex
-      begin
-        puts
-        print "Error getting code, trying harder (#{ex.message})... "
-        delete_repo
-        Kablammo::Git.pull_or_clone github_url, path
-      rescue Git::GitExecuteError => ex2
-        puts
-        puts "Error: ", ex2
-        self.errors.add :github_url, "Unable to clone url.  Check your Url and permissions"
-        return false
-      end
+
+    if repo_exists?
+      cmd = "cd '#{path}' && git pull"
+    else
+      cmd = "git clone #{github_url} #{path}"
     end
+    return false unless run(cmd) == 0
+
     bundle = opts[:bundle_update] ? 'bundle update' : 'bundle'
-    cmd = "cd '#{path}' && #{bundle} 2>&1"
+    cmd = "cd '#{path}' && #{bundle}"
     print "#{bundle.sub(/e$/, '')}ing... "
     Bundler.with_clean_env do
-      bundle_output = `#{cmd}`
-      status = $?
-      if status.to_i != 0
-        puts
-        puts "Error running #{bundle}: #{status.to_s}"
-        puts "$> #{cmd}"
-        puts bundle_output
-        return false
-      end
+      return false unless run(cmd) == 0
     end
     puts 'done'
     true
@@ -152,24 +138,49 @@ class Strategy
   private
   def get_github_repo_name(url)
     matches = url.match(REPO_REGEX)
-    if matches && matches[2]
-      matches[2]
-    else
-      nil
-    end
+    matches && matches[2]
   end
 
   def get_github_username(url)
     matches = url.match(REPO_REGEX)
-    if matches && matches[1]
-      matches[1].downcase
-    else
-      nil
-    end
+    matches && matches[1] && matches[1].downcase
   end
 
   def spawn_file
     File.join(path, @@start_code_file_name)
+  end
+
+  def run(cmd, sem = 0)
+    rout, wout = IO.pipe
+    status = nil
+    begin
+      pid = Process.spawn cmd, out: wout
+      _, status = Timeout::timeout(5) do
+        Process.wait2 pid
+      end
+    rescue Timeout::Error
+      Process.kill 'KILL', pid
+    end
+    wout.close
+    output = rout.readlines.join("\n")
+    rout.close
+
+    return run(cmd, sem + 1) if sem < 1 && ! status
+
+    if ! status
+      puts
+      puts "Timeout running command:"
+      puts "$> #{cmd}"
+      return nil
+    end
+
+    if status.exitstatus != 0
+      puts
+      puts "Error running command: #{status.to_s}"
+      puts "$> #{cmd}"
+      puts output
+    end
+    status.exitstatus
   end
 
 end

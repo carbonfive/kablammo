@@ -106,7 +106,7 @@ module Engine
 
     def output(players, benchmarks)
       turns = players.map.with_index do |player|
-        value = "%4s" % player.handler.value
+        value = "%6s" % player.handler.value
         "#{player.robot.username}: #{value}"
       end.join('  ')
       num = "%3s" % @count
