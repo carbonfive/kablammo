@@ -11,7 +11,7 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
       (events[type] = (events[type] || [])).push(listener);
     }
     out.trigger = function trigger( type ) {
-      var listeners = events[type], 
+      var listeners = events[type],
           payload = Array.prototype.slice.call(arguments,1);
       if (listeners)
         for ( var i=0,listener; listener = listeners[i]; i++ )
@@ -378,9 +378,17 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
     ctx.restore();    
   }
 
+  function triggerTurnEvent(name, turnIndex) {
+    var key = name + ":" + turnIndex;
+    if (! eventsSent[key]) {
+      eventsSent[key] = true;
+      eventDispatcher.trigger(name, turnIndex);
+    }
+  }
+
   var startTime = 0;
   var gameTime = 0;
-  var currentTurn = -1;
+  var turnIndex = 0;
   var visibility = 1;
   var eventsSent = {};
   function render( time ) {
@@ -388,9 +396,10 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
 
   	if ( startTime == 0 ) startTime = time;
   	gameTime = (time - startTime) / 1000;
+    turnIndex = gameTime|0;
 		for (var i=0,tank; tank = tanks[i]; i++) {
       if (gameTime >= tank.turns.length) {
-        eventDispatcher.trigger('gameOver', (gameTime|0)-1);
+        eventDispatcher.trigger('gameOver', turnIndex-1);
         return false;
       }
     }
@@ -398,19 +407,15 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
     var hits = {}, somethingHit=false;
     if (gameTime%1 > .75) {
       for (var i=0,tank; tank=tanks[i]; i++) {
-        var turn = tank.turns[gameTime|0];
+        var turn = tank.turns[turnIndex];
         if (turn.fire) {
-          firing = true;
           if (turn.fire.hit) {
             hits[turn.fire.x + ':' + turn.fire.y] = turn.username;
             somethingHit = true;
           }
+          triggerTurnEvent('fire', turnIndex);
         }
       }
-    }
-    if (firing && !eventsSent['fire:'+(gameTime|0)]) {
-      eventsSent['fire:'+(gameTime|0)] = true;
-      eventDispatcher.trigger('fire', (gameTime|0));
     }
 
     visibility = somethingHit ? .5 : 1 - (1-visibility)*.9;
@@ -459,13 +464,9 @@ kablammo.Visualization = function Visualization( canvasId, gridWidth, gridHeight
       }
     }
 
-    var turnIndex = gameTime|0;
-    if (!eventsSent['turn:'+turnIndex]) {
-      eventsSent['turn:'+turnIndex] = true;
-      var turn = {index:turnIndex, turns:[]}
-      for (var i=0,tank; tank = tanks[i]; i++) turn.turns.push(tank.turns[turnIndex])
-      eventDispatcher.trigger('turn', turn)
-    }
+    triggerTurnEvent('turnStart', turnIndex);
+    if (gameTime%1 > .5) triggerTurnEvent('turnMid', turnIndex);
+    if (gameTime%1 > .95) triggerTurnEvent('turnEnd', turnIndex);
 
     return true;
   }

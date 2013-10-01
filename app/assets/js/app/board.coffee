@@ -3,7 +3,7 @@ class kablammo.Board
     @el = '.board'
     @viz = @createVisualization()
     @viz.addEventListener 'fire', @updateStats
-    @viz.addEventListener 'turn', @updateTurns
+    @viz.addEventListener 'turnMid', @updateTurns
     @viz.addEventListener 'gameOver', @gameOver
 
   $el: ->
@@ -28,23 +28,27 @@ class kablammo.Board
 
   updateStats: (turnIndex) =>
     board = @args[turnIndex].board
-    _(board.robots).each (robot, i) ->
-      stats = $("#stats-#{robot.identifier}")
-      stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
-      ammos = stats.find('.ammo')
-      ammos.find("li:lt(#{robot.ammo})").removeClass('ammo-empty').addClass('ammo-full')
-      if robot.ammo == 0
-        ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
-      else
-        ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
+    _(board.robots).each (robot, i) =>
+      @updateRobotStats robot
 
-  updateTurns: (turn) =>
-    board = @args[turn.index].board
-    _(board.robots).each (robot, i) ->
+  updateTurns: (turnIndex) =>
+    board = @args[turnIndex].board
+    _(board.robots).each (robot, i) =>
+      @updateRobotStats robot if robot.last_turn == '.'
       turnsLog = $('.turns-log')
       turnsLogContainer = $('.turns-log-container')
-      turnsLog.append("<tr><td>#{turn.index}</td><td>#{robot.username}</td><td>#{turn.turns[i].last_turn}</td></tr>")
+      turnsLog.append("<tr><td>#{turnIndex}</td><td>#{robot.username}</td><td>#{robot.last_turn}</td></tr>")
       turnsLogContainer.scrollTop(turnsLogContainer[0].scrollHeight)
+
+  updateRobotStats: (robot) =>
+    stats = $("#stats-#{robot.identifier}")
+    stats.find('.progress-bar').css 'width', "#{robot.armor * 20}%"
+    ammos = stats.find('.ammo')
+    ammos.find("li:lt(#{robot.ammo})").removeClass('ammo-empty').addClass('ammo-full')
+    if robot.ammo == 0
+      ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
+    else
+      ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
 
   gameOver: (turnIndex) =>
     robots = @args[turnIndex].board.robots
@@ -81,6 +85,7 @@ class kablammo.Board
       hash = robot.username.hashCode()
       {
         id: hash
+        name: robot.username
         color: Math.abs(hash % 10)
         turns: _(@args).map (turn) =>
           @toTurn turn, robot
