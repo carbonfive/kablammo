@@ -1,7 +1,7 @@
 kablammo
 ========
 
-Kablammo!  the GoGaRuCo death match
+Kablammo!  the robot death match
 
 
 Dependencies
