@@ -43,9 +43,8 @@ class Strategy
   end
 
   def kill
-    puts "Should I kill process #{@pid}? #{process_exists? ? 'yes' : 'no'}"
     if process_exists?
-      puts "Killing #{name} (#{@pid})"
+      puts "Force killing player #{name}. (#{@pid})"
       Process.kill 'KILL', @pid
     end
   end
@@ -115,7 +114,7 @@ class Strategy
     print "Getting latest code for #{visible_name}... "
 
     if repo_exists?
-      cmd = "cd '#{path}' && git pull"
+      cmd = "cd '#{path}' && git pull origin"
     else
       cmd = "git clone #{github_url} #{path}"
     end
