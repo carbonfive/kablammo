@@ -14,7 +14,7 @@ class StrategiesController
   def pull(id)
     # make sure the repo is up to date
     strategy = Strategy.find(id)
-    strategy.fetch_repo bundle_update: true
+    strategy.fetch_repo
     @app.redirect "/strategies/#{strategy.id}"
   end
 

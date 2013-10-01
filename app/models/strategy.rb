@@ -109,7 +109,7 @@ class Strategy
     end
   end
 
-  def fetch_repo(opts = {})
+  def fetch_repo
     return true if repo_is_local?
 
     print "Getting latest code for #{visible_name}... "
@@ -121,9 +121,8 @@ class Strategy
     end
     return false unless run(cmd) == 0
 
-    bundle = opts[:bundle_update] ? 'bundle update' : 'bundle'
-    cmd = "cd '#{path}' && #{bundle}"
-    print "#{bundle.sub(/e$/, '')}ing... "
+    cmd = "cd '#{path}' && bundle"
+    print "bundling... "
     Bundler.with_clean_env do
       return false unless run(cmd) == 0
     end
