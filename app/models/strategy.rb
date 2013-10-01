@@ -114,7 +114,7 @@ class Strategy
     print "Getting latest code for #{visible_name}... "
 
     if repo_exists?
-      cmd = "cd '#{path}' && git pull origin"
+      cmd = "cd '#{path}' && git pull"
     else
       cmd = "git clone #{github_url} #{path}"
     end

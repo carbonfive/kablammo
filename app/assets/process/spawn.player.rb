@@ -37,14 +37,21 @@ process = Thread.current
 receive_channel.register do |msg|
   if 'ready?'.eql? msg
     send_channel.send :ready
-  elsif 'loser'.eql? msg
-    shutdown process
-  elsif 'winner'.eql? msg
-    shutdown process
   elsif 'shutdown'.eql? msg
     shutdown process
   else
-    turn = next_turn strategy, msg
+    begin
+      turn = next_turn strategy, msg
+    rescue Exception => e
+      puts "----------- Error: #{username} -----------"
+      puts e.message
+      puts
+      puts e.backtrace.join("\n")
+      puts
+      puts "#{username} is now disabled."
+      puts "-------------------#{'-' * username.length}------------"
+      turn = 'error'
+    end
     send_channel.send turn
   end
 end

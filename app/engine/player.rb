@@ -11,6 +11,7 @@ module Engine
       @battle = battle
       @username = username
       @timeouts = 0
+      @disabled = false
       @ready = false
       listen_for_messages
     end
@@ -33,12 +34,12 @@ module Engine
       channel
     end
 
-    def too_many_timeouts?
-      @timeouts >= 3
+    def disabled?
+      @disabled || @timeouts >= 3
     end
 
-    def send(message)
-      if too_many_timeouts?
+    def send(message, force = false)
+      if disabled? && !force
         @ready = true
         @handler = RestHandler.new robot
         return
@@ -52,6 +53,10 @@ module Engine
     def ready!(message)
       if message == 'ready'
         puts "Player #{@username} is ready!" unless @ready
+      elsif message == 'error'
+        print '!'
+        @disabled = true
+        @handler = RestHandler.new robot
       else
         print '.'
         @handler = TurnHandler.parse robot, message
@@ -93,11 +98,7 @@ module Engine
     def sign_off
       return if @signed_off
       @signed_off = true
-      if robot.alive?
-        send :winner
-      else
-        send :loser
-      end
+      send :shutdown, true
       clear
     end
 
