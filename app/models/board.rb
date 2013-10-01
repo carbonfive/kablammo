@@ -40,6 +40,12 @@ class Board
   end
   alias_method :robot?, :robot_at
 
+  def in_bounds?(target)
+    return false if target.x < 0 || target.x >= width
+    return false if target.y < 0 || target.y >= height
+    true
+  end
+
   def add_robot(robot, start)
     r = robot.at start.position.x, start.position.y
     r.rotation = start.rotation

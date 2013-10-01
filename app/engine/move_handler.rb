@@ -8,10 +8,15 @@ module Engine
     end
 
     def execute
-      robot.y += 1 if move == 'north' && robot.y + 1 < robot.board.height
-      robot.y -= 1 if move == 'south' && robot.y - 1 >= 0
-      robot.x += 1 if move == 'east'  && robot.x + 1 < robot.board.width
-      robot.x -= 1 if move == 'west'  && robot.x - 1 >= 0
+      p = Pixel.new robot.x, robot.y
+      p.y += 1 if move == 'north'
+      p.y -= 1 if move == 'south'
+      p.x += 1 if move == 'east'
+      p.x -= 1 if move == 'west'
+      return unless board.in_bounds?(p) && ! board.occupied?(p)
+
+      robot.x = p.x
+      robot.y = p.y
     end
   end
 end
