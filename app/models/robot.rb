@@ -7,30 +7,18 @@ class Robot
 
   validates :last_turn, :username, :turn, :x, :y, :rotation, :ammo, :armor, :abilities, presence: true
 
-  field :last_turn, type: String
+  field :last_turn, type: String, default: "*"
   field :username, type: String
   field :turn, type: String
   field :x, type: Integer
   field :y, type: Integer
-  field :rotation, type: Float
-  field :ammo, type: Integer
-  field :armor, type: Integer
-  field :abilities, type: Array
+  field :rotation, type: Float, default: 0.0
+  field :ammo, type: Integer, default: MAX_AMMO
+  field :armor, type: Integer, default: MAX_ARMOR
+  field :abilities, type: Array, default: []
 
   embeds_one :fire
   embeds_many :power_ups
-
-  embedded_in :board
-
-  def initialize(*args)
-    self.last_turn = '*'
-    self.rotation = 0
-    self.ammo = MAX_AMMO
-    self.armor = MAX_ARMOR
-    self.abilities = []
-    self.power_ups = []
-    super
-  end
 
   def identifier
     username.hash.abs.to_s
