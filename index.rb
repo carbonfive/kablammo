@@ -15,11 +15,13 @@ Bundler.require :default
 
 require 'sinatra/base'
 require 'sinatra/flash'
+require 'sinatra/assetpack'
 require 'json'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
+  set :mustermann_opts, { type: :regexp, check_anchors: false }
 
   enable :sessions
 
