@@ -50,7 +50,7 @@ end
 
 Dir['./ext/**/*.rb'].each { |file| require file }
 
-require './config/mongo'
+Mongoid.load!("config/mongoid.yml")
 
 require './app/models/target'
 require './app/models/board' # need this before Battle

@@ -1,13 +1,15 @@
 class PowerUp
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
   include Target
 
-  key :x,         Integer
-  key :y,         Integer
-  key :name,      String, required: true
-  key :duration,  Integer
-  key :abilities, Array
-  key :type,      String, required: true
+  validates :name, :type, presence: true
+
+  field :x, type: Integer
+  field :y, type: Integer
+  field :name, type: String
+  field :duration, type: Integer
+  field :abilities, type: Array
+  field :type, type: String
 
   embedded_in :board
   embedded_in :robot

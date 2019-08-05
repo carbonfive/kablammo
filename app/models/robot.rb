@@ -1,22 +1,24 @@
 class Robot
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
   include Target
 
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
-  key :last_turn, String,  required: true
-  key :username,  String,  required: true
-  key :turn,      String,  required: true
-  key :x,         Integer, required: true
-  key :y,         Integer, required: true
-  key :rotation,  Float,   required: true
-  key :ammo,      Integer, required: true
-  key :armor,     Integer, required: true
-  key :abilities, Array,   required: true
+  validates :last_turn, :username, :turn, :x, :y, :rotation, :ammo, :armor, :abilities, presence: true
 
-  one :fire
-  many :power_ups
+  field :last_turn, type: String
+  field :username, type: String
+  field :turn, type: String
+  field :x, type: Integer
+  field :y, type: Integer
+  field :rotation, type: Float
+  field :ammo, type: Integer
+  field :armor, type: Integer
+  field :abilities, type: Array
+
+  embeds_one :fire
+  embeds_many :power_ups
 
   embedded_in :board
 
