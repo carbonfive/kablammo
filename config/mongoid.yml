@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      database: kablammo_development
+      hosts:
+        - localhost:27017
