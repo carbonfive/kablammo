@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-flash'
-# gem 'puma'
+gem 'puma'
 gem 'mongoid', '~> 6.1.0'
 gem 'activemodel-serializers-xml'
 gem 'bson_ext'
