@@ -3,6 +3,7 @@ class Turn
   include Mongoid::Timestamps
 
   embeds_one :board
+  belongs_to :battle, optional: true
 
   def robots
     board.robots

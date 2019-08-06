@@ -4,3 +4,9 @@ development:
       database: kablammo_development
       hosts:
         - localhost:27017
+test:
+  clients:
+    default:
+      database: kablammo_test
+      hosts:
+        - localhost:27017

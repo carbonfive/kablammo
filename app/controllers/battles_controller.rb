@@ -44,9 +44,6 @@ class BattlesController
     battle.save!
     battle.finish!
 
-    # TODO: battle.turns.length == 6 here
-    puts "GENERATED BATTLE TURNS #{battle.turns.length}"
-
     strategies.each { |s| s.kill }
     outcome = battle.robots.map { |r| "#{r.username}: #{r.armor} armor" }.join(', ')
     puts "Battle complete - #{outcome}"
@@ -58,9 +55,6 @@ class BattlesController
     battle = Battle.find id
     return [404, "Unknown battle: #{id}"] unless battle
     json = jbuilder :"battle/show", locals: { battle: battle }
-
-    # TODO: but battle.turns.length == 1 here??
-    puts "SAVED BATTLE TURNS #{battle.turns.length}"
 
     erb :"battle/show", locals: { battle: battle, json: json, active_nav: 'arena', scoreboard: Battle.scoreboard }
   end
