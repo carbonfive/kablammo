@@ -5,7 +5,7 @@ class Robot
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
-  validates :last_turn, :username, :turn, :x, :y, :rotation, :ammo, :armor, :abilities, presence: true
+  validates :last_turn, :username, :x, :y, :rotation, :ammo, :armor, presence: true
 
   field :last_turn, type: String, default: "*"
   field :username, type: String
@@ -19,6 +19,8 @@ class Robot
 
   embeds_one :fire
   embeds_many :power_ups
+
+  embedded_in :board
 
   def identifier
     username.hash.abs.to_s
@@ -35,7 +37,7 @@ class Robot
   end
 
   def strategy
-    Strategy.lookup @username
+    Strategy.lookup username
   end
 
   def rest!

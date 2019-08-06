@@ -1,6 +1,4 @@
 module Target
-  attr_reader :x, :y
-
   def at(x, y)
     self.x = x
     self.y = y

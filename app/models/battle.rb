@@ -5,7 +5,7 @@ class Battle
   validates :name, :usernames, presence: true
 
   field :name, type: String
-  field :usernames, type: Array
+  field :usernames, type: Array, default: []
 
   # TODO: order_by created_at?
   embeds_many :turns

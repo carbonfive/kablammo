@@ -1,7 +1,7 @@
 class Board
   include Mongoid::Document # Embedded
 
-  validates :height, :with, presence: true
+  validates :height, :width, presence: true
 
   field :height, type: Integer
   field :width, type: Integer
@@ -20,15 +20,8 @@ class Board
     board
   end
 
-  def initialize(*args)
-    self.walls = []
-    self.robots = []
-    self.power_ups = []
-    super
-  end
-
   def geometry
-    @geometry ||= Geometry.new(@width, @height)
+    @geometry ||= Geometry.new(width, height)
   end
 
   def hittable(target)

@@ -9,9 +9,12 @@ EOF
   exit 1
 end
 
+
 require 'rubygems'
 require 'bundler'
 Bundler.require :default
+
+require 'pry'
 
 require 'sinatra/base'
 require 'sinatra/flash'

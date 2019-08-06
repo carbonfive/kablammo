@@ -16,6 +16,14 @@ gem 'git'
 gem 'tux'
 
 group :development do
+  gem 'pry'
+  gem 'pry-nav'
   gem 'capistrano'
   gem 'rerun'
+end
+
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+  gem 'mongoid-rspec'
 end

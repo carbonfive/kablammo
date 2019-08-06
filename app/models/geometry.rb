@@ -9,6 +9,9 @@ class Geometry
     @height = height
   end
 
+  ## 
+  # Returns a list of Pixels that describes a line of sight
+  # from the source to the edge of the board.
   def line_of_sight(source, degrees)
     degrees *= 1.0 # cast to float
     degrees %= 360 # normalize to 0...360 degrees
@@ -41,6 +44,8 @@ class Geometry
       end
       add_to_line(los, x + offset_x, y + offset_y)
     end
+
+    # Make sure the LOS don't include the source, or it will shoot itself
     los.delete Pixel.new(source.x, source.y)
 
     #puts "line of sight: [#{source.x}, #{source.y}] @ #{degrees} -> " + los.join(' ')
@@ -85,16 +90,19 @@ class Geometry
 end
 
 class Float
-  def in?(s, e, inclusive = true)
+  def in?(starting, ending, inclusive = true)
     if inclusive
-      self >= s && self <= e
+      self >= starting && self <= ending
     else
-      self > s && self < e
+      self > starting && self < ending
     end
   end
 end
 
+# Use a struct, for easy equality checks
 Pixel = Struct.new(:x, :y) do
+  include Target
+
   def to_s
     "[#{x}, #{y}]"
   end
