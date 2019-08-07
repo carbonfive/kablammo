@@ -6,7 +6,7 @@ gem 'puma'
 gem 'mongoid', '~> 6.1.0'
 gem 'activemodel-serializers-xml'
 gem 'bson_ext'
-gem 'sinatra-assetpack', require: 'sinatra/assetpack'
+gem 'sprockets'
 gem 'coffee-script'
 gem 'oj'
 gem 'execjs', '1.4.0'
@@ -25,5 +25,4 @@ end
 group :test do
   gem 'rack-test'
   gem 'rspec'
-  gem 'mongoid-rspec'
 end

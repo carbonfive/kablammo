@@ -1,6 +1,5 @@
 class KablammoServer < Sinatra::Base
   set :views, Proc.new { File.join(root, 'app/views') }
-  set :mustermann_opts, { type: :regexp, check_anchors: false }
 
   get '/' do
     HomesController.new(self).index
