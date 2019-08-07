@@ -9,8 +9,6 @@ EOF
   exit 1
 end
 
-require 'pry'
-
 require 'rubygems'
 require 'bundler'
 Bundler.require :default

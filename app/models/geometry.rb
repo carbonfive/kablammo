@@ -45,7 +45,7 @@ class Geometry
       add_to_line(los, x + offset_x, y + offset_y)
     end
 
-    # Make sure the LOS don't include the source, or it will shoot itself
+    # Make sure the LOS doesn't include the source, or a tank will shoot itself
     los.delete Pixel.new(source.x, source.y)
 
     #puts "line of sight: [#{source.x}, #{source.y}] @ #{degrees} -> " + los.join(' ')
