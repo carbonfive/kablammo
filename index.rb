@@ -18,8 +18,6 @@ Bundler.require :default
 require 'sinatra/base'
 require 'sinatra/flash'
 require 'sprockets'
-require 'json'
-require 'execjs'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)

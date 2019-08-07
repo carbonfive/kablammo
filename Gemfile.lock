@@ -11,10 +11,6 @@ GEM
   specs:
     activemodel (5.2.3)
       activesupport (= 5.2.3)
-    activemodel-serializers-xml (1.0.2)
-      activemodel (> 5.x)
-      activesupport (> 5.x)
-      builder (~> 3.1)
     activesupport (5.2.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -25,7 +21,6 @@ GEM
     bond (0.5.1)
     bson (4.5.0)
     bson_ext (1.5.1)
-    builder (3.2.3)
     capistrano (3.11.0)
       airbrussh (>= 1.0.0)
       i18n
@@ -136,11 +131,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activemodel-serializers-xml
   bson_ext
   capistrano
   coffee-script
-  execjs (= 1.4.0)
   git
   mongoid (~> 6.1.0)
   oj
