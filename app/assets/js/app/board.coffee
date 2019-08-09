@@ -5,6 +5,7 @@ class kablammo.Board
     @viz.addEventListener 'fire', @updateStats
     @viz.addEventListener 'turnMid', @updateTurns
     @viz.addEventListener 'gameOver', @gameOver
+    $(window).resize(@updateCanvasHeight)
 
   $el: ->
     @parent.$el().find @el
@@ -23,7 +24,7 @@ class kablammo.Board
     robots = @createRobots()
     console.log robots
     board = @firstBoard()
-    $('#board').css { height: "#{board.height * 83}px", width: "#{board.width * 83}px" }
+    @updateCanvasHeight()
     kablammo.Visualization 'board', board.width, board.height, walls, robots
 
   updateStats: (turnIndex) =>
@@ -49,6 +50,12 @@ class kablammo.Board
       ammos.find("li").removeClass('ammo-full').addClass('ammo-empty')
     else
       ammos.find("li:gt(#{robot.ammo-1})").removeClass('ammo-full').addClass('ammo-empty')
+  
+  # Canvas height can't be percentage based.
+  updateCanvasHeight: => 
+    $board = $('#board');
+    console.log($board.width())
+    $board.css { height: "#{$board.width()}px" }
 
   gameOver: (turnIndex) =>
     robots = @args[turnIndex].board.robots
