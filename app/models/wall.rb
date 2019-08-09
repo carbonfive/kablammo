@@ -1,9 +1,11 @@
 class Wall
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
   include Target
 
-  key :x, Integer, required: true
-  key :y, Integer, required: true
+  validates :x, :y, presence: true
+
+  field :x, type: Integer
+  field :y, type: Integer
 
   embedded_in :board
 

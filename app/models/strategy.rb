@@ -5,18 +5,21 @@ require 'timeout'
 class Strategy
 
   REPO_REGEX = /git@github\.com:([^\/]*)\/(.*)\.git/
-  include MongoMapper::Document
+  include Mongoid::Document
+
+  validates :name, :email, :username, :path, presence: true
+  validates :name, uniqueness: true
 
   cattr_accessor :strategies_location
   cattr_accessor :start_code_file_name
   cattr_accessor :start_code_file_location
 
-  key :github_url, String
-  key :name,       String, required: true, unique: true
-  key :email,      String, required: true
+  field :github_url, type: String
+  field :name, type: String
+  field :email, type: String
 
-  key :username,   String, required: true
-  key :path,       String, required: true   # local path where we've cloned this
+  field :username, type: String
+  field :path, type: String   # local path where we've cloned this
 
   validates_format_of :github_url, :allow_blank => true, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
 

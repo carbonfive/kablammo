@@ -1,9 +1,9 @@
 class Turn
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  timestamps!
-  one :board
-  belongs_to :battle
+  embeds_one :board
+  belongs_to :battle, optional: true
 
   def robots
     board.robots

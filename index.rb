@@ -15,42 +15,31 @@ Bundler.require :default
 
 require 'sinatra/base'
 require 'sinatra/flash'
-require 'json'
+require 'sprockets'
 
 class KablammoServer < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
 
+  # initialize new sprockets environment
+  set :environment, Sprockets::Environment.new
+
+  # append assets paths
+  environment.append_path "app/assets"
+
+  get "/assets/*" do
+    env["PATH_INFO"].sub!("/assets", "")
+    settings.environment.call(env)
+  end
+
   enable :sessions
 
-  register Sinatra::AssetPack
   register Sinatra::Flash
-
-  assets {
-    serve '/js',     from: 'app/assets/js'
-    serve '/css',    from: 'app/assets/css'
-    serve '/img',    from: 'app/assets/img'
-
-    js :application, '/js/application.js', [
-      '/js/vendor/jquery-2.0.3.js',
-      '/js/vendor/*.js',
-      '/js/app/ext.js',
-      '/js/app/battle.js',
-      '/js/app/board.js',
-      '/js/app/visualization.js',
-      '/js/app/main.js'
-    ]
-
-    css :application, '/css/application.css', [
-      '/css/bootstrap.min.css',
-      '/css/*.css'
-    ]
-  }
 end
 
 Dir['./ext/**/*.rb'].each { |file| require file }
 
-require './config/mongo'
+Mongoid.load!("config/mongoid.yml")
 
 require './app/models/target'
 require './app/models/board' # need this before Battle

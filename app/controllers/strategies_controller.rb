@@ -28,7 +28,7 @@ class StrategiesController
       @app.redirect '/strategies' and return
     end
 
-    if Strategy.count(name: name) > 0
+    if Strategy.where(name: name).count > 0
       @app.flash[:error] = 'Your name must be unique.  Is your robot here?'
       @app.redirect '/strategies' and return
     end

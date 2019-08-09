@@ -52,14 +52,15 @@ class BattlesController
   end
 
   def show(id)
-    battle = Battle.find_by_id id
+    battle = Battle.find id
     return [404, "Unknown battle: #{id}"] unless battle
     json = jbuilder :"battle/show", locals: { battle: battle }
+
     erb :"battle/show", locals: { battle: battle, json: json, active_nav: 'arena', scoreboard: Battle.scoreboard }
   end
 
   def turn(id, count=1)
-    battle = Battle.find_by_id id
+    battle = Battle.find id
     1.upto(count) { battle.turn } if battle
     jbuilder :"battle/turn", locals: { battle: battle }
   end

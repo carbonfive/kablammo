@@ -1,34 +1,26 @@
 class Robot
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
   include Target
 
   MAX_AMMO  = 10
   MAX_ARMOR = 5
 
-  key :last_turn, String,  required: true
-  key :username,  String,  required: true
-  key :turn,      String,  required: true
-  key :x,         Integer, required: true
-  key :y,         Integer, required: true
-  key :rotation,  Float,   required: true
-  key :ammo,      Integer, required: true
-  key :armor,     Integer, required: true
-  key :abilities, Array,   required: true
+  validates :last_turn, :username, :x, :y, :rotation, :ammo, :armor, presence: true
 
-  one :fire
-  many :power_ups
+  field :last_turn, type: String, default: "*"
+  field :username, type: String
+  field :turn, type: String
+  field :x, type: Integer
+  field :y, type: Integer
+  field :rotation, type: Float, default: 0.0
+  field :ammo, type: Integer, default: MAX_AMMO
+  field :armor, type: Integer, default: MAX_ARMOR
+  field :abilities, type: Array, default: []
+
+  embeds_one :fire
+  embeds_many :power_ups
 
   embedded_in :board
-
-  def initialize(*args)
-    self.last_turn = '*'
-    self.rotation = 0
-    self.ammo = MAX_AMMO
-    self.armor = MAX_ARMOR
-    self.abilities = []
-    self.power_ups = []
-    super
-  end
 
   def identifier
     username.hash.abs.to_s
@@ -45,7 +37,7 @@ class Robot
   end
 
   def strategy
-    Strategy.lookup @username
+    Strategy.lookup username
   end
 
   def rest!

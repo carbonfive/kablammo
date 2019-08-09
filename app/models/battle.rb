@@ -1,17 +1,19 @@
 class Battle
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
-  key :name,      String, required: true
-  key :usernames, Array,  required: true
-  timestamps!
+  validates :name, :usernames, presence: true
 
-  many :turns, order: :created_at
+  field :name, type: String
+  field :usernames, type: Array, default: []
+
+  has_many :turns, order: :created_at.asc
 
   def self.wage(map, robots)
     battle = Battle.new name: map.name, usernames: robots.map(&:username)
     turn = Turn.new
     turn.board = Board.draw map, robots
+    turn.battle = battle
     turn.save!
     battle.turns << turn
     battle.save!

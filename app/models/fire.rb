@@ -1,10 +1,12 @@
 class Fire
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
   include Target
 
-  key :x,   Integer
-  key :y,   Integer
-  key :hit, Boolean, required: true
+  validates :hit, presence: true
+
+  field :x, type: Integer
+  field :y, type: Integer
+  field :hit, type: Boolean
 
   embedded_in :robot
 end

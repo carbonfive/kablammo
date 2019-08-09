@@ -1,12 +1,14 @@
 class Board
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document # Embedded
 
-  key :height, Integer, required: true
-  key :width,  Integer, required: true
+  validates :height, :width, presence: true
 
-  many :walls
-  many :robots
-  many :power_ups
+  field :height, type: Integer
+  field :width, type: Integer
+
+  embeds_many :walls
+  embeds_many :robots
+  embeds_many :power_ups
 
   embedded_in :turn
 
@@ -18,15 +20,8 @@ class Board
     board
   end
 
-  def initialize(*args)
-    self.walls = []
-    self.robots = []
-    self.power_ups = []
-    super
-  end
-
   def geometry
-    @geometry ||= Geometry.new(@width, @height)
+    @geometry ||= Geometry.new(width, height)
   end
 
   def hittable(target)
