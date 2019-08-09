@@ -1,6 +1,7 @@
 module Engine
   class TurnHandler
 
+    MAX_SKEW = 15
     MOVES = Hash[%w(north south east west).map {|d| [d[0], d]}]
 
     attr_accessor :value
@@ -12,16 +13,20 @@ module Engine
     end
 
     def self.parse(robot, str)
-      return RestHandler.new robot unless str
+      return RestHandler.new robot, str, 0 unless str
 
       str = str.downcase
       type = str[0]
-      value = Float(str[1..-1]) if str.length > 1
+      rotation = Float(str[1..-1]) if str.length > 1
 
-      return MoveHandler.new(robot, str, MOVES[type]) if MOVES[type]
-      return FireHandler.new(robot, str, value) if type == 'f'
-      return RotateHandler.new(robot, str, value) if type == 'r'
-      RestHandler.new robot
+      skew = rotation || 0
+      skew = MAX_SKEW * -1 if skew < MAX_SKEW * -1
+      skew = MAX_SKEW      if skew > MAX_SKEW
+
+      return MoveHandler.new(robot, str, MOVES[type], skew) if MOVES[type]
+      return FireHandler.new(robot, str, skew) if type == 'f'
+      return RotateHandler.new(robot, str, rotation) if type == 'r'
+      RestHandler.new robot, str, skew
     end
 
     def board

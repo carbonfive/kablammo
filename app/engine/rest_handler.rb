@@ -1,13 +1,16 @@
 module Engine
   class RestHandler < TurnHandler
 
-    MAX_AMMO = 10
+    attr_reader :skew
 
-    def initialize(robot)
+    def initialize(robot, value, skew)
       super robot, '.'
+
+      @skew = skew
     end
 
     def execute
+      robot.rotate_by! skew
       robot.rest!
     end
 

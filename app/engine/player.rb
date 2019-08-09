@@ -83,7 +83,7 @@ module Engine
 
     def timeout
       puts "Player #{@username} turn timed out"
-      @handler = RestHandler.new robot
+      @handler = RestHandler.new robot, "", 0
       @timeouts += 1
       puts "Too many timeouts - #{@username} is now disabled" if too_many_timeouts?
     end

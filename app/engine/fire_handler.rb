@@ -6,9 +6,7 @@ module Engine
 
     def initialize(robot, str, skew)
       super robot, str
-      @skew = skew || 0
-      @skew = MAX_SKEW * -1 if @skew < MAX_SKEW * -1
-      @skew = MAX_SKEW      if @skew > MAX_SKEW
+      @skew = skew
     end
 
     def execute

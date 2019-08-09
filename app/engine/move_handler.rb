@@ -1,10 +1,11 @@
 module Engine
   class MoveHandler < TurnHandler
-    attr_reader :move
+    attr_reader :move, :skew
 
-    def initialize(robot, str, move)
+    def initialize(robot, str, move, skew)
       super robot, str
       @move = move
+      @skew = skew
     end
 
     def execute
@@ -15,8 +16,8 @@ module Engine
       p.x -= 1 if move == 'west'
       return unless board.in_bounds?(p) && ! board.occupied?(p)
 
-      robot.x = p.x
-      robot.y = p.y
+      robot.rotate_by! skew
+      robot.move_to! p.x, p.y
     end
   end
 end
