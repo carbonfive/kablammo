@@ -19,11 +19,14 @@ RSpec.describe MapMaker, type: :model do
       expect(map.walls[0].y).to be(2)
     end
 
-    it "creates a robot start" do
+    it "creates robot starts" do
       expect(map.starts.length).to be(2)
 
-      expect(map.starts[0]).to eq([0, 0, 0])
-      expect(map.starts[1]).to eq([2, 1, 180])
+      expect(map.starts[0].position).to eq(Pixel.new(0, 0))
+      expect(map.starts[1].position).to eq(Pixel.new(2, 1))
+
+      expect(map.starts[0].rotation).to be(0)
+      expect(map.starts[1].rotation).to be(180)
     end
   end
 end

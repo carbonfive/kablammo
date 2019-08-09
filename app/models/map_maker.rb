@@ -8,6 +8,9 @@ module MapMaker
     width = map[0].length
     height = map.length
 
+    # 0, 0 is at the bottom of the map, not the top.
+    map = map.reverse
+
     walls = map_to_walls(map)
     starts = map_to_starts(map, rotations)
 
@@ -33,16 +36,20 @@ module MapMaker
   end
 
   def self.map_to_starts(map, rotations)
-    starts = []
+    starts = {}
     each_cell(map) do |cell, x, y|
       next unless cell =~ /[0-9]/
 
       player_number = cell.to_i
+      rotation = rotations[player_number]
 
-      starts.push([x, y, rotations[player_number]])
+      start = Start.new(x, y, rotation)
+      starts[player_number] = start
     end
-
-    starts.sort_by { |x, y, rotation| rotation }
+    
+    starts
+      .sort_by { |n, start| n }
+      .map { |n, start| start}
   end
 
   def self.each_cell(map, &block)
