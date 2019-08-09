@@ -44,6 +44,11 @@ class Robot
     self.ammo = [ammo + 1, MAX_AMMO].min
   end
 
+  def move_to!(x, y)
+    self.x = x
+    self.y = y
+  end
+
   def fire!
     self.ammo -= 1
     hit = line_of_fire.last
