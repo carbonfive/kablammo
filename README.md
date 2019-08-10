@@ -31,7 +31,8 @@ bundle
 ```
 
 ### Start the server
-```
+
+```bash
 rackup
 ```
 
@@ -47,3 +48,10 @@ You should probably actually add your bot twice (with two different names), so t
 
 ### Go to the arena
 `http://localhost:9292/battles/new`
+
+
+## Manual Deploy
+
+```bash
+bundle exec cap production deploy
+```

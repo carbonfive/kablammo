@@ -26,6 +26,15 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
+    capistrano-asdf (0.0.3)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2)
+    capistrano-bundler (1.6.0)
+      capistrano (~> 3.1)
+    capistrano3-puma (4.0.0)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (~> 4.0)
     coderay (1.1.2)
     coffee-script (2.4.1)
       coffee-script-source
@@ -42,6 +51,7 @@ GEM
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     json (2.2.0)
+    libv8 (3.16.14.19)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -77,6 +87,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.2)
+    ref (2.0.0)
     rerun (0.13.0)
       listen (~> 3.0)
     ripl (0.7.1)
@@ -114,6 +125,9 @@ GEM
     sshkit (1.20.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thread_safe (0.3.6)
     tilt (2.0.9)
     tilt-jbuilder (0.7.1)
@@ -132,8 +146,12 @@ PLATFORMS
 
 DEPENDENCIES
   bson_ext
-  capistrano
+  capistrano (~> 3.0)
+  capistrano-asdf
+  capistrano-bundler
+  capistrano3-puma
   coffee-script
+  execjs
   git
   mongoid (~> 6.1.0)
   oj
@@ -147,6 +165,7 @@ DEPENDENCIES
   sinatra
   sinatra-flash
   sprockets
+  therubyracer
   tilt-jbuilder
   tux
 
