@@ -1,3 +1,9 @@
+production:
+  clients:
+    default:
+      database: kablammo
+      hosts:
+        - localhost:27017
 development:
   clients:
     default:
