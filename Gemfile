@@ -20,7 +20,7 @@ group :development do
   gem 'pry-nav'
   gem 'rerun'
   gem 'capistrano', '~> 3.0'
-  gem 'capistrano-asdf'
+  gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano3-puma'
 end

@@ -14,6 +14,8 @@ set :bundle_flags, "--deployment --binstubs"
 
 append :linked_dirs, ".bundle", "tmp/pids", "tmp/sockets", "log"
 
+set :rbenv_ruby, File.read('.ruby-version').strip
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
