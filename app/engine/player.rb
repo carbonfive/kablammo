@@ -35,7 +35,11 @@ module Engine
     end
 
     def disabled?
-      @disabled || @timeouts >= 3
+      @disabled || too_many_timeouts?
+    end
+
+    def too_many_timeouts?
+      @timeouts >= 3
     end
 
     def send(message, force = false)
@@ -85,7 +89,7 @@ module Engine
       puts "Player #{@username} turn timed out"
       @handler = RestHandler.new robot, "", 0
       @timeouts += 1
-      puts "Too many timeouts - #{@username} is now disabled" if too_many_timeouts?
+      puts "Too many timeouts - #{@username} is now disabled" if disabled?
     end
 
     def handle_power_ups
