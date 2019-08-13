@@ -12,6 +12,6 @@ set :use_sudo, false
 
 set :bundle_flags, "--deployment --binstubs"
 
-append :linked_dirs, ".bundle", "tmp/pids", "tmp/sockets", "log"
+append :linked_dirs, ".bundle", "tmp/pids", "tmp/sockets", "log", "game_strategies"
 
 set :rbenv_ruby, File.read('.ruby-version').strip
