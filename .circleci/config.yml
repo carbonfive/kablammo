@@ -1,11 +1,11 @@
 version: 2
 jobs:
   build:
-    parallelism: 3 # run three instances of this job in parallel
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
         environment:
           RAKE_ENV: test
+      - image: circleci/mongo:4.0.11
     steps:
       - checkout
 
@@ -15,6 +15,10 @@ jobs:
           keys:
             - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
             - rails-demo-bundle-v2-
+      
+      - run: 
+          name: Install Bundler
+          command: gem install bundler
 
       - run: # Install Ruby dependencies
           name: Bundle Install
@@ -38,4 +42,4 @@ jobs:
       - store_test_results:
           path: test_results
       
-      - bundle exec cap deploy
+      - run: bundle exec cap production deploy
