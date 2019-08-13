@@ -3,7 +3,7 @@ module Engine
 
     attr_reader :skew
 
-    def initialize(robot, value, skew)
+    def initialize(robot, value = ".", skew = 0)
       super robot, '.'
 
       @skew = skew
