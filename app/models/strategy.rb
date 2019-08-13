@@ -7,7 +7,7 @@ class Strategy
   REPO_REGEX = /git@github\.com:([^\/]*)\/(.*)\.git/
   include Mongoid::Document
 
-  validates :name, :email, :username, :path, presence: true
+  validates :name, :email, :username,  presence: true
   validates :name, uniqueness: true
 
   cattr_accessor :strategies_location
@@ -19,7 +19,6 @@ class Strategy
   field :email, type: String
 
   field :username, type: String
-  field :path, type: String   # local path where we've cloned this
 
   validates_format_of :github_url, :allow_blank => true, :with => REPO_REGEX, message: 'Your repository url needs to be the ssh url.  e.g. git@github.com:my_username/myrepo.git'
 
@@ -29,6 +28,13 @@ class Strategy
 
   def self.lookup(username)
     Strategy.where(name: username).first
+  end
+
+  # local path where we've cloned this
+  def path
+    return github_url if github_url.is_local_dir?
+    path_to_name = File.join( @@strategies_location, username, name )
+    File.join path_to_name, get_github_repo_name(github_url)
   end
 
   def visible_name
@@ -65,19 +71,14 @@ class Strategy
 
   def setup_as_local_repo
     self.username = 'local'
-    self.path = github_url
-    self.github_url = nil
-    self.path
   end
 
   def update_repo_properties
     return setup_as_local_repo if github_url && github_url.is_local_dir?
     username = get_github_username(github_url)
     if username
-      path = File.join( @@strategies_location, username, name )
       FileUtils.mkdir_p path
       self.username = username
-      self.path = File.join path, get_github_repo_name(github_url)
     else
       puts "ERROR: Cannot get github username for repo: #{github_url}"
     end
@@ -113,6 +114,11 @@ class Strategy
 
   def fetch_repo
     return true if repo_is_local?
+
+    calc_path = File.join( @@strategies_location, username, name )
+    puts self.path
+    puts path
+    puts calc_path
 
     print "Getting latest code for #{visible_name}... "
 
