@@ -45,10 +45,18 @@ class Strategy
     print "Lauching #{name} by #{username}... "
     Bundler.with_clean_env do
       cmd = "cd '#{path}' && bundle exec ruby '#{@@start_code_file_location}' '#{name}'"
-      @pid = Process.spawn(cmd)
-      Process.detach(@pid)
+      rout, wout = IO.pipe
+      @pid = Process.spawn(cmd, [:out, :err] => wout)
+      puts "done (pid #{@pid})"
+      Thread.new do
+        _, status = Process.wait2 @pid
+        wout.close
+        puts
+        puts rout.readlines.map { |l| "#{name}: #{l}" }.join("")
+        puts
+        rout.close
+      end
     end
-    puts "done (pid #{@pid})"
   end
 
   def kill
@@ -116,9 +124,6 @@ class Strategy
     return true if repo_is_local?
 
     calc_path = File.join( @@strategies_location, username, name )
-    puts self.path
-    puts path
-    puts calc_path
 
     print "Getting latest code for #{visible_name}... "
 
