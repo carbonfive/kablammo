@@ -1,36 +1,21 @@
-require 'bundler/capistrano'
-require 'puma/capistrano'
+# config valid for current version and patch releases of Capistrano
+lock "~> 3.11.0"
 
-set :application, 'Kablammo'
+set :application, "kablammo"
+set :repo_url, "git@github.com:carbonfive/kablammo.git"
 
-set :scm,        :git
-set :deploy_via, :copy
-set :repository, 'git@github.com:carbonfive/kablammo.git'
-set :branch,     'master'
+set :branch, "chores/circleci"
 
-set :user,       'deploy'
-set :deploy_to,  '/home/deploy/apps/kablammo/'
-set :use_sudo,   false
+set :user, "deploy"
+set :deploy_to, "/home/deploy/apps/kablammo/"
+set :use_sudo, false
 
-set :bundle_flags, '--deployment --binstubs'
+set :bundle_flags, "--deployment --binstubs"
 
-set :default_environment, {
-  'PATH' => "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
-}
+# linked_dirs persist across deploys. This will persist:
+# - the bundle cache for faster deploys
+# - pids, sockets, and logs for seamless deploys
+# - game_strategies so they exist without re-downloading from github
+append :linked_dirs, ".bundle", "tmp/pids", "tmp/sockets", "log", "game_strategies"
 
-server 'kablammo.io', :app, :web, :db, primary: true
-
-namespace :deploy do
-  task :finalize_update do
-  end
-end
-
-before 'bundle:install' do
-  run "gem install bundler && rbenv rehash"
-end
-
-after 'deploy:finalize_update' do
-  run "rbenv rehash"
-end
-
-after 'deploy:restart', 'deploy:cleanup'
+set :rbenv_ruby, File.read('.ruby-version').strip

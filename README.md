@@ -31,7 +31,8 @@ bundle
 ```
 
 ### Start the server
-```
+
+```bash
 rackup
 ```
 
@@ -47,3 +48,20 @@ You should probably actually add your bot twice (with two different names), so t
 
 ### Go to the arena
 `http://localhost:9292/battles/new`
+
+
+## Deploy
+
+Usually, pushing to master should kick off a deploy to `kablammo.io`.
+
+### Manual Deploy
+
+If your ssh key is registered with the remove server, you can manually deploy with:
+
+```bash
+bundle exec cap production deploy
+```
+
+### Debugging In Production
+
+`~/apps/kablammo/shared/log/puma_(access|error).log` has holds logs from the app.
