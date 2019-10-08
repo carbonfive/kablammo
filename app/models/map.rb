@@ -21,7 +21,7 @@ class Map
 
   def self.create_maps
     [
-      MapMaker.map("Battle Royale", [
+      MapMaker.make("Battle Royale", [
         "____3____",
         "_________",
         "_________",

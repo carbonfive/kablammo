@@ -8,7 +8,8 @@ module MapMaker
     width = map[0].length
     height = map.length
 
-    # 0, 0 is at the bottom of the map, not the top.
+    # 0, 0 should be the bottom left corner, but the first character that
+    # comes in will be the top left corner. Reversing the rows fixes that.
     map = map.reverse
 
     walls = map_to_walls(map)
@@ -53,7 +54,7 @@ module MapMaker
   end
 
   def self.each_cell(map, &block)
-    map.reverse.each_with_index do |row, y|
+    map.each_with_index do |row, y|
       row.chars.to_a.each_with_index do |cell, x|
         block.call(cell, x, y)
       end
