@@ -33,6 +33,12 @@ class Strategy
   # local path where we've cloned this
   def path
     return github_url if github_url.is_local_dir?
+
+    puts @@strategies_location
+    puts username
+    puts self.username
+    puts name
+
     path_to_name = File.join( @@strategies_location, username, name )
     File.join path_to_name, get_github_repo_name(github_url)
   end
@@ -85,8 +91,8 @@ class Strategy
     return setup_as_local_repo if github_url && github_url.is_local_dir?
     username = get_github_username(github_url)
     if username
-      FileUtils.mkdir_p path
       self.username = username
+      FileUtils.mkdir_p path
     else
       puts "ERROR: Cannot get github username for repo: #{github_url}"
     end
@@ -110,7 +116,7 @@ class Strategy
   end
 
   def repo_exists?
-    File.exists? path
+    File.exists? "#{path}/.git"
   end
 
   def delete_repo
