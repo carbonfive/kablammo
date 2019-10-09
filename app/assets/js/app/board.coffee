@@ -22,7 +22,6 @@ class kablammo.Board
   createVisualization: ->
     walls = @createWalls()
     robots = @createRobots()
-    console.log robots
     board = @firstBoard()
     @updateCanvasHeight()
     kablammo.Visualization 'board', board.width, board.height, walls, robots
@@ -54,7 +53,6 @@ class kablammo.Board
   # Canvas height can't be percentage based.
   updateCanvasHeight: => 
     $board = $('#board');
-    console.log($board.width())
     $board.css { height: "#{$board.width()}px" }
 
   gameOver: (turnIndex) =>
